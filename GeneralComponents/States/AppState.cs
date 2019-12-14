@@ -20,21 +20,20 @@ namespace GeneralComponents.States
 
         public string Language
         {
-            get => //_localStorage.GetItemAsync("language").GetAwaiter().GetResult();//_language;
-                _language;
+            get => _language;
             set { _language = value;
                 _localStorage.SetItemAsync("language",value);
                 StateHasChanged();
             }
         }
 
-        //protected override async Task OnLoad()
-        //{
-        //    _language = await _localStorage.GetItemAsync<string>("language");
-        //    if (string.IsNullOrWhiteSpace(_language))
-        //    {
-        //        _language = "EN";
-        //    }
-        //}
+       protected override async Task OnLoad()
+       {
+           var language = await _localStorage.GetItemAsync("language");
+           if (!string.IsNullOrWhiteSpace(language))
+           {
+               _language = language;
+           }
+       }
     }
 }

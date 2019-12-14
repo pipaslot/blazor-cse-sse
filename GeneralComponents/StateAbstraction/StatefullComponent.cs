@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace GeneralComponents.StateAbstraction
 {
-    public class StatefullComponent : ComponentBase, IDisposable
+    public abstract class StatefullComponent : ComponentBase, IDisposable
     {
         private readonly List<State> _states = new List<State>();
 
@@ -29,6 +29,32 @@ namespace GeneralComponents.StateAbstraction
                     state.StateChanged -= OnStateChanged;
                 }
             }
+        }
+
+#if ClientSideExecution
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadStateAsync();
+            await base.OnInitializedAsync();
+        }
+#else
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if(firstRender){
+                await LoadStateAsync();
+            }
+            await base.OnAfterRenderAsync(firstRender);
+        }
+#endif
+
+        private async Task LoadStateAsync()
+        {
+            var tasks = new List<Task>();
+            foreach (var state in _states)
+            {
+                tasks.Add(state.LoadInitialState());
+            }
+            await Task.WhenAll(tasks);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using GeneralComponents.States
 @inject AppState appState
+@inherits GeneralComponents.StateAbstraction.StatefullComponent
 <h1>Home</h1>
 
 <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
@@ -14,5 +15,8 @@ Language: @appState.Language
 </select>
 
 @code{
-
+    protected override void OnInitialized()
+    {
+        Observe(appState);
+    }
 }
