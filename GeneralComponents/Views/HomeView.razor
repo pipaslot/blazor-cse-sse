@@ -1,0 +1,18 @@
+﻿@page "/"
+@using GeneralComponents.States
+@inject AppState appState
+<h1>Home</h1>
+
+<h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
+
+Language: @appState.Language
+
+<select @bind="appState.Language">
+    <option value="EN">EN</option>
+    <option value="DE">DE</option>
+    <option value="CS">CZ</option>
+</select>
+
+@code{
+
+}

@@ -1,0 +1,26 @@
+﻿@namespace GeneralComponents.Shared
+@inherits LayoutComponentBase
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="content px4">
+        @Body
+    </div>
+</div>
+
+@code
+{
+    [Inject] ILogger<MainLayout> m_Logger { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        m_Logger.LogDebug("");
+        m_Logger.LogDebug("MainLayout OnInitAsync()");
+    }
+
+}
