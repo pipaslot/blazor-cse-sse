@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="Cloudcrate.AspNetCore.Blazor.Browser.Storage" Version="3.0.0" />
+    <PackageReference Include="MatBlazor" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.0" />
     <PackageReference Include="Scrutor" Version="3.1.0" />

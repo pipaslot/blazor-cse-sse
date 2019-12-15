@@ -3,39 +3,23 @@
 @inject AppState appState
 @inherits GeneralComponents.StateAbstraction.StatefullComponent
 
-<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Blazor-CSE-SSE</a>
-    <div>@appState.Language</div>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
+    <MatNavMenu>
+        <MatNavItem>
+            @appState.Language
+        </MatNavItem>
+        <MatNavItem>
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
-        </li>
-        <li class="nav-item px-3">
+        </MatNavItem>
+        <MatNavItem>
             <NavLink class="nav-link" href="aboutview">
-                <span class="oi oi-plus" aria-hidden="true"></span> About
+                <span class="oi oi-plus" aria-hidden="true"></span> About 4
             </NavLink>
-        </li>
-    </ul>
-</div>
+        </MatNavItem>
+    </MatNavMenu>
 
 @code{
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
     protected override void OnInitialized()
     {
         Observe(appState);
