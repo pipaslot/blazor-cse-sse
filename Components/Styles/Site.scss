@@ -4,13 +4,10 @@
 }
 
 app {
-    display: block;
-    height: 100vh;
-    width: 100vw;
-}
 
-header.mdc-top-app-bar {
-    z-index: 7;
+    header.mdc-top-app-bar {
+        z-index: 7;
+    }
 }
 
 .flag {
@@ -33,11 +30,11 @@ header.mdc-top-app-bar {
     position: fixed;
     width: 100%;
     z-index: 1000;
-}
 
-#blazor-error-ui .dismiss {
-    cursor: pointer;
-    position: absolute;
-    right: 0.75rem;
-    top: 0.5rem;
+    .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
 }
