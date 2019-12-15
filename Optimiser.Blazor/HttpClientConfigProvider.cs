@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Components.Services;
+using Core.Configuration;
 using Microsoft.AspNetCore.Components;
 
 namespace Optimiser.Blazor

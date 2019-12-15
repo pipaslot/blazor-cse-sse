@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Components.Services
+namespace Core.Configuration
 {
     public interface IConfigProvider
     {

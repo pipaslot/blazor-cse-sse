@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using Blazor.Extensions.Logging;
 using Components;
-using Components.Services;
+using Core.Configuration;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 

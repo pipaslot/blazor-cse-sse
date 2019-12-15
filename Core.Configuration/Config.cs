@@ -1,4 +1,4 @@
-﻿namespace Components.Services
+﻿namespace Core.Configuration
 {
     public class Config
     {

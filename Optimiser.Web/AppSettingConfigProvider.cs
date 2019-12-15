@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Components.Services;
+using Core.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Optimiser.Web

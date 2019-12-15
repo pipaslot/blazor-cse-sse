@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Components.States
+namespace Infrastructure
 {
     public abstract class State
     {

@@ -11,10 +11,8 @@ using Microsoft.Extensions.Hosting;
 
 using System.Linq;
 using Components;
-using Components.Services;
+using Core.Configuration;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Westwind.AspNetCore.LiveReload;
 
 namespace Optimiser.Web

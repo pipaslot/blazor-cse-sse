@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Components.Services;
+using Core.Configuration;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
