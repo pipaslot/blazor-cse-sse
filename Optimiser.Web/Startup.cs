@@ -13,6 +13,8 @@ using System.Linq;
 using Components;
 using Components.Services;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Westwind.AspNetCore.LiveReload;
 
 namespace Optimiser.Web
@@ -101,6 +103,7 @@ namespace Optimiser.Web
 
             logger.Debug("UseStaticFiles...");
             app.UseStaticFiles();
+            app.UseMiddleware<ConfigProviderMiddleware>();
 
 #if ClientSideExecution
             // Serving Client wwwroot folder

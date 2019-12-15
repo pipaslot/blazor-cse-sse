@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using Blazor.Extensions.Logging;
 using Components;
@@ -15,10 +16,6 @@ namespace Optimiser.Blazor
             services.AddLogging(builder => builder
                 .AddBrowserConsole());
             services.AddApplicationComponents();
-            services.AddSingleton(s =>
-            {
-                return new HttpClient {BaseAddress = new Uri("http://localhost:44349/")};
-            });
             services.AddSingleton<IConfigProvider, HttpClientConfigProvider>();
         }
 

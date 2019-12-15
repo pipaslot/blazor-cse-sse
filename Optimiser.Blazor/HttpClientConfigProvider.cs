@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace Optimiser.Blazor
 {
-
+    /// <summary>
+    /// Connects to server side and reads section from appSettings.json files
+    /// </summary>
     public class HttpClientConfigProvider : IConfigProvider
     {
         private readonly HttpClient _httpClient;
@@ -21,7 +23,7 @@ namespace Optimiser.Blazor
         {
             if (_config == null)
             {
-                _config = await _httpClient.GetJsonAsync<Config>("/_content/Components/config.json?v=" + DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss"));
+                _config = await _httpClient.GetJsonAsync<Config>("/config.json?v=" + DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss"));
             }
 
             return _config;
