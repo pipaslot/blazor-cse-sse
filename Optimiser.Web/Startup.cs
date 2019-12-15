@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using System.Linq;
-using GeneralComponents;
+using Components;
 
 namespace Optimiser.Web
 {

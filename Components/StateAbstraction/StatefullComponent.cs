@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
-namespace GeneralComponents.StateAbstraction
+namespace Components.StateAbstraction
 {
     public abstract class StatefullComponent : ComponentBase, IDisposable
     {

@@ -1,0 +1,35 @@
+﻿@using Components.States
+@inherits Components.StateAbstraction.StatefullComponent
+@inject AppState appState
+
+<img src="_content/Components/images/flags/en.svg" />
+<select @bind="appState.Language">
+    <option value="EN">EN</option>
+    <option value="DE">DE</option>
+    <option value="CS">CZ</option>
+</select>
+
+<MatButton Label="Menu" OnClick="@OnClick2" @ref="Button"></MatButton>
+           <MatMenu @ref="Menu">
+               <MatList>
+                   <MatListItem>Item 1</MatListItem>
+                   <MatListItem>Item 2</MatListItem>
+                   <MatListItem>Item 3</MatListItem>
+                   <MatListItem>Item 4</MatListItem>
+                   <MatListItem>Item 5</MatListItem>
+               </MatList>
+           </MatMenu>
+
+@code{
+    protected override void OnInitialized()
+    {
+        Observe(appState);
+    }
+    BaseMatButton Button;
+    BaseMatMenu Menu;
+ 
+    public void OnClick2(MouseEventArgs e)
+    {
+        this.Menu.OpenAsync(Button.Ref);
+    }
+}

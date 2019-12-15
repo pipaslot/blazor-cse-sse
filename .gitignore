@@ -6,6 +6,8 @@
 # remove the --cached if you want to delete the files
 # push
 
+.history
+
 # User-specific files
 *.suo
 *.user

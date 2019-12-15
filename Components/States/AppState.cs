@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
-using GeneralComponents.StateAbstraction;
+using Components.StateAbstraction;
 
-namespace GeneralComponents.States
+namespace Components.States
 {
     public class AppState : State
     {

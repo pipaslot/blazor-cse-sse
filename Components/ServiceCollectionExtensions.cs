@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
-using GeneralComponents.StateAbstraction;
+using Components.StateAbstraction;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GeneralComponents
+namespace Components
 {
     public static class ServiceCollectionExtensions
     {

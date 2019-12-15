@@ -42,7 +42,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Optimiser.Blazor\Optimiser.Blazor.csproj" />
-    <ProjectReference Include="..\GeneralComponents\GeneralComponents.csproj" />
+    <ProjectReference Include="..\Components\Components.csproj" />
   </ItemGroup>
 
   <ItemGroup>

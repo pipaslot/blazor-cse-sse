@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimiser.Blazor", "Optimiser.Blazor\Optimiser.Blazor.csproj", "{BA529802-0691-4513-9339-23A7BFCFF32D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneralComponents", "GeneralComponents\GeneralComponents.csproj", "{90233477-DB05-4E95-94F6-67495994418C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Components", "Components\Components.csproj", "{90233477-DB05-4E95-94F6-67495994418C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

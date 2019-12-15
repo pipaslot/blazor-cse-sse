@@ -1,14 +1,14 @@
 ﻿@page "/"
-@using GeneralComponents.States
+@using Components.States
 @inject AppState appState
-@inherits GeneralComponents.StateAbstraction.StatefullComponent
+@inherits Components.StateAbstraction.StatefullComponent
 <h1>Home</h1>
 
 <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
 
 Language: @appState.Language
 
-@*<GeneralComponents.Shared.Navigation.LanguageSelect/>*@
+@*<Components.Shared.Navigation.LanguageSelect/>*@
 
 @code{
     protected override void OnInitialized()

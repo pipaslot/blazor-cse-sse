@@ -6,7 +6,7 @@
 //
 
 using Blazor.Extensions.Logging;
-using GeneralComponents;
+using Components;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,7 +23,7 @@ namespace Optimiser.Blazor
 
         public void Configure(IComponentsApplicationBuilder app)
         {
-            app.AddComponent<GeneralComponents.App>("app");
+            app.AddComponent<Components.App>("app");
         }
     }
 }
