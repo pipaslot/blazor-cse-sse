@@ -15,14 +15,6 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Optimiser.Web": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:44349/"
-    },
     "Watch": {
       "commandName": "Project",
       "executablePath": "dotnet.exe",
