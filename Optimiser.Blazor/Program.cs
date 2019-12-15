@@ -1,8 +1,4 @@
-﻿//
-// Optimiser.Blazor.Program
-//
-
-using Microsoft.AspNetCore.Blazor.Hosting;
+﻿using Microsoft.AspNetCore.Blazor.Hosting;
 
 namespace Optimiser.Blazor
 {
