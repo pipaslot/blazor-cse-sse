@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Core.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Optimiser.Web
+namespace App.Server
 {
     public class AppSettingConfigProvider : IConfigProvider
     {

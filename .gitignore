@@ -215,7 +215,7 @@ HeatService8.wxs
 #Copied config files
 [aA]pp.config
 [wW]eb.config
-# But keep the app.config in the Optimiser.Web project as well as the standalone app config's
+# But keep the app.config in the App.Server project as well as the standalone app config's
 !**/GenerateCodes/app.config
 !**/GenerateDataTier/app.config
 !**/GenerateProperties/app.config
@@ -227,7 +227,7 @@ HeatService8.wxs
 !**/VerifyConfigFiles/app.config
 !**/UnityEHR/App.config
 !**/UnityPM/App.config
-!**/NG-Blazor/Optimiser.Web/Web.config
+!**/NG-Blazor/App.Server/Web.config
 
 #Documents & Reports
 **/Optimiser.2012.Web/Documents/
@@ -238,9 +238,9 @@ HeatService8.wxs
 **/Optimiser.2012.Web/Reports/
 
 #JS stuff
-/Optimiser.Web/ClientApp/dist
-/Optimiser.Web/node_modules
-/Optimiser.Web/package-lock.json
-/Optimiser.Web/wwwroot/dist
+/App.Server/ClientApp/dist
+/App.Server/node_modules
+/App.Server/package-lock.json
+/App.Server/wwwroot/dist
 /NG-Blazor/Blazor.Extensions.Logging.JS/node_modules
 /NG-Blazor/Blazor.Extensions.Logging.JS/package-lock.json

@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Optimiser.Blazor": {
+    "App.Client": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

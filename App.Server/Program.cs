@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System;
 
-namespace Optimiser.Web
+namespace App.Server
 {
     public class Program
     {

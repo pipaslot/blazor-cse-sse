@@ -7,7 +7,7 @@ using Core.Configuration;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Optimiser.Blazor
+namespace App.Client
 {
     public class Startup
     {

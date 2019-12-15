@@ -15,7 +15,7 @@ using Core.Configuration;
 using Microsoft.Extensions.Configuration;
 using Westwind.AspNetCore.LiveReload;
 
-namespace Optimiser.Web
+namespace App.Server
 {
     public class Startup
     {
@@ -111,7 +111,7 @@ namespace Optimiser.Web
             {
                 FileProvider = new PhysicalFileProvider(
                      Path.Combine(
-                         $@"{Directory.GetParent(Directory.GetCurrentDirectory())}\Optimiser.Blazor",
+                         $@"{Directory.GetParent(Directory.GetCurrentDirectory())}\App.Client",
                          @"wwwroot")
                 ),
                 RequestPath = new PathString("")
@@ -119,7 +119,7 @@ namespace Optimiser.Web
             */
 
             logger.Debug("UseClientSideBlazorFiles...");
-            app.UseClientSideBlazorFiles<Optimiser.Blazor.Startup>();
+            app.UseClientSideBlazorFiles<App.Client.Startup>();
 
             logger.Debug("UseRouting...");
             app.UseRouting();
@@ -128,7 +128,7 @@ namespace Optimiser.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapFallbackToClientSideBlazor<Optimiser.Blazor.Startup>("index_cse.html");
+                endpoints.MapFallbackToClientSideBlazor<App.Client.Startup>("index_cse.html");
             });
 #else
             logger.Debug("UseRouting...");

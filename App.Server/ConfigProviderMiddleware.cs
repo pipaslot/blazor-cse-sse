@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Optimiser.Web
+namespace App.Server
 {
     public class ConfigProviderMiddleware
     {

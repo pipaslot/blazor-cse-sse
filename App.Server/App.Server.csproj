@@ -43,7 +43,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Configuration\Core.Configuration.csproj" />
-    <ProjectReference Include="..\Optimiser.Blazor\Optimiser.Blazor.csproj" />
+    <ProjectReference Include="..\App.Client\App.Client.csproj" />
     <ProjectReference Include="..\Components\Components.csproj" />
   </ItemGroup>
 

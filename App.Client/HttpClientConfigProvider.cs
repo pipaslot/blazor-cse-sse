@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Core.Configuration;
 using Microsoft.AspNetCore.Components;
 
-namespace Optimiser.Blazor
+namespace App.Client
 {
     /// <summary>
     /// Connects to server side and reads section from appSettings.json files
