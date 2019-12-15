@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 
 using System.Linq;
 using Components;
+using Westwind.AspNetCore.LiveReload;
 
 namespace Optimiser.Web
 {
@@ -47,6 +48,7 @@ namespace Optimiser.Web
             });
 
             services.AddApplicationComponents();
+            services.AddLiveReload();
             logger.Debug("Completed Startup.ConfigureServices()");
         }
 
@@ -61,6 +63,7 @@ namespace Optimiser.Web
 
             if (env.IsDevelopment())
             {
+                app.UseLiveReload();
                 logger.Debug("UseDeveloperExceptionPage...");
                 app.UseDeveloperExceptionPage();
                 app.UseBlazorDebugging();
