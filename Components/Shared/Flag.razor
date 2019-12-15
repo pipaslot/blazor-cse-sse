@@ -1,15 +1,24 @@
 ﻿@inherits BaseMatComponent
-<img src="_content/Components/images/flags/@GetFilename()" @onclick="OnClick.InvokeAsync" class="@GetClass()" @ref="Ref" />
+    <span  @onclick="OnClick.InvokeAsync" class="@GetClass()">
+        <img src="_content/Components/images/flags/@GetFilename()" @ref="Ref" />
+        @ChildContent
+    </span>
 
 @code {
     [Parameter]
     public string Name { get; set; }
 
     [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     [Parameter]
     public ElementReference Ref {get;set;}
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
 
     string GetFilename()
     {
@@ -18,6 +27,6 @@
 
     string GetClass()
     {
-        return "flag" + (OnClick.HasDelegate ? " clickable" : "");
+        return "flag" + (OnClick.HasDelegate ? " clickable" : "")+" "+Class;
     }
 }

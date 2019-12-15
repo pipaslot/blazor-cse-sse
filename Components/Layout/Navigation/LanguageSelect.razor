@@ -1,33 +1,29 @@
 ﻿@using Components.Layout.Navigation
 @inherits StatefulComponent
 @inject AppState appState
+@inject IConfigProvider configProvider
 
-<Flag Name="@appState.Language" @onclick="OpenMenu" @ref="flag"/> @appState.Language
-
+<Flag Class="layout-navigation-languageSelect-flag" Name="@appState.Language" @onclick="OpenMenu" @ref="flag">@appState.Language.ToUpper()</Flag>
 <MatMenu @ref="menu">
     <MatList>
-        @foreach (var lang in Languages)
+        @foreach (var lang in _languages)
         {
             <MatListItem @onclick="()=>SelectLanguage(lang)">
-                <Flag Name="@lang" />@lang
+                <Flag Class="layout-navigation-languageSelect-flag" Name="@lang">@lang.ToUpper()</Flag>
             </MatListItem>
         }
     </MatList>
 </MatMenu>
-
 @code{
     Flag flag;
     MatMenu menu;
 
-    string[] Languages = new string[]
-    {
-        "EN",
-        "DE",
-        "CZ"
-                };
-    protected override void OnInitialized()
+    string[] _languages = new string[] { };
+    protected override async Task OnInitializedAsync()
     {
         Observe(appState);
+        var config = await configProvider.GetConfig();
+        _languages = config.Languages;
     }
 
     void OpenMenu(MouseEventArgs e)

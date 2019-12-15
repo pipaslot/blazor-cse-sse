@@ -1,14 +1,27 @@
-﻿document, body {
+﻿html, document, body {
   margin: 0px;
-  padding: 0px; }
+  padding: 0px;
+  height: 100%; }
 
 app header.mdc-top-app-bar {
   z-index: 7; }
 
+app header .flag {
+  justify-content: flex-end; }
+
 .flag {
-  width: auto;
-  height: 100%;
-  max-height: 50px; }
+  display: inline-flex;
+  flex-direction: row;
+  flex: 1 0 auto; }
+  .flag img {
+    display: flex;
+    width: auto;
+    height: 100%;
+    max-height: 50px;
+    min-width: 1rem;
+    min-height: 1rem;
+    vertical-align: middle;
+    margin-right: 0.25rem; }
 
 .flag.clickable {
   cursor: pointer; }
@@ -28,3 +41,6 @@ app header.mdc-top-app-bar {
     position: absolute;
     right: 0.75rem;
     top: 0.5rem; }
+
+.layout-navigation-languageSelect-flag img {
+  max-height: 20px; }
