@@ -1,0 +1,20 @@
+﻿.flag {
+    display: inline-flex;
+    flex-direction: row;
+    flex: 1 0 auto;
+
+    img {
+        display: flex;
+        width: auto;
+        height: 100%;
+        max-height: 50px;
+        min-width: 1rem;
+        min-height: 1rem;
+        vertical-align: middle;
+        margin-right: 0.25rem;
+    }
+}
+
+.flag.clickable {
+    cursor: pointer;
+}
