@@ -36,4 +36,9 @@
     <PackageReference Include="Scrutor" Version="3.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+    <None Include="compilerconfig.json" />
+  </ItemGroup>
+
 </Project>
