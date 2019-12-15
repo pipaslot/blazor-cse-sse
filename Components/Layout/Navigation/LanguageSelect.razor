@@ -2,34 +2,42 @@
 @inherits Components.StateAbstraction.StatefullComponent
 @inject AppState appState
 
-<img src="_content/Components/images/flags/en.svg" />
-<select @bind="appState.Language">
-    <option value="EN">EN</option>
-    <option value="DE">DE</option>
-    <option value="CS">CZ</option>
-</select>
+<Flag Name="@appState.Language" @onclick="OpenMenu" @ref="flag"/> @appState.Language
 
-<MatButton Label="Menu" OnClick="@OnClick2" @ref="Button"></MatButton>
-           <MatMenu @ref="Menu">
-               <MatList>
-                   <MatListItem>Item 1</MatListItem>
-                   <MatListItem>Item 2</MatListItem>
-                   <MatListItem>Item 3</MatListItem>
-                   <MatListItem>Item 4</MatListItem>
-                   <MatListItem>Item 5</MatListItem>
-               </MatList>
-           </MatMenu>
+<MatMenu @ref="menu">
+    <MatList>
+        @foreach (var lang in Languages)
+        {
+            <MatListItem @onclick="()=>SelectLanguage(lang)">
+                <Flag Name="@lang" />@lang
+            </MatListItem>
+        }
+    </MatList>
+</MatMenu>
 
 @code{
+    Flag flag;
+    MatMenu menu;
+
+    string[] Languages = new string[]
+    {
+        "EN",
+        "DE",
+        "CZ"
+                };
     protected override void OnInitialized()
     {
         Observe(appState);
     }
-    BaseMatButton Button;
-    BaseMatMenu Menu;
- 
-    public void OnClick2(MouseEventArgs e)
+
+    void OpenMenu(MouseEventArgs e)
     {
-        this.Menu.OpenAsync(Button.Ref);
+        menu.OpenAsync(flag.Ref);
     }
+
+    void SelectLanguage(string language)
+    {
+        appState.Language = language;
+    }
+
 }

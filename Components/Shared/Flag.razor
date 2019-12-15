@@ -1,0 +1,23 @@
+﻿@inherits BaseMatComponent
+<img src="_content/Components/images/flags/@GetFilename()" @onclick="OnClick.InvokeAsync" class="@GetClass()" @ref="Ref" />
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    [Parameter]
+    public ElementReference Ref {get;set;}
+
+    string GetFilename()
+    {
+        return Name?.ToLower() + ".svg";
+    }
+
+    string GetClass()
+    {
+        return "flag" + (OnClick.HasDelegate ? " clickable" : "");
+    }
+}

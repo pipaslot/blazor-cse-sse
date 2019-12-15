@@ -11,6 +11,13 @@ app {
 header.mdc-top-app-bar {
     z-index: 7;
 }
+.flag {
+    width: auto;
+    height: 100%;
+}
+.flag.clickable {
+    cursor: pointer;
+}
 
 #blazor-error-ui {
     background: lightyellow;
