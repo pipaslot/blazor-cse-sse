@@ -43,14 +43,11 @@ namespace App.Server
             logger.Debug("Beginning Startup.ConfigureServices() in CSE mode");
 #else
             logger.Debug("Beginning Startup.ConfigureServices() in SSE mode");
-
-            logger.Debug("Adding AddRazorPages...");
             services.AddRazorPages();
 
             // Adds the Server-Side Blazor services, and those registered by the app project's startup.
             logger.Debug("Adding AddServerSideBlazor...");
             services.AddServerSideBlazor();
-
 #endif
 
             logger.Debug("Adding Mvc...");
@@ -62,9 +59,11 @@ namespace App.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
-
-            services.AddApplicationComponents();
+            
+            logger.Debug("Adding LiveReload");
             services.AddLiveReload();
+            logger.Debug("Adding ApplicationComponents");
+            services.AddApplicationComponents();
             services.AddSingleton<IConfigProvider, AppSettingConfigProvider>();
             services.Configure<Config>(_configuration.GetSection("App"));
             logger.Debug("Completed Startup.ConfigureServices()");
@@ -104,19 +103,6 @@ namespace App.Server
             app.UseMiddleware<ConfigProviderMiddleware>();
 
 #if ClientSideExecution
-            // Serving Client wwwroot folder
-            /*
-            logger.Debug("UseFileServer...");
-            app.UseFileServer(new FileServerOptions()
-            {
-                FileProvider = new PhysicalFileProvider(
-                     Path.Combine(
-                         $@"{Directory.GetParent(Directory.GetCurrentDirectory())}\App.Client",
-                         @"wwwroot")
-                ),
-                RequestPath = new PathString("")
-            });
-            */
 
             logger.Debug("UseClientSideBlazorFiles...");
             app.UseClientSideBlazorFiles<App.Client.Startup>();
