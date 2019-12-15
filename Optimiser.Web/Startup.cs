@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 
 using System.Linq;
 using Components;
+using Components.Services;
+using Microsoft.Extensions.Configuration;
 using Westwind.AspNetCore.LiveReload;
 
 namespace Optimiser.Web
@@ -18,6 +20,20 @@ namespace Optimiser.Web
     public class Startup
     {
         NLog.Logger logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+
+        public Startup(IHostEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.Local.json", optional: true)
+                .AddEnvironmentVariables();
+
+            _configuration = builder.Build();
+        }
+
+        private IConfigurationRoot _configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -49,6 +65,8 @@ namespace Optimiser.Web
 
             services.AddApplicationComponents();
             services.AddLiveReload();
+            services.AddSingleton<IConfigProvider, AppSettingConfigProvider>();
+            services.Configure<Config>(_configuration.GetSection("App"));
             logger.Debug("Completed Startup.ConfigureServices()");
         }
 

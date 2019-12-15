@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+﻿using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using Components.States;
 using Microsoft.Extensions.DependencyInjection;
 
