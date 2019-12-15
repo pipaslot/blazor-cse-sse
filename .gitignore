@@ -229,18 +229,4 @@ HeatService8.wxs
 !**/UnityPM/App.config
 !**/NG-Blazor/App.Server/Web.config
 
-#Documents & Reports
-**/Optimiser.2012.Web/Documents/
-!**/Optimiser.2012.Web/Documents/Assets/*.html
-!**/Optimiser.2012.Web/Documents/Assets/*.jpg
-!**/Optimiser.2012.Web/Documents/Assets/LiquidBlueprint/*.css
-!**/Optimiser.2012.Web/Documents/Assets/LiquidBlueprint/mint
-**/Optimiser.2012.Web/Reports/
-
-#JS stuff
-/App.Server/ClientApp/dist
-/App.Server/node_modules
-/App.Server/package-lock.json
-/App.Server/wwwroot/dist
-/NG-Blazor/Blazor.Extensions.Logging.JS/node_modules
-/NG-Blazor/Blazor.Extensions.Logging.JS/package-lock.json
+Logs/
