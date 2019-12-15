@@ -1,5 +1,5 @@
-﻿@using Components.States
-@inherits Components.StateAbstraction.StatefullComponent
+﻿@using Components.Layout.Navigation
+@inherits StatefulComponent
 @inject AppState appState
 
 <Flag Name="@appState.Language" @onclick="OpenMenu" @ref="flag"/> @appState.Language

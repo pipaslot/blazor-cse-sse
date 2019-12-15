@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Components.States;
 using Microsoft.AspNetCore.Components;
 
-namespace Components.StateAbstraction
+
+namespace Components.Shared
 {
-    public abstract class StatefullComponent : ComponentBase, IDisposable
+    public abstract class StatefulComponent : ComponentBase, IDisposable
     {
         private readonly List<State> _states = new List<State>();
 
