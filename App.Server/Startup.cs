@@ -13,7 +13,6 @@ using System.Linq;
 using App.Server.Controllers;
 using App.Shared;
 using Components;
-using Core.Configuration;
 using Microsoft.Extensions.Configuration;
 using Westwind.AspNetCore.LiveReload;
 

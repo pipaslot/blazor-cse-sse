@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Configuration;
+using App.Shared;
 using Microsoft.Extensions.Options;
 
 namespace App.Server

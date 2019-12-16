@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Core.Configuration;
+using App.Shared;
 using Microsoft.AspNetCore.Components;
 
 namespace App.Client.Services

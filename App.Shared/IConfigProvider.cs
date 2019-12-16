@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Core.Configuration
+namespace App.Shared
 {
     public interface IConfigProvider
     {

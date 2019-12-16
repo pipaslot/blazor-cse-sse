@@ -1,4 +1,4 @@
-﻿namespace Core.Configuration
+﻿namespace App.Shared
 {
     public class Config
     {

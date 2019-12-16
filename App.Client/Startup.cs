@@ -5,7 +5,6 @@ using App.Client.Services;
 using App.Shared;
 using Blazor.Extensions.Logging;
 using Components;
-using Core.Configuration;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 

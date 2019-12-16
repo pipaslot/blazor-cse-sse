@@ -45,7 +45,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\App.Shared\App.Shared.csproj" />
-    <ProjectReference Include="..\Core.Configuration\Core.Configuration.csproj" />
     <ProjectReference Include="..\App.Client\App.Client.csproj" />
     <ProjectReference Include="..\Components\Components.csproj" />
   </ItemGroup>
