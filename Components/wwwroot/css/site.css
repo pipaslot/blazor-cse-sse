@@ -88,11 +88,27 @@
       transform: scale(1);
       -webkit-transform: scale(1); } } }
 
-app header.mdc-top-app-bar {
-  z-index: 7; }
-
-app header .flag {
-  justify-content: flex-end; }
+app {
+  height: 100%; }
+  app > div {
+    display: flex; }
+  app header.mdc-top-app-bar {
+    z-index: 7; }
+  app header .flag {
+    justify-content: flex-end; }
+  app .mdc-top-app-bar--fixed-adjust {
+    display: flex; }
+    app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content {
+      display: flex;
+      flex-direction: row;
+      flex-grow: 1; }
+      app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content .mdc-drawer {
+        display: flex; }
+        app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content .mdc-drawer > .mat-drawer-app-content {
+          display: flex;
+          margin: 0.5rem;
+          flex-grow: 1;
+          flex-direction: column; }
 
 .layout-navigation-languageSelect-flag img {
   max-height: 20px; }

@@ -1,4 +1,10 @@
 ﻿app {
+    height: 100%;
+
+    > div {
+        //height: 100%;
+        display: flex;
+    }
 
     header.mdc-top-app-bar {
         z-index: 7;
@@ -6,5 +12,26 @@
 
     header .flag {
         justify-content: flex-end;
+    }
+
+    .mdc-top-app-bar--fixed-adjust {
+        display: flex;
+
+        > .mdc-drawer-app-content {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+
+            .mdc-drawer {
+                display: flex;
+
+                > .mat-drawer-app-content {
+                    display: flex;
+                    margin: 0.5rem;
+                    flex-grow: 1;
+                    flex-direction: column;
+                }
+            }
+        }
     }
 }
