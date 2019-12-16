@@ -13,6 +13,7 @@ namespace App.Client
     {
         private readonly HttpClient _httpClient;
         private Config _config;
+        private Task<Config> _task;
 
         public HttpClientConfigProvider(HttpClient httpClient)
         {
@@ -23,7 +24,12 @@ namespace App.Client
         {
             if (_config == null)
             {
-                _config = await _httpClient.GetJsonAsync<Config>("/config.json?v=" + DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss"));
+                //Prevent multiple parallel calls
+                if (_task == null)
+                {
+                    _task = _httpClient.GetJsonAsync<Config>("/config.json?v=" + DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss"));
+                }
+                _config = await _task;
             }
 
             return _config;
