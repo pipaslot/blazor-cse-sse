@@ -1,13 +1,12 @@
 ﻿@namespace Components.Layout
 @inherits LayoutComponentBase
-@inject IConfigProvider configProvider
 
 <MatAppBarContainer Style="height:100%">
     <MatAppBar Fixed="true">
         <MatAppBarRow>
             <MatAppBarSection>
                 <MatIconButton Icon="menu" @onclick="ToggleMenu"></MatIconButton>
-                <MatAppBarTitle>@Name</MatAppBarTitle>
+                <MatAppBarTitle>@_name</MatAppBarTitle>
             </MatAppBarSection>
             <MatAppBarSection Align="@MatAppBarSectionAlign.End">
                 <Components.Layout.Navigation.LanguageSelect />
@@ -17,7 +16,7 @@
 
     <MatAppBarContent>
         <MatDrawerContainer>
-            <MatDrawer @bind-Opened="@Opened" Mode="@MatDrawerMode.Dismissible">
+            <MatDrawer @bind-Opened="@_opened" Mode="@MatDrawerMode.Dismissible">
                 <NavMenu />
             </MatDrawer>
             <MatDrawerContent>
@@ -28,21 +27,22 @@
 </MatAppBarContainer>
 
 @code{
-    bool Opened = true;
-    string Name;
+    bool _opened = true;
+    string _name;
 
-    [Inject] ILogger<MainLayout> m_Logger { get; set; }
+    [Inject] ILogger<MainLayout> MLogger { get; set; }
+    [Inject] IConfigProvider ConfigProvider { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        m_Logger.LogDebug("MainLayout OnInitAsync()");
-        var config = await configProvider.GetConfig();
-        Name = config.Name;
+        MLogger.LogDebug("MainLayout OnInitAsync()");
+        var config = await ConfigProvider.GetConfig();
+        _name = config.Name;
     }
 
     void ToggleMenu()
     {
-        Opened = !Opened;
+        _opened = !_opened;
     }
 }
