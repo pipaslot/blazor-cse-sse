@@ -9,9 +9,9 @@ namespace Components.Shared
 {
     public abstract class StatefulComponent : ComponentBase, IDisposable
     {
-        private readonly List<State> _states = new List<State>();
+        private readonly List<TemporaryState> _states = new List<TemporaryState>();
 
-        protected void Observe(params State[] states)
+        protected void Observe(params TemporaryState[] states)
         {
             _states.AddRange(states);
             foreach (var state in states)

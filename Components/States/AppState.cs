@@ -6,33 +6,22 @@ using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 
 namespace Components.States
 {
-    public class AppState : State
+    public class AppState : PersistedState<AppStateData>
     {
-        private readonly LocalStorage _localStorage;
-
-        public AppState(LocalStorage localStorage)
+        public AppState(LocalStorage localStorage) : base(localStorage)
         {
-            _localStorage = localStorage;
         }
-
-        private string _language = "DE";
-
+        
         public string Language
         {
-            get => _language;
-            set { _language = value;
-                _localStorage.SetItemAsync("language",value);
-                StateHasChanged();
+            get => Data.Language;
+            set { Data.Language = value;
+                SaveChanges();
             }
         }
-
-       protected override async Task OnLoad()
-       {
-           var language = await _localStorage.GetItemAsync("language");
-           if (!string.IsNullOrWhiteSpace(language))
-           {
-               _language = language;
-           }
-       }
+    }
+    public class AppStateData
+    {
+        public string Language { get; set; } = "DE";
     }
 }

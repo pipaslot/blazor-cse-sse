@@ -11,7 +11,7 @@ namespace Components
             services.Scan(scan => scan
                 .FromAssemblyOf<AppState>()
                 .AddClasses(c=> c
-                    .AssignableTo<State>())
+                    .AssignableTo<TemporaryState>())
                 .AsSelf()
                 .WithScopedLifetime()
             );

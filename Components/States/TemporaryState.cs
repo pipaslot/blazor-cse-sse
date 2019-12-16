@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Components.States
 {
-    public abstract class State
+    public abstract class TemporaryState
     {
         private bool _initialized;
         private Task _initializeTask;
@@ -21,7 +21,7 @@ namespace Components.States
             }
         }
         protected abstract Task OnLoad();
-        public event EventHandler StateChanged;    
+        public event EventHandler StateChanged;
         protected void StateHasChanged()
         {
             StateChanged?.Invoke(this, EventArgs.Empty);
