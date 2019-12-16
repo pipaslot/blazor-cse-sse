@@ -10,7 +10,6 @@
                 <MatAppBarTitle>@Name</MatAppBarTitle>
             </MatAppBarSection>
             <MatAppBarSection Align="@MatAppBarSectionAlign.End">
-                @*<MatIconButton Icon="favorite"></MatIconButton>*@
                 <Components.Layout.Navigation.LanguageSelect />
             </MatAppBarSection>
         </MatAppBarRow>
@@ -37,8 +36,6 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        //var config = await ConfigProvider.GetConfig();
-        //Name = config.Name;
         m_Logger.LogDebug("MainLayout OnInitAsync()");
         var config = await configProvider.GetConfig();
         Name = config.Name;
