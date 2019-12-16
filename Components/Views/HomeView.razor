@@ -1,6 +1,8 @@
 ﻿@page "/"
 @inject AppState appState
+@using System.Net
 @inherits StatefulComponent
+@inject HttpClient httpClient
 <h1>Home</h1>
 
 <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
@@ -8,10 +10,18 @@
 Language: @appState.Language
 
     <Components.Layout.Navigation.LanguageSelect/>
+<br />
+@foreach (var name in Names)
+{
+    <div>@name</div>
+}
 
 @code{
-    protected override void OnInitialized()
+    string[] Names = new string[] {};
+    protected override async Task OnInitializedAsync()
     {
         Observe(appState);
+
+        Names = await httpClient.GetJsonAsync<string[]>("api/value");
     }
 }
