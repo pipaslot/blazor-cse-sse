@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Components\Components.csproj" />
-    <ProjectReference Include="..\Core.Auth\Core.Auth.csproj" />
   </ItemGroup>
 
   <ItemGroup>

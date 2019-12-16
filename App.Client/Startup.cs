@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Net.Http;
 using App.Client.Services;
+using App.Shared;
 using Blazor.Extensions.Logging;
 using Components;
-using Core.Auth;
 using Core.Configuration;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +24,7 @@ namespace App.Client
 
         public void Configure(IComponentsApplicationBuilder app)
         {
-            app.AddComponent<Components.App>("app");
+            app.AddComponent<Components.Application>("app");
         }
     }
 }

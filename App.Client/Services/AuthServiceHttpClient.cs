@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Core.Auth;
+using App.Shared;
 using Microsoft.AspNetCore.Components;
 
 namespace App.Client.Services

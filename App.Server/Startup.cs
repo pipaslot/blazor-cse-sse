@@ -10,8 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using System.Linq;
+using App.Server.Controllers;
+using App.Shared;
 using Components;
-using Core.Auth;
 using Core.Configuration;
 using Microsoft.Extensions.Configuration;
 using Westwind.AspNetCore.LiveReload;
@@ -70,7 +71,7 @@ namespace App.Server
             //Configure custom services
             services.Configure<Config>(_configuration.GetSection("App"));
             services.AddSingleton<IConfigProvider, AppSettingConfigProvider>();
-            services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IAuthService, AuthController>();
 
             logger.Debug("Completed Startup.ConfigureServices()");
         }

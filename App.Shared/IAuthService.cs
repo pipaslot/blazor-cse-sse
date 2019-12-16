@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Core.Auth
+namespace App.Shared
 {
     public interface IAuthService
     {

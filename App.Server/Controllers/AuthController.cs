@@ -2,26 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Auth;
+using App.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Server.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : ControllerBase, IAuthService
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
-
         [HttpGet]
-        public async Task<string[]> GetAll()
+        public Task<string[]> GetUserPermissions()
         {
-            return await _authService.GetUserPermissions();
+            return Task.FromResult(new string[]
+            {
+                "AAAA",
+                "BBBB"
+            });
         }
     }
 }
