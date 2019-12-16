@@ -6,12 +6,17 @@ namespace Components.States
     public abstract class State
     {
         private bool _initialized;
+        private Task _initializeTask;
         public async Task LoadInitialState()
         {
             if (!_initialized)
             {
+                if (_initializeTask == null)
+                {
+                    _initializeTask = OnLoad();
+                }
+                await _initializeTask;
                 _initialized = true;
-                await OnLoad();
                 StateHasChanged();
             }
         }
