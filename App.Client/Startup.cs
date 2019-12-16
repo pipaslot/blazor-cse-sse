@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using App.Client.Services;
 using Blazor.Extensions.Logging;
 using Components;
+using Core.Auth;
 using Core.Configuration;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +18,8 @@ namespace App.Client
             services.AddLogging(builder => builder
                 .AddBrowserConsole());
             services.AddApplicationComponents();
-            services.AddSingleton<IConfigProvider, HttpClientConfigProvider>();
+            services.AddSingleton<IConfigProvider, ConfigProviderHttpClient>();
+            services.AddSingleton<IAuthService, AuthServiceHttpClient>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

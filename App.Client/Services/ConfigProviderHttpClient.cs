@@ -4,18 +4,18 @@ using System.Threading.Tasks;
 using Core.Configuration;
 using Microsoft.AspNetCore.Components;
 
-namespace App.Client
+namespace App.Client.Services
 {
     /// <summary>
     /// Connects to server side and reads section from appSettings.json files
     /// </summary>
-    public class HttpClientConfigProvider : IConfigProvider
+    public class ConfigProviderHttpClient : IConfigProvider
     {
         private readonly HttpClient _httpClient;
         private Config _config;
         private Task<Config> _task;
 
-        public HttpClientConfigProvider(HttpClient httpClient)
+        public ConfigProviderHttpClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

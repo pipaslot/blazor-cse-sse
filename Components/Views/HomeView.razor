@@ -1,15 +1,14 @@
 ﻿@page "/"
 @inject AppState appState
-@using System.Net
+@using Core.Auth
 @inherits StatefulComponent
-@inject HttpClient httpClient
 <h1>Home</h1>
 
 <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
 
 Language: @appState.Language
 
-    <Components.Layout.Navigation.LanguageSelect/>
+<Components.Layout.Navigation.LanguageSelect />
 <br />
 @foreach (var name in Names)
 {
@@ -17,11 +16,12 @@ Language: @appState.Language
 }
 
 @code{
-    string[] Names = new string[] {};
+    [Inject] IAuthService authService { get; set; }
+    string[] Names = new string[] { };
     protected override async Task OnInitializedAsync()
     {
         Observe(appState);
 
-        Names = await httpClient.GetJsonAsync<string[]>("api/value");
+        Names = await authService.GetUserPermissions();
     }
 }

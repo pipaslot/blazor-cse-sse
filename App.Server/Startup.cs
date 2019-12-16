@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 
 using System.Linq;
 using Components;
+using Core.Auth;
 using Core.Configuration;
 using Microsoft.Extensions.Configuration;
 using Westwind.AspNetCore.LiveReload;
@@ -62,10 +63,15 @@ namespace App.Server
             
             logger.Debug("Adding LiveReload");
             services.AddLiveReload();
+
             logger.Debug("Adding ApplicationComponents");
             services.AddApplicationComponents();
-            services.AddSingleton<IConfigProvider, AppSettingConfigProvider>();
+
+            //Configure custom services
             services.Configure<Config>(_configuration.GetSection("App"));
+            services.AddSingleton<IConfigProvider, AppSettingConfigProvider>();
+            services.AddSingleton<IAuthService, AuthService>();
+
             logger.Debug("Completed Startup.ConfigureServices()");
         }
 

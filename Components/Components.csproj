@@ -42,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Core.Auth\Core.Auth.csproj" />
     <ProjectReference Include="..\Core.Configuration\Core.Configuration.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
