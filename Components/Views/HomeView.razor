@@ -1,27 +1,9 @@
 ﻿@page "/"
-@inject AppState appState
-@using App.Shared
-@inherits StatefulComponent
+
 <h1>Home</h1>
 
 <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
 
-Language: @appState.Language
-
-<Components.Layout.Navigation.LanguageSelect />
-<br />
-@foreach (var name in Names)
-{
-    <div>@name</div>
-}
-
 @code{
-    [Inject] IAuthService authService { get; set; }
-    string[] Names = new string[] { };
-    protected override async Task OnInitializedAsync()
-    {
-        Observe(appState);
 
-        Names = await authService.GetUserPermissions();
-    }
 }

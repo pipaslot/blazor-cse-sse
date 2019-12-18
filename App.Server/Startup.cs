@@ -1,6 +1,7 @@
 ﻿#if ClientSideExecution
 #else
 using System.Net.Http;
+using Westwind.AspNetCore.LiveReload;
 #endif
 
 using Microsoft.AspNetCore.Builder;
@@ -11,10 +12,10 @@ using Microsoft.Extensions.Hosting;
 
 using System.Linq;
 using App.Server.Controllers;
+using App.Server.Services;
 using App.Shared;
 using Components;
 using Microsoft.Extensions.Configuration;
-using Westwind.AspNetCore.LiveReload;
 
 namespace App.Server
 {
@@ -49,6 +50,7 @@ namespace App.Server
             // Adds the Server-Side Blazor services, and those registered by the app project's startup.
             logger.Debug("Adding AddServerSideBlazor...");
             services.AddServerSideBlazor();
+
 #endif
 
             logger.Debug("Adding Mvc...");
@@ -60,9 +62,10 @@ namespace App.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
-            
+#if ServerSideExecution
             logger.Debug("Adding LiveReload");
             services.AddLiveReload();
+#endif
 
             logger.Debug("Adding ApplicationComponents");
             services.AddApplicationComponents();
@@ -70,7 +73,8 @@ namespace App.Server
             //Configure custom services
             services.Configure<Config>(_configuration.GetSection("App"));
             services.AddSingleton<IConfigProvider, AppSettingConfigProvider>();
-            services.AddSingleton<IAuthService, AuthController>();
+            services.AddAuthorization();
+            services.AddSingleton<IAuthService, AuthService>();
 
             logger.Debug("Completed Startup.ConfigureServices()");
         }
@@ -86,7 +90,9 @@ namespace App.Server
 
             if (env.IsDevelopment())
             {
+#if ServerSideExecution
                 app.UseLiveReload();
+#endif
                 logger.Debug("UseDeveloperExceptionPage...");
                 app.UseDeveloperExceptionPage();
                 app.UseBlazorDebugging();

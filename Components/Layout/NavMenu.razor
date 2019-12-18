@@ -1,5 +1,6 @@
-﻿@namespace  Components.Layout
+﻿@namespace Components.Layout
 @inject AppState appState
+@inject IAuthService AuthService
 @inherits StatefulComponent
 
 <MatNavMenu>
@@ -7,20 +8,41 @@
         @appState.Language
     </MatNavItem>
     <MatNavItem>
-        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-            <span class="oi oi-home" aria-hidden="true"></span> Home
+        <NavLink href="" Match="NavLinkMatch.All">
+            <MatIcon>@MatIconNames.Home</MatIcon> Home
         </NavLink>
     </MatNavItem>
     <MatNavItem>
-        <NavLink class="nav-link" href="/about">
-            <span class="oi oi-plus" aria-hidden="true"></span> About
+        <NavLink href="/about">
+            <MatIcon>@MatIconNames.Feedback</MatIcon> About
         </NavLink>
+    </MatNavItem>
+
+    <MatNavItem>
+        <AuthorizeView>
+            <NotAuthorized>
+                <NavLink href="/auth/sign-in">
+                    <MatIcon>@MatIconNames.Favorite</MatIcon> Sign In
+                </NavLink>
+            </NotAuthorized>
+            <Authorized>
+                <NavLink @onclick="SignOut">
+                    <MatIcon>@MatIconNames.Favorite</MatIcon> Sign Out
+                </NavLink>
+            </Authorized>
+        </AuthorizeView>
     </MatNavItem>
 </MatNavMenu>
 
 @code{
+
     protected override void OnInitialized()
     {
         Observe(appState);
+    }
+
+    void SignOut()
+    {
+        AuthService.SignOut();
     }
 }

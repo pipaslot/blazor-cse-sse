@@ -4,6 +4,7 @@ namespace App.Shared
 {
     public interface IAuthService
     {
-        Task<string[]> GetUserPermissions();
+        Task SignIn(string username, string password);
+        Task SignOut();
     }
 }

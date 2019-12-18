@@ -9,9 +9,9 @@ namespace Components.Shared
 {
     public abstract class StatefulComponent : ComponentBase, IDisposable
     {
-        private readonly List<TemporaryState> _states = new List<TemporaryState>();
+        private readonly List<IState> _states = new List<IState>();
 
-        protected void Observe(params TemporaryState[] states)
+        protected void Observe(params IState[] states)
         {
             _states.AddRange(states);
             foreach (var state in states)
@@ -22,7 +22,7 @@ namespace Components.Shared
 
         void OnStateChanged(object sender, EventArgs e) => StateHasChanged();
 
-        void IDisposable.Dispose()
+        public virtual void Dispose()
         {
             if (_states != null)
             {

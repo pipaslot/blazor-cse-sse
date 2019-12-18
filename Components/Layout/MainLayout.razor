@@ -9,6 +9,9 @@
                 <MatAppBarTitle>@_name</MatAppBarTitle>
             </MatAppBarSection>
             <MatAppBarSection Align="@MatAppBarSectionAlign.End">
+                <AuthorizeView>
+                    <span>Hello, @context.User.Identity.Name</span>
+                </AuthorizeView>
                 <Components.Layout.Navigation.LanguageSelect />
             </MatAppBarSection>
         </MatAppBarRow>
@@ -30,13 +33,13 @@
     bool _opened = true;
     string _name;
 
-    [Inject] ILogger<MainLayout> MLogger { get; set; }
+    //[Inject] ILogger<MainLayout> MLogger { get; set; }
     [Inject] IConfigProvider ConfigProvider { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        MLogger.LogDebug("MainLayout OnInitAsync()");
+        //MLogger.LogDebug("MainLayout OnInitAsync()");
         var config = await ConfigProvider.GetConfig();
         _name = config.Name;
     }

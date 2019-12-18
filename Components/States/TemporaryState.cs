@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Components.States
 {
-    public abstract class TemporaryState
+    public abstract class TemporaryState : IState
     {
         private bool _initialized;
         private Task _initializeTask;

@@ -21,8 +21,7 @@
 
 .flag {
   display: inline-flex;
-  flex-direction: row;
-  flex: 1 0 auto; }
+  flex-direction: row; }
   .flag img {
     display: flex;
     width: auto;
@@ -94,21 +93,24 @@ app {
     display: flex; }
   app header.mdc-top-app-bar {
     z-index: 7; }
-  app header .flag {
-    justify-content: flex-end; }
+  app header .mdc-top-app-bar__section--align-end > * {
+    display: inline-flex;
+    justify-content: flex-end;
+    margin-left: 2.5rem;
+    font-size: 1.25rem; }
   app .mdc-top-app-bar--fixed-adjust {
     display: flex; }
-    app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content {
-      display: flex;
-      flex-direction: row;
-      flex-grow: 1; }
-      app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content .mdc-drawer {
-        display: flex; }
-        app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content .mdc-drawer > .mat-drawer-app-content {
-          display: flex;
-          margin: 0.5rem;
-          flex-grow: 1;
-          flex-direction: column; }
+  app > .mdc-drawer-app-content {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1; }
+    app > .mdc-drawer-app-content .mdc-drawer {
+      display: flex; }
+      app > .mdc-drawer-app-content .mdc-drawer > .mat-drawer-app-content {
+        display: flex;
+        margin: 0.5rem;
+        flex-grow: 1;
+        flex-direction: column; }
 
 .layout-navigation-languageSelect-flag img {
   max-height: 20px; }

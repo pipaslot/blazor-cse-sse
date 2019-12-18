@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using App.Shared;
 using Microsoft.Extensions.Options;
 
-namespace App.Server
+namespace App.Server.Services
 {
     public class AppSettingConfigProvider : IConfigProvider
     {
