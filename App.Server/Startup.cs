@@ -3,7 +3,6 @@
 using System.Net.Http;
 using Westwind.AspNetCore.LiveReload;
 #endif
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -11,10 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using System.Linq;
-using App.Server.Controllers;
 using App.Server.Services;
 using App.Shared;
+using Core.Auth;
 using Components;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace App.Server
@@ -40,8 +40,9 @@ namespace App.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            logger.Debug("");
+            var isClientSide = false;
 #if ClientSideExecution
+            isClientSide = true;
             logger.Debug("Beginning Startup.ConfigureServices() in CSE mode");
 #else
             logger.Debug("Beginning Startup.ConfigureServices() in SSE mode");
@@ -74,7 +75,9 @@ namespace App.Server
             services.Configure<Config>(_configuration.GetSection("App"));
             services.AddSingleton<IConfigProvider, AppSettingConfigProvider>();
             services.AddAuthorization();
-            services.AddSingleton<IAuthService, AuthService>();
+            services.AddCoreAuth(_configuration.GetSection("Auth"), isClientSide);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IAuthService,AuthService>();
 
             logger.Debug("Completed Startup.ConfigureServices()");
         }
@@ -113,7 +116,7 @@ namespace App.Server
             logger.Debug("UseStaticFiles...");
             app.UseStaticFiles();
             app.UseMiddleware<ConfigProviderMiddleware>();
-
+            app.UseAuthentication();
 #if ClientSideExecution
 
             logger.Debug("UseClientSideBlazorFiles...");

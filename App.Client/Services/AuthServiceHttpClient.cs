@@ -4,12 +4,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 using App.Shared;
 using App.Shared.AuthModels;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
-using Components.States;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -17,7 +15,7 @@ namespace App.Client.Services
 {
     public class AuthServiceHttpClient : AuthenticationStateProvider, IAuthService
     {
-        private const string AuthTokenKey = "userAuthToken";
+        private const string UserIdentityKey = "userIdentity";
         private readonly HttpClient _httpClient;
         private readonly LocalStorage _localStorage;
 
@@ -28,16 +26,19 @@ namespace App.Client.Services
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var savedToken = await _localStorage.GetItemAsync(AuthTokenKey);
+            var savedToken = await _localStorage.GetItemAsync<SingInResult>(UserIdentityKey);
 
-            if (string.IsNullOrWhiteSpace(savedToken))
+            if (savedToken == null)
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken.AccessToken);
 
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, savedToken.Username),
+            }, "jwt")));
         }
         
         public async Task SignIn(string username, string password)
@@ -49,7 +50,7 @@ namespace App.Client.Services
             });
             if (result.Success)
             {
-                await _localStorage.SetItemAsync(AuthTokenKey, result.AccessToken);
+                await _localStorage.SetItemAsync(UserIdentityKey, result);
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.AccessToken);
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             }
@@ -58,30 +59,8 @@ namespace App.Client.Services
         public async Task SignOut()
         {
             _httpClient.DefaultRequestHeaders.Authorization = null;
-            await _localStorage.RemoveItemAsync(AuthTokenKey);
+            await _localStorage.RemoveItemAsync(UserIdentityKey);
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-        }
-
-        private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
-        {
-            var claims = new List<Claim>();
-            var payload = jwt.Split('.')[1];
-            var jsonBytes = ParseBase64WithoutPadding(payload);
-            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-            
-            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
-
-            return claims;
-        }
-
-        private byte[] ParseBase64WithoutPadding(string base64)
-        {
-            switch (base64.Length % 4)
-            {
-                case 2: base64 += "=="; break;
-                case 3: base64 += "="; break;
-            }
-            return Convert.FromBase64String(base64);
         }
     }
 }
