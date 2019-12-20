@@ -1,4 +1,5 @@
 ﻿@page "/auth/sign-in"
+@layout EmptyLayout
 @using App.Shared.AuthModels
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
@@ -6,17 +7,16 @@
 <h3>Sing In</h3>
 <EditForm Model="@_model" OnValidSubmit="@Success">
     <DataAnnotationsValidator />
-    <p>
-        <MatTextField Label="Username" @bind-Value="_model.Username" />
-        <ValidationMessage For="@(() => _model.Username)" />
-    </p>
-    <p>
-        <MatTextField Label="Password" @bind-Value="_model.Password" Type="password" />
-        <ValidationMessage For="@(() => _model.Password)" />
-    </p>
-    <p>
-        <MatButton Type="submit" Raised="true">Login</MatButton>
-    </p>
+
+    <MatTextField Label="Username" @bind-Value="_model.Username" />
+    <ValidationMessage For="@(() => _model.Username)" />
+
+
+    <MatTextField Label="Password" @bind-Value="_model.Password" Type="password" />
+    <ValidationMessage For="@(() => _model.Password)" />
+
+    <MatButton Type="submit" Raised="true">Login</MatButton>
+
 </EditForm>
 
 @code {
