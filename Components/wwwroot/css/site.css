@@ -206,4 +206,8 @@ app > .mdc-drawer-app-content .mdc-drawer > .mat-drawer-app-content {
       -ms-flex-direction: column;
           flex-direction: column;
 }
+
+.layout-navigation-languageSelect-flag img {
+  max-height: 20px;
+}
 /*# sourceMappingURL=Site.css.map */
