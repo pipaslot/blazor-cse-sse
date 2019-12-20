@@ -1,5 +1,20 @@
 ﻿@import '_reset';
 @import '_blazor';
+@import '_mdc';
+
+app {
+    display: flex;
+    flex-grow: 1;
+    flex-direction:column;
+    height: 100%;
+    
+    > div {
+        display: flex;
+    }
+}
+.flex{
+    display: flex;
+}
 
 @import '../Shared/_index';
 @import '../Layout/_index';

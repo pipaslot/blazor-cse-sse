@@ -1,11 +1,4 @@
 ﻿app {
-    height: 100%;
-
-    > div {
-        //height: 100%;
-        display: flex;
-    }
-
     header.mdc-top-app-bar {
         z-index: 7;
     }

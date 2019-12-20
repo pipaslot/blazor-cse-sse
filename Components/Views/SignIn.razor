@@ -14,8 +14,9 @@
 
     <MatTextField Label="Password" @bind-Value="_model.Password" Type="password" />
     <ValidationMessage For="@(() => _model.Password)" />
-
-    <MatButton Type="submit" Raised="true">Login</MatButton>
+<div class="flex">
+    <Spacer /><MatButton Type="submit" Raised="true">Login</MatButton>
+    </div>
 
 </EditForm>
 
