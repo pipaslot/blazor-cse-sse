@@ -3,16 +3,16 @@
         {
             "format": "expanded",
             "extensionName": ".css",
-            "savePath": "/wwwroot/css"
+            "savePath": "Components/wwwroot/css"
         },
         {
             "format": "compressed",
             "extensionName": ".min.css",
-            "savePath": "/wwwroot/css"
+            "savePath": "Components/wwwroot/css"
         }
     ],
     "liveSassCompile.settings.includeItems": [
-        "Styles/Site.scss",
-        "Styles/Loading.scss",
+        "Components/Styles/Site.scss",
+        "Components/Styles/Loading.scss",
     ]
 }
