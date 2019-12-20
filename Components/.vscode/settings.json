@@ -1,0 +1,18 @@
+{
+    "liveSassCompile.settings.formats":[
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "/wwwroot/css"
+        },
+        {
+            "format": "compressed",
+            "extensionName": ".min.css",
+            "savePath": "/wwwroot/css"
+        }
+    ],
+    "liveSassCompile.settings.includeItems": [
+        "Styles/Site.scss",
+        "Styles/Loading.scss",
+    ]
+}
