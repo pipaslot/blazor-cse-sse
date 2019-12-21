@@ -1,20 +1,22 @@
-<div class="@GetClasses()">@ChildContent</div>
+<div class="@GetClasses()" style="@Style">@ChildContent</div>
 
 @code {
     [Parameter]
     public RenderFragment ChildContent { get; set; }
     [Parameter]
     public string Size {get;set;}
+    [Parameter]
+    public string Style { get; set; }
 
     string GetClasses(){
         
         var sizes = (Size?? "")
             .Split(" ")
             .Where(i=>!string.IsNullOrWhiteSpace(i))
-            .Select(i => "col-"+i)
+            .Select(i => "b-col-"+i)
             .ToArray();
         return sizes.Any()
-            ? "col col-" + string.Join(" ",sizes)
-            : "col";
+            ? "b-col " + string.Join(" ",sizes)
+            : "b-col";
     }
 }

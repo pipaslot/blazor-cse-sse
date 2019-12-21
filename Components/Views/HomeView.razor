@@ -6,12 +6,12 @@
 <BRow>
     <BCol Size="sm-4">4</BCol>
     <BCol Size="sm-4">4</BCol>
-    <BCol Size="sm-4">4</BCol>
+    <BCol Size="sm-2">4</BCol>
 </BRow>
 <BRow>
+    <BCol Size="sm-2">2</BCol>
     <BCol Size="sm-4">4</BCol>
-    <BCol Size="sm-4">4</BCol>
-    <BCol Size="sm-4">4</BCol>
+    <BCol Size="sm-6">6</BCol>
 </BRow>
 
 <BContainer>
@@ -26,7 +26,36 @@
         <BCol Size="sm-4">4</BCol>
     </BRow>
 </BContainer>
-
+<BContainer>
+    <BRow>
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+    </BRow>
+    <BRow>
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+    </BRow>
+</BContainer>
+<h4>Align</h4>
+<BContainer>
+    <BRow Align="start" style="height:150px">
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+    </BRow>
+    <BRow Align="center" style="height:150px">
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+    </BRow>
+    <BRow Align="@BRowAlign.Center" style="height:150px">
+        <BCol Size="@(BColSize.All_4+BColSize.XL_4)">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+        <BCol Size="sm-4">4</BCol>
+    </BRow>
+</BContainer>
 @code{
 
 }

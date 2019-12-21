@@ -5,3 +5,12 @@
   margin-right: 0.75rem;
   margin-left: 0.75rem;
 }
+.row.align-start{
+  align-items: flex-start !important;
+}
+.row.align-center{
+  align-items: center !important;
+}
+.row.align-end{
+  align-items: flex-end !important;
+}

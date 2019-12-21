@@ -1,6 +1,17 @@
-<div class="row">@ChildContent</div>
+<div class="row @GetAlign()" style="@Style">@ChildContent</div>
 
 @code {
     [Parameter]
     public RenderFragment ChildContent { get; set; }
+    
+    [Parameter]
+    public string Align { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    string GetAlign()
+    {
+        return string.IsNullOrWhiteSpace(Align) ? "" : ("align-" + Align);
+    }
 }
