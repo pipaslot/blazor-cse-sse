@@ -60,6 +60,22 @@ app > div {
   display: flex;
 }
 
+.col {
+  -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  max-width: 100%;
+}
+
+.container {
+  width: 100%;
+  margin: 0.75rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .flag {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -85,6 +101,19 @@ app > div {
 
 .flag.clickable {
   cursor: pointer;
+}
+
+.row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  margin-right: 0.75rem;
+  margin-left: 0.75rem;
 }
 
 .spacer {
@@ -199,7 +228,7 @@ app .mdc-top-app-bar--fixed-adjust {
   display: flex;
 }
 
-app > .mdc-drawer-app-content {
+app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -212,17 +241,16 @@ app > .mdc-drawer-app-content {
           flex-grow: 1;
 }
 
-app > .mdc-drawer-app-content .mdc-drawer {
+app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content .mdc-drawer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-app > .mdc-drawer-app-content .mdc-drawer > .mat-drawer-app-content {
+app .mdc-top-app-bar--fixed-adjust .mat-drawer-app-content {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin: 0.5rem;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -230,6 +258,7 @@ app > .mdc-drawer-app-content .mdc-drawer > .mat-drawer-app-content {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  width: 100%;
 }
 
 .layout-navigation-languageSelect-flag img {

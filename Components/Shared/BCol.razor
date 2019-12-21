@@ -1,0 +1,20 @@
+<div class="@GetClasses()">@ChildContent</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public string Size {get;set;}
+
+    string GetClasses(){
+        
+        var sizes = (Size?? "")
+            .Split(" ")
+            .Where(i=>!string.IsNullOrWhiteSpace(i))
+            .Select(i => "col-"+i)
+            .ToArray();
+        return sizes.Any()
+            ? "col col-" + string.Join(" ",sizes)
+            : "col";
+    }
+}
