@@ -1,3 +1,9 @@
 .b-container {
     padding: 0.75rem;
 }
+.b-container.fill-height {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+}

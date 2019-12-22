@@ -15,6 +15,9 @@
         flex: 0 0 100% / 12 * $i;
         max-width: 100% / 12 * $i;
       }
+      .b-col-offset-#{$breakpoint}-#{$i} {
+        margin-left: 100% / 12 * $i;
+      }
     }
   }
 }
@@ -23,5 +26,8 @@
   .b-col-#{$i} {
     flex: 0 0 100% / 12 * $i;
     max-width: 100% / 12 * $i;
+  }
+  .b-col-offset-#{$i} {
+    margin-left: 100% / 12 * $i;
   }
 }

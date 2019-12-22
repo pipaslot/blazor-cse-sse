@@ -59,8 +59,8 @@
   
   <ItemGroup>
     <Watch Include="..\**\*.razor" />
-    <Watch Include="..\**\*.css" />
-    <Watch Include="..\**\*.js" />
+    <!--<Watch Include="..\**\*.css" />
+    <Watch Include="..\**\*.js" />-->
   </ItemGroup>
 
 

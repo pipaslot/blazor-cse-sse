@@ -3,22 +3,27 @@
 @using App.Shared.AuthModels
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
-
-<h3>Sing In</h3>
-<EditForm Model="@_model" OnValidSubmit="@Success">
-    <DataAnnotationsValidator />
-
-    <MatTextField Label="Username" @bind-Value="_model.Username" />
-    <ValidationMessage For="@(() => _model.Username)" />
-
-
-    <MatTextField Label="Password" @bind-Value="_model.Password" Type="password" />
-    <ValidationMessage For="@(() => _model.Password)" />
+<BContainer FillHeight>
     <BRow>
-        <BSpacer /><MatButton Type="submit" Raised="true">Login</MatButton>
-    </BRow>
+        <BCol Size="offset-4 4">
+            <h3>Sing In</h3>
+            <EditForm Model="@_model" OnValidSubmit="@Success">
+                <DataAnnotationsValidator />
 
-</EditForm>
+                <MatTextField Label="Username" @bind-Value="_model.Username" />
+                <ValidationMessage For="@(() => _model.Username)" />
+
+
+                <MatTextField Label="Password" @bind-Value="_model.Password" Type="password" />
+                <ValidationMessage For="@(() => _model.Password)" />
+                <BRow>
+                    <BSpacer /><MatButton Type="submit" Raised="true">Login</MatButton>
+                </BRow>
+
+            </EditForm>
+        </BCol>
+    </BRow>
+</BContainer>
 
 @code {
     UserCredentials _model = new UserCredentials();

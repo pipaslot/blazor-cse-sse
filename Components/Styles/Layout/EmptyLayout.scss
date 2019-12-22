@@ -1,13 +1,17 @@
-﻿
-    #layout-empty {
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-    }
-@media only screen and (min-width: 960px)
-{
-    #layout-empty {
-        min-width: 500px;
-    }
+﻿#layout-empty {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  &:before{
+    margin: 0 auto;
+  }
+  &:after{      
+    align-items: center !important;
+  }
+}
+@media only screen and (min-width: 960px) {
+  #layout-empty {
+    min-width: 500px;
+  }
 }
