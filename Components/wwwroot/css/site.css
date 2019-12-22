@@ -28,10 +28,16 @@ app .mdc-text-field {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  margin: 0 0.75rem;
 }
 
 app .mdc-button--raised, app .mdc-button--unelevated {
   padding: 1.75rem;
+}
+
+app h1, app h2, app h3, app h4, app h5, app h6 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
 }
 
 app {
@@ -45,16 +51,9 @@ app {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  height: 100%;
 }
 
 app > div {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.flex {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -537,11 +536,8 @@ app > div {
   max-width: 100%;
 }
 
-.container {
-  width: 100%;
-  margin: 0.75rem;
-  margin-right: auto;
-  margin-left: auto;
+.b-container {
+  padding: 0.75rem;
 }
 
 .flag {
@@ -571,7 +567,7 @@ app > div {
   cursor: pointer;
 }
 
-.row {
+.b-row {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -580,29 +576,29 @@ app > div {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
-  margin-right: 0.75rem;
-  margin-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
 }
 
-.row.align-start {
+.b-row.align-start {
   -webkit-box-align: start !important;
       -ms-flex-align: start !important;
           align-items: flex-start !important;
 }
 
-.row.align-center {
+.b-row.align-center {
   -webkit-box-align: center !important;
       -ms-flex-align: center !important;
           align-items: center !important;
 }
 
-.row.align-end {
+.b-row.align-end {
   -webkit-box-align: end !important;
       -ms-flex-align: end !important;
           align-items: flex-end !important;
 }
 
-.spacer {
+.b-spacer {
   -webkit-box-flex: 1 !important;
       -ms-flex-positive: 1 !important;
           flex-grow: 1 !important;
@@ -727,7 +723,7 @@ app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content {
           flex-grow: 1;
 }
 
-app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content .mdc-drawer {
+app .mdc-top-app-bar--fixed-adjust > .mdc-drawer-app-content .mdc-drawer:not(.mdc-drawer--dismissible) {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

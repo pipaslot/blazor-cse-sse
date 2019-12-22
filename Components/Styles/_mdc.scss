@@ -1,8 +1,13 @@
 app {
     .mdc-text-field{
         display: flex;
+        margin: 0 0.75rem;
     }
     .mdc-button--raised, .mdc-button--unelevated {
         padding: 1.75rem;    
+    }
+    h1,h2,h3,h4,h5,h6{
+        margin-left: 0.75rem;
+        margin-right: 0.75rem;
     }
 }

@@ -6,14 +6,10 @@ app {
     display: flex;
     flex-grow: 1;
     flex-direction:column;
-    height: 100%;
     
     > div {
         display: flex;
     }
-}
-.flex{
-    display: flex;
 }
 
 @import 'Shared/_index';
