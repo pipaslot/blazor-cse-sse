@@ -3,20 +3,32 @@
 @code {
     [Parameter]
     public RenderFragment ChildContent { get; set; }
+    
     [Parameter]
     public string Size {get;set;}
     [Parameter]
+    public string Offset {get;set;}
+    [Parameter]
     public string Style { get; set; }
 
-    string GetClasses(){
-        
-        var sizes = (Size?? "")
+    string GetClasses()
+    {
+        var classes = new List<string>()
+        {
+            "b-col"
+        };
+
+        var sizes = (Size ?? "")
             .Split(" ")
-            .Where(i=>!string.IsNullOrWhiteSpace(i))
-            .Select(i => "b-col-"+i)
-            .ToArray();
-        return sizes.Any()
-            ? "b-col " + string.Join(" ",sizes)
-            : "b-col";
+            .Where(i => !string.IsNullOrWhiteSpace(i))
+            .Select(i => "b-col-" + i);
+        var offsets = (Size ?? "")
+            .Split(" ")
+            .Where(i => !string.IsNullOrWhiteSpace(i))
+            .Select(i => "b-col-offset-" + i);
+        classes.AddRange(offsets);
+
+        return string.Join(" ", classes);
+
     }
 }
