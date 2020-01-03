@@ -46,17 +46,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Layout.Designer.cs">
+    <Compile Update="Resources\LayoutResource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Layout.resx</DependentUpon>
+      <DependentUpon>LayoutResource.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Layout.resx">
+    <EmbeddedResource Update="Resources\LayoutResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Layout.Designer.cs</LastGenOutput>
+      <LastGenOutput>LayoutResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

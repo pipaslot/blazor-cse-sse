@@ -9,7 +9,7 @@
     </MatNavItem>
     <MatNavItem>
         <NavLink href="" Match="NavLinkMatch.All">
-            <MatIcon>@MatIconNames.Home</MatIcon> @Layout.Home
+            <MatIcon>@MatIconNames.Home</MatIcon> @LayoutResource.Home
         </NavLink>
     </MatNavItem>
     <MatNavItem>
@@ -35,10 +35,12 @@
 </MatNavMenu>
 
 @code{
-
+    [Inject] IJSRuntime Runtime {get;set;}
     protected override void OnInitialized()
     {
         Observe(appState);
+        //LayoutResource.Culture = new System.Globalization.CultureInfo("cs");
+        (Runtime as IJSInProcessRuntime)?.Invoke<string>("console.log", LayoutResource.Home);
     }
 
     void SignOut()
