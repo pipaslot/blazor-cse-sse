@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using System.Resources;
-using Components.Resources;
+using Core.Localization;
 
 namespace App.Client.Services
 {

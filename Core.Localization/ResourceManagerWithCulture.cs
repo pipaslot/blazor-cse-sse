@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Resources;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Components.Resources
+namespace Core.Localization
 {
     public abstract class ResourceManagerWithCulture : ResourceManager
     {

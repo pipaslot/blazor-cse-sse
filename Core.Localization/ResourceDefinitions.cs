@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Components.Resources
+namespace Core.Localization
 {
     public class ResourceDefinitions : IReadOnlyCollection<Type>
     {

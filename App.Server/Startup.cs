@@ -72,7 +72,7 @@ namespace App.Server
 #endif
 
             logger.Debug("Adding ApplicationComponents");
-            services.AddApplicationComponents();
+            services.AddApplicationComponents<ResourceManagerServerFactory>();
 
             //Configure custom services
             services.Configure<Config>(_configuration.GetSection("App"));
@@ -81,7 +81,6 @@ namespace App.Server
             services.AddCoreAuth(_configuration.GetSection("Auth"), isClientSide);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthService,AuthService>();
-            services.AddSingleton<IResourceManagerFactory, ResourceManagerServerFactory>();
             logger.Debug("Completed Startup.ConfigureServices()");
         }
 

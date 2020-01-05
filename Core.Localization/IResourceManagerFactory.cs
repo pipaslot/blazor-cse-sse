@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Resources;
 
-namespace Components.Resources
+namespace Core.Localization
 {
     public interface IResourceManagerFactory
     {

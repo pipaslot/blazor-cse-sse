@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Components.Resources;
+using Core.Localization;
 using Microsoft.AspNetCore.Components;
 
 namespace App.Client.Services

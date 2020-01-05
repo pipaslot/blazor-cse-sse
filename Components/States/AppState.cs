@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
-using Components.Resources;
+using Core.Localization;
 
 namespace Components.States
 {

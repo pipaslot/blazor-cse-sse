@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\App.Shared\App.Shared.csproj" />
+    <ProjectReference Include="..\Core.Localization\Core.Localization.csproj" />
   </ItemGroup>
 
   <ItemGroup>
