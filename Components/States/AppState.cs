@@ -25,7 +25,7 @@ namespace Components.States
 
         private async Task SwitchLanguage(string language)
         {
-            var tasks = ResourceManagers.Select(rm => rm.LoadTranslations(Language));
+            var tasks = ResourceManagers.Select(rm => rm.LoadTranslations(language));
             await Task.WhenAll(tasks);
 
         }
