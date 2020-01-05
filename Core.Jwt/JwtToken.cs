@@ -9,6 +9,11 @@ namespace Core.Jwt
             Value = value;
             ValidTo = validTo;
         }
+
+        public JwtToken()
+        {
+        }
+
         public DateTime ValidTo { get; set; }
         public string Value { get; set; }
     }

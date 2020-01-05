@@ -27,13 +27,12 @@ namespace App.Client.Services
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var savedToken = await _localStorage.GetItemAsync<SingInResult>(UserIdentityKey);
-
-            if (savedToken == null)
+            if (savedToken?.AccessToken?.Value == null || savedToken?.AccessToken?.ValidTo < DateTime.UtcNow)
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken.AccessToken);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken.AccessToken.Value);
 
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new[]
             {
@@ -51,7 +50,7 @@ namespace App.Client.Services
             if (result.Success)
             {
                 await _localStorage.SetItemAsync(UserIdentityKey, result);
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.AccessToken);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.AccessToken.Value);
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             }
         }

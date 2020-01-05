@@ -41,7 +41,7 @@ namespace App.Server.Controllers
             return new SingInResult
             {
                 Success = true,
-                AccessToken = token.Value,
+                AccessToken = token,
                 Username = body.Username
             };
         }
