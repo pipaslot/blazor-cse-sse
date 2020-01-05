@@ -18,14 +18,16 @@
     </MatAppBar>
 
     <MatAppBarContent>
-        <MatDrawerContainer>
-            <MatDrawer @bind-Opened="@_opened" Mode="@MatDrawerMode.Dismissible">
+        <div class="layout-nav">
+            @if(_opened){
+            <div class="layout-nav-aside">
                 <NavMenu />
-            </MatDrawer>
-            <MatDrawerContent>
+            </div>
+        }
+            <div class="layout-nav-content">
                 @Body
-            </MatDrawerContent>
-        </MatDrawerContainer>
+            </div>
+        </div>
     </MatAppBarContent>
 </MatAppBarContainer>
 

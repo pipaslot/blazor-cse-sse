@@ -1,33 +1,59 @@
 ﻿app {
-  header.mdc-top-app-bar {
-    z-index: 7;
-  }
+    header.mdc-top-app-bar {
+        z-index: 7;
+    }
 
-  header .mdc-top-app-bar__section--align-end > * {
-    display: inline-flex;
-    justify-content: flex-end;
-    margin-left: 2.5rem;
-    font-size: 1.25rem;
-  }
+    header .mdc-top-app-bar__section--align-end > * {
+        display: inline-flex;
+        justify-content: flex-end;
+        margin-left: 2.5rem;
+        font-size: 1.25rem;
+    }
 
-  .mdc-top-app-bar--fixed-adjust {
-    display: flex;
-
-    > .mdc-drawer-app-content {
-      display: flex;
-      flex-direction: row;
-      flex-grow: 1;
-
-      .mdc-drawer:not(.mdc-drawer--dismissible) {
+    .mdc-top-app-bar--fixed-adjust {
         display: flex;
-      }
+
+        > .mdc-drawer-app-content {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+
+            .mdc-drawer:not(.mdc-drawer--dismissible) {
+                display: flex;
+            }
+        }
+
+        .mat-drawer-app-content {
+            display: flex;
+            //   margin: 0.5rem;
+            flex-grow: 1;
+            flex-direction: column;
+            width: 100%;
+        }
     }
-    .mat-drawer-app-content {
-      display: flex;
-    //   margin: 0.5rem;
-      flex-grow: 1;
-      flex-direction: column;
-      width: 100%;
+
+    .layout-nav {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+
+        .layout-nav-aside {
+            display: flex;
+        }
+
+        .layout-nav-content {
+            display: flex;
+            flex-grow: 1;
+        }
     }
-  }
+
+    @media (min-width: 600px) {
+        .layout-nav {
+            flex-direction: row;
+
+            .layout-nav-aside {
+                width: 20rem;
+            }
+        }
+    }
 }
