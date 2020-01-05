@@ -1,4 +1,7 @@
 ﻿using System;
+using System.CodeDom.Compiler;
+using System.Collections;
+using System.Collections.Generic;
 using App.Client.Services;
 using App.Shared;
 using Components;
@@ -21,13 +24,12 @@ namespace App.Client
             services.AddScoped<AuthServiceHttpClient>();
             services.AddScoped<IAuthService, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
             services.AddScoped<AuthenticationStateProvider, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
-            services.AddScoped<ResourceManagerFactory>();
+            services.AddScoped<IResourceManagerFactory, ResourceManagerClientFactory>();
         }
 
-        public void Configure(IComponentsApplicationBuilder app, ResourceManagerFactory resourceManagerFactory)
+        public void Configure(IComponentsApplicationBuilder app)
         {
-            resourceManagerFactory.ReplaceResourceManager<LayoutResource>();
-            app.AddComponent<Components.Application>("app");
+            app.AddComponent<Application>("app");
         }
     }
 }

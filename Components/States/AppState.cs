@@ -9,9 +9,10 @@ namespace Components.States
 {
     public class AppState : PersistedState<AppStateData>
     {
-        public List<ApiResourceManager> ResourceManagers { get; set; } = new List<ApiResourceManager>();
-        public AppState(LocalStorage localStorage) : base(localStorage)
+        private readonly ResourceCollection _resourceCollection;
+        public AppState(LocalStorage localStorage, ResourceCollection resourceCollection) : base(localStorage)
         {
+            _resourceCollection = resourceCollection;
         }
         
         public string Language => Data.Language;
@@ -19,21 +20,14 @@ namespace Components.States
         public async Task SetLanguage(string language)
         {
             Data.Language = language;
-            await SwitchLanguage(language);
+            await _resourceCollection.SetCulture(language);
             SaveChanges();
         }
-
-        private async Task SwitchLanguage(string language)
-        {
-            var tasks = ResourceManagers.Select(rm => rm.LoadTranslations(language));
-            await Task.WhenAll(tasks);
-
-        }
-
+        
         protected override async Task OnLoad()
         {
             await base.OnLoad();
-            await SwitchLanguage(Language);
+            await _resourceCollection.SetCulture(Language);
         }
     }
 

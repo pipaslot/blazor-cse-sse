@@ -1,4 +1,9 @@
-﻿using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+﻿using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Resources;
+using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+using Components.Resources;
 using Components.States;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +21,10 @@ namespace Components
                 .WithScopedLifetime()
             );
             services.AddStorage();
+
+            //Register all resources
+            services.AddResources()
+                .Register<LayoutResource>();
         }
     }
 }

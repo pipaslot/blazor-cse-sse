@@ -3,6 +3,8 @@
 using System.Net.Http;
 using Westwind.AspNetCore.LiveReload;
 #endif
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -14,6 +16,7 @@ using App.Server.Services;
 using App.Shared;
 using Core.Auth;
 using Components;
+using Components.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -78,7 +81,7 @@ namespace App.Server
             services.AddCoreAuth(_configuration.GetSection("Auth"), isClientSide);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthService,AuthService>();
-
+            services.AddSingleton<IResourceManagerFactory, ResourceManagerServerFactory>();
             logger.Debug("Completed Startup.ConfigureServices()");
         }
 

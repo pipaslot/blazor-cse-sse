@@ -34,6 +34,7 @@
     <PackageReference Include="Blazor.Extensions.Logging" Version="1.1.0-preview2" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview4.19579.2" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="3.1.0-preview4.19579.2" PrivateAssets="all" />
+    <PackageReference Include="Scrutor" Version="3.1.0" />
   </ItemGroup>
 
 </Project>
