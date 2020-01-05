@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Auth
+namespace Core.Jwt
 {
     public sealed class JwtToken
     {

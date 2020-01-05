@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.Auth
+namespace Core.Jwt
 {
     public class AuthOptions
     {

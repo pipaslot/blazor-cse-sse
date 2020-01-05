@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Core.Auth
+namespace Core.Jwt
 {
     public sealed class JwtTokenBuilder
     {

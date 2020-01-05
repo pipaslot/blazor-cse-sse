@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Core.Auth
+namespace Core.Jwt
 {
     public static class IServiceCollectionExtensions
     {

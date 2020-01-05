@@ -14,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using App.Server.Services;
 using App.Shared;
-using Core.Auth;
+using Core.Jwt;
 using Components;
 using Components.Resources;
 using Microsoft.AspNetCore.Http;
