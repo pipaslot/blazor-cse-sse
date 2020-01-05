@@ -779,6 +779,9 @@ app > div {
 
 .b-container {
   padding: 0.75rem;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 
 .b-container.fill-height {
@@ -1004,6 +1007,46 @@ app .mdc-top-app-bar--fixed-adjust .mat-drawer-app-content {
       -ms-flex-direction: column;
           flex-direction: column;
   width: 100%;
+}
+
+app .layout-nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+app .layout-nav .layout-nav-aside {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+app .layout-nav .layout-nav-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+@media (min-width: 600px) {
+  app .layout-nav {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+  }
+  app .layout-nav .layout-nav-aside {
+    width: 20rem;
+  }
 }
 
 .layout-navigation-languageSelect-flag img {
