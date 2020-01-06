@@ -22,10 +22,11 @@
             .Split(" ")
             .Where(i => !string.IsNullOrWhiteSpace(i))
             .Select(i => "b-col-" + i);
-        var offsets = (Size ?? "")
+        var offsets = (Offset ?? "")
             .Split(" ")
             .Where(i => !string.IsNullOrWhiteSpace(i))
             .Select(i => "b-col-offset-" + i);
+        classes.AddRange(sizes);
         classes.AddRange(offsets);
 
         return string.Join(" ", classes);
