@@ -34,7 +34,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.2.0-preview1.20073.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="3.2.0-preview1.20073.1" PrivateAssets="all" />
-    <PackageReference Include="Scrutor" Version="3.1.0" />
+    <PackageReference Include="Scrutor" Version="3.2.0" />
   </ItemGroup>
 
 </Project>
