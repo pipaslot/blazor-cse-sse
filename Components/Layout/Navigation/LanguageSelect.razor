@@ -17,7 +17,7 @@
 @code{
     Flag flag;
     MatMenu menu;
-
+        
     string[] _languages = new string[] { };
     protected override async Task OnInitializedAsync()
     {
@@ -28,6 +28,7 @@
 
     void OpenMenu(MouseEventArgs e)
     {
+
         menu.OpenAsync(flag.Ref);
     }
 

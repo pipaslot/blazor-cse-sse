@@ -122,7 +122,7 @@ namespace App.Server
 #if ClientSideExecution
 
             logger.Debug("UseClientSideBlazorFiles...");
-            app.UseClientSideBlazorFiles<App.Client.Startup>();
+            app.UseClientSideBlazorFiles<App.Client.Program>();
 
             logger.Debug("UseRouting...");
             app.UseRouting();
@@ -131,7 +131,7 @@ namespace App.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapFallbackToClientSideBlazor<App.Client.Startup>("index_cse.html");
+                endpoints.MapFallbackToClientSideBlazor<App.Client.Program>("index_cse.html");
             });
 #else
             logger.Debug("UseRouting...");
