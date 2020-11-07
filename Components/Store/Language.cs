@@ -7,6 +7,7 @@ namespace Components.Store
     public static class Language
     {
         public const string LocalStorageKey = nameof(Authentication);
+        public const string DefaultLanguage = "de";
         public class State
         {
             public State(string language)
@@ -18,7 +19,7 @@ namespace Components.Store
         }
         public class PersistedState
         {
-            public string Language { get; set; }
+            public string Language { get; set; } = DefaultLanguage;
         }
         
         // ReSharper disable once UnusedType.Global
@@ -31,7 +32,7 @@ namespace Components.Store
 
             protected override State GetInitialState()
             {
-                return new State("en");
+                return new State(DefaultLanguage);
             }
             public static async Task LoadPersistedStateAsync(ILocalStorageService localStorage, IDispatcher dispatcher)
             {

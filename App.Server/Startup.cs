@@ -27,8 +27,6 @@ namespace App.Server
 {
     public class Startup
     {
-        NLog.Logger logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-
         public Startup(IHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -49,28 +47,20 @@ namespace App.Server
             var isClientSide = false;
 #if ClientSideExecution
             isClientSide = true;
-            logger.Debug("Beginning Startup.ConfigureServices() in CSE mode");
 #else
-            logger.Debug("Beginning Startup.ConfigureServices() in SSE mode");
             services.AddRazorPages();
-
-            // Adds the Server-Side Blazor services, and those registered by the app project's startup.
-            logger.Debug("Adding AddServerSideBlazor...");
             services.AddServerSideBlazor();
 
 #endif
 
-            logger.Debug("Adding Mvc...");
             services.AddMvc();
 
-            logger.Debug("Adding ResponseCompression...");
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
 #if ServerSideExecution
-            logger.Debug("Adding LiveReload");
             services.AddLiveReload();
 #endif
 
@@ -88,10 +78,6 @@ namespace App.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            logger.Debug("");
-            logger.Debug("Beginning Startup.Configure()");
-
-            logger.Debug("UseResponseCompression...");
             app.UseResponseCompression();
 
             if (env.IsDevelopment())
@@ -99,45 +85,30 @@ namespace App.Server
 #if ServerSideExecution
                 app.UseLiveReload();
 #endif
-                logger.Debug("UseDeveloperExceptionPage...");
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
             }
             else
             {
-                logger.Debug("UseExceptionHandler...");
                 app.UseExceptionHandler("/Home/Error");
 
-                logger.Debug("UseHsts...");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            logger.Debug("UseHttpsRedirection...");
             app.UseHttpsRedirection();
-
-            logger.Debug("UseStaticFiles...");
             app.UseStaticFiles();
             app.UseAuthentication();
 #if ClientSideExecution
-
-            logger.Debug("UseClientSideBlazorFiles...");
             app.UseBlazorFrameworkFiles();
-
-            logger.Debug("UseRouting...");
             app.UseRouting();
-
-            logger.Debug("UseEndpoints...");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapFallbackToFile("index_cse.html");
             });
 #else
-            logger.Debug("UseRouting...");
             app.UseRouting();
-
-            logger.Debug("UseEndpoints...");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
@@ -145,8 +116,6 @@ namespace App.Server
                 endpoints.MapFallbackToPage("/index_sse");
             });
 #endif
-
-            logger.Debug("Completed Startup.Configure()");
         }
     }
 

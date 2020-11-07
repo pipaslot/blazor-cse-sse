@@ -46,8 +46,8 @@ namespace Components.Store
             public static async Task LoadPersistedStateAsync(ILocalStorageService localStorage, IDispatcher dispatcher)
             {
                 var auth = await localStorage.GetItemAsync<PersistedState>(LocalStorageKey);
-                if (auth != null){
-                    dispatcher.Dispatch(new SignInAction(auth.BearerToken, auth.UserName));
+                if (auth?.BearerToken != null){
+                    dispatcher.Dispatch(new SignInAction(auth.BearerToken, auth.UserName ?? ""));
                 }
             }
         }
