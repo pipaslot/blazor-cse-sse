@@ -56,7 +56,7 @@ namespace Components.Store
         
         // ReSharper disable once UnusedMember.Global
         [ReducerMethod]
-        public static State ReduceChangeLanguageAction(State state, ChangeLanguageAction action) => new State(action.Language);
+        public static State ReduceChangeLanguageAction(State state, ChangeLanguageAction action) => state;
         
         // ReSharper disable once UnusedMember.Global
         public class ChangeLanguageActionEffect : Effect<ChangeLanguageAction>
@@ -77,8 +77,25 @@ namespace Components.Store
                 {
                     Language = action.Language
                 });
+                dispatcher.Dispatch(new StoreNewLanguageAction(action.Language));
             }
         }
+        
+        
+        public class StoreNewLanguageAction
+        {
+            public StoreNewLanguageAction(string language)
+            {
+                Language = language;
+            }
+
+            public string Language { get;}
+        }
+        
+        // ReSharper disable once UnusedMember.Global
+        [ReducerMethod]
+        public static State ReduceChangeLanguageAction(State state, StoreNewLanguageAction action) => new State(action.Language);
+        
 
     }
 }

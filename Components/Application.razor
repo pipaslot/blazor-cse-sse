@@ -1,8 +1,10 @@
 ﻿@inject IDispatcher Dispatcher
+@inject IState<Language.State> LanguageState
+@inherits Fluxor.Blazor.Web.Components.FluxorLayout
 
 <Fluxor.Blazor.Web.StoreInitializer />
 
-<Router AppAssembly="typeof(Application).Assembly">
+<Router AppAssembly="typeof(Application).Assembly" @key=@LanguageState.Value.Language>
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
     </Found>
@@ -17,11 +19,9 @@
 </Router>
 
 @code{
-    
     protected override void OnInitialized()
     {
         Dispatcher.Dispatch(new Init.LoadPersistedStateAction());
         base.OnInitialized();
     }
-
 }
