@@ -1,7 +1,7 @@
 ﻿@namespace Components.Layout
 @inherits LayoutComponentBase
 @inject ILogger<MainLayout> Logger 
-@inject IConfigProvider ConfigProvider
+@inject IMediator Mediator
 
 <MatAppBarContainer Style="height:100%">
     <MatAppBar Fixed="true">
@@ -41,7 +41,7 @@
     {
         await base.OnInitializedAsync();
         Logger.LogDebug("MainLayout OnInitAsync()");
-        var config = await ConfigProvider.GetConfig();
+        var config = await Mediator.Send(new Config.Request());
         _name = config.Name;
     }
 

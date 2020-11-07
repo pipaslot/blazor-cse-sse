@@ -12,11 +12,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using System.Linq;
+using System.Reflection;
 using App.Server.Services;
 using App.Shared;
+using App.Shared.Requests;
 using Core.Jwt;
 using Components;
 using Components.Resources;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -71,17 +74,15 @@ namespace App.Server
             services.AddLiveReload();
 #endif
 
-            logger.Debug("Adding ApplicationComponents");
             services.AddApplicationComponents<ResourceManagerServerFactory>();
 
             //Configure custom services
-            services.Configure<Config>(_configuration.GetSection("App"));
-            services.AddSingleton<IConfigProvider, AppSettingConfigProvider>();
+            services.Configure<Config.Result>(_configuration.GetSection("App"));
             services.AddAuthorization();
             services.AddCoreAuth(_configuration.GetSection("Auth"), isClientSide);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthService,AuthService>();
-            logger.Debug("Completed Startup.ConfigureServices()");
+            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,7 +101,7 @@ namespace App.Server
 #endif
                 logger.Debug("UseDeveloperExceptionPage...");
                 app.UseDeveloperExceptionPage();
-                app.UseBlazorDebugging();
+                app.UseWebAssemblyDebugging();
             }
             else
             {
@@ -117,12 +118,11 @@ namespace App.Server
 
             logger.Debug("UseStaticFiles...");
             app.UseStaticFiles();
-            app.UseMiddleware<ConfigProviderMiddleware>();
             app.UseAuthentication();
 #if ClientSideExecution
 
             logger.Debug("UseClientSideBlazorFiles...");
-            app.UseClientSideBlazorFiles<App.Client.Program>();
+            app.UseBlazorFrameworkFiles();
 
             logger.Debug("UseRouting...");
             app.UseRouting();
@@ -131,7 +131,7 @@ namespace App.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapFallbackToClientSideBlazor<App.Client.Program>("index_cse.html");
+                endpoints.MapFallbackToFile("index_cse.html");
             });
 #else
             logger.Debug("UseRouting...");

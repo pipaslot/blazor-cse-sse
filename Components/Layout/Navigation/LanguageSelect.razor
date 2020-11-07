@@ -1,7 +1,8 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 @inject IState<Language.State> LanguageState
 @inject IDispatcher Dispatcher
-@inject IConfigProvider ConfigProvider
+@inject IMediator Mediator
+@inject ILogger<LanguageSelect> Logger
 
 <Flag Class="layout-navigation-languageSelect-flag" Name="@LanguageState.Value.Language" @onclick="OpenMenu" @ref="flag">@LanguageState.Value.Language.ToUpper()</Flag>
 <MatMenu @ref="menu">
@@ -17,17 +18,17 @@
 @code{
     Flag flag;
     MatMenu menu;
-        
-    string[] _languages = new string[] { };
+
+    string[] _languages = { };
     protected override async Task OnInitializedAsync()
     {
-        var config = await ConfigProvider.GetConfig();
+        var config = await Mediator.Send(new Config.Request());
         _languages = config.Languages;
+        await base.OnInitializedAsync();
     }
 
     void OpenMenu(MouseEventArgs e)
     {
-
         menu.OpenAsync(flag.Ref);
     }
 

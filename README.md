@@ -6,3 +6,12 @@
 Install VS codee ExtensionLive Sass Compiler
 
 Press F1 and type `Live Sass: Watch Sass`
+
+#Features
+- API-less integration
+- Redux integration (Fluxer nuget package)
+- Local storage persistence
+- Authentication
+- Configuration
+- Logging
+- Localization
