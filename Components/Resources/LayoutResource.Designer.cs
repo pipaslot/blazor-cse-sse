@@ -19,7 +19,7 @@ namespace Components.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class LayoutResource {
@@ -61,11 +61,47 @@ namespace Components.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello.
+        /// </summary>
+        public static string Hello {
+            get {
+                return ResourceManager.GetString("Hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string Home {
             get {
                 return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in.
+        /// </summary>
+        public static string SignIn {
+            get {
+                return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        public static string SignOut {
+            get {
+                return ResourceManager.GetString("SignOut", resourceCulture);
             }
         }
     }
