@@ -3,12 +3,12 @@
 @code {
     [Parameter]
     public RenderFragment ChildContent { get; set; }
-    
-    [Parameter]
-    public string Align { get; set; }
 
     [Parameter]
-    public string Style { get; set; }
+    public string Align { get; set; } = "";
+
+    [Parameter]
+    public string Style { get; set; } = "";
 
     string GetAlign()
     {

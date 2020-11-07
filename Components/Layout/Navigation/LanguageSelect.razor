@@ -1,9 +1,9 @@
-﻿@using Components.Layout.Navigation
-@inherits StatefulComponent
-@inject AppState appState
-@inject IConfigProvider configProvider
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inject IState<Language.State> LanguageState
+@inject IDispatcher Dispatcher
+@inject IConfigProvider ConfigProvider
 
-<Flag Class="layout-navigation-languageSelect-flag" Name="@appState.Language" @onclick="OpenMenu" @ref="flag">@appState.Language.ToUpper()</Flag>
+<Flag Class="layout-navigation-languageSelect-flag" Name="@LanguageState.Value.Language" @onclick="OpenMenu" @ref="flag">@LanguageState.Value.Language.ToUpper()</Flag>
 <MatMenu @ref="menu">
     <MatList>
         @foreach (var lang in _languages)
@@ -21,8 +21,7 @@
     string[] _languages = new string[] { };
     protected override async Task OnInitializedAsync()
     {
-        Observe(appState);
-        var config = await configProvider.GetConfig();
+        var config = await ConfigProvider.GetConfig();
         _languages = config.Languages;
     }
 
@@ -32,9 +31,9 @@
         menu.OpenAsync(flag.Ref);
     }
 
-    async Task SelectLanguage(string language)
+    void SelectLanguage(string language)
     {
-        await appState.SetLanguage(language);
+        Dispatcher.Dispatch(new Language.ChangeLanguageAction(language));
     }
 
 }

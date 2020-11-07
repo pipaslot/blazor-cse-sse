@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>Components</RootNamespace>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -10,6 +10,7 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <Configurations>Debug_CSE;Debug_SSE;Release_CSE;Release_SSE</Configurations>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_CSE|AnyCPU'">
@@ -29,12 +30,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cloudcrate.AspNetCore.Blazor.Browser.Storage" Version="3.0.0" />
+    <PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />
+    <PackageReference Include="Fluxor.Blazor.Web" Version="3.8.0" />
+    <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="3.8.0" />
     <PackageReference Include="MatBlazor" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.9" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.2" />
-    <PackageReference Include="Scrutor" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>

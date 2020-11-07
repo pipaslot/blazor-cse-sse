@@ -1,11 +1,14 @@
 ﻿@namespace Components.Layout
-@inject AppState appState
+@using IState = Fluxor.IState
+@using Components.Store
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inject IState<Language.State> LanguageState
 @inject IAuthService AuthService
-@inherits StatefulComponent
+@inject IJSRuntime Runtime
 
 <MatNavMenu>
     <MatNavItem>
-        @appState.Language
+        @LanguageState.Value.Language
     </MatNavItem>
     <MatNavItem>
         <NavLink href="" Match="NavLinkMatch.All">
@@ -35,12 +38,11 @@
 </MatNavMenu>
 
 @code{
-    [Inject] IJSRuntime Runtime {get;set;}
     protected override void OnInitialized()
     {
-        Observe(appState);
         //LayoutResource.Culture = new System.Globalization.CultureInfo("cs");
         (Runtime as IJSInProcessRuntime)?.Invoke<string>("console.log", LayoutResource.Home);
+        base.OnInitialized();
     }
 
     void SignOut()

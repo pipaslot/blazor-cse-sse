@@ -1,5 +1,7 @@
 ﻿@namespace Components.Layout
 @inherits LayoutComponentBase
+@inject ILogger<MainLayout> Logger 
+@inject IConfigProvider ConfigProvider
 
 <MatAppBarContainer Style="height:100%">
     <MatAppBar Fixed="true">
@@ -33,10 +35,7 @@
 
 @code{
     bool _opened = true;
-    string _name;
-
-    [Inject] ILogger<MainLayout> Logger { get; set; }
-    [Inject] IConfigProvider ConfigProvider { get; set; }
+    string _name = "";
 
     protected override async Task OnInitializedAsync()
     {

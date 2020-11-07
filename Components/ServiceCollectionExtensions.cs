@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Blazored.LocalStorage;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using Components.Resources;
-using Components.States;
 using Core.Localization;
+using Fluxor;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Components
@@ -11,18 +11,19 @@ namespace Components
     {
         public static void AddApplicationComponents<TResourceManagerFactory>(this IServiceCollection services) where TResourceManagerFactory : class, IResourceManagerFactory
         {
-            services.Scan(scan => scan
-                .FromAssemblyOf<AppState>()
-                .AddClasses(c => c
-                    .AssignableTo<TemporaryState>())
-                .AsSelf()
-                .WithScopedLifetime()
-            );
             services.AddStorage();
+
 
             //Register all resources
             services.AddCoreResources<TResourceManagerFactory>()
                 .Register<LayoutResource>();
+
+            services.AddFluxor(o =>
+            {
+                o.ScanAssemblies(typeof(Application).Assembly);
+                o.UseReduxDevTools();
+            });
+            services.AddBlazoredLocalStorage();
         }
     }
 }

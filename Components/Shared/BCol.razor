@@ -5,11 +5,11 @@
     public RenderFragment ChildContent { get; set; }
     
     [Parameter]
-    public string Size {get;set;}
+    public string Size {get;set;} = "";
     [Parameter]
-    public string Offset {get;set;}
+    public string Offset {get;set;} = "";
     [Parameter]
-    public string Style { get; set; }
+    public string Style { get; set; } = "";
 
     string GetClasses()
     {

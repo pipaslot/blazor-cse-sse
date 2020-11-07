@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using App.Shared;
 using App.Shared.AuthModels;
-using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+using Components.Store;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -15,31 +13,34 @@ namespace App.Client.Services
 {
     public class AuthServiceHttpClient : AuthenticationStateProvider, IAuthService
     {
-        private const string UserIdentityKey = "userIdentity";
         private readonly HttpClient _httpClient;
-        private readonly LocalStorage _localStorage;
+        private readonly IDispatcher _dispatcher;
+        private readonly IState<Authentication.State> _authenticationState;
 
-        public AuthServiceHttpClient(HttpClient httpClient, LocalStorage localStorage)
+        public AuthServiceHttpClient(HttpClient httpClient, IDispatcher dispatcher, IState<Authentication.State> authenticationState)
         {
             _httpClient = httpClient;
-            _localStorage = localStorage;
+            _dispatcher = dispatcher;
+            _authenticationState = authenticationState;
         }
-        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+
+        public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var savedToken = await _localStorage.GetItemAsync<SingInResult>(UserIdentityKey);
-            if (savedToken?.AccessToken?.Value == null || savedToken?.AccessToken?.ValidTo < DateTime.UtcNow)
-            {
-                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            var authState = _authenticationState.Value;
+            if (authState.IsAuthenticated){
+                return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
             }
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken.AccessToken.Value);
+            if (authState.BearerToken != null){
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authState.BearerToken.Value);
+            }
 
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new[]
+            return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, savedToken.Username),
-            }, "jwt")));
+                new Claim(ClaimTypes.Name, authState.UserName),
+            }, "jwt"))));
         }
-        
+
         public async Task SignIn(string username, string password)
         {
             var result = await _httpClient.PostJsonAsync<SingInResult>("api/auth/sign-in", new UserCredentials
@@ -47,19 +48,19 @@ namespace App.Client.Services
                 Username = username,
                 Password = password
             });
-            if (result.Success)
-            {
-                await _localStorage.SetItemAsync(UserIdentityKey, result);
+            if (result.Success){
+                _dispatcher.Dispatch(new Authentication.SignInAction(result.AccessToken, result.Username));
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.AccessToken.Value);
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             }
         }
 
-        public async Task SignOut()
+        public Task SignOut()
         {
             _httpClient.DefaultRequestHeaders.Authorization = null;
-            await _localStorage.RemoveItemAsync(UserIdentityKey);
+            _dispatcher.Dispatch(new Authentication.SignOutAction());
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            return Task.CompletedTask;
         }
     }
 }
