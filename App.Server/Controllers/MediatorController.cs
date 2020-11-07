@@ -23,7 +23,7 @@ namespace App.Server.Controllers
         }
 
         [HttpPost("request")]
-        public async Task<ActionResult> GetLayout([FromBody]RequestNotificationContract commandQuery, CancellationToken cancellationToken)
+        public async Task<ActionResult> Request([FromBody]RequestNotificationContract commandQuery, CancellationToken cancellationToken)
         {
             var query = commandQuery.GetObject();
             var result = await _mediator.Send(query, cancellationToken);
@@ -31,8 +31,10 @@ namespace App.Server.Controllers
         }
         
         [HttpPost("notification")]
-        public ActionResult GetLayout(string language, string typeName)
+        public async Task<ActionResult> Notification([FromBody]RequestNotificationContract commandQuery, CancellationToken cancellationToken)
         {
+            var query = commandQuery.GetObject();
+            await _mediator.Publish(query, cancellationToken);
             return Ok();
         }
     }
