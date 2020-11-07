@@ -11,12 +11,15 @@ namespace Components.Store
         public const string DefaultLanguage = "de";
         public class State
         {
-            public State(string language)
+            public State(string language, bool loading)
             {
                 Language = language;
+                Loading = loading;
             }
 
             public string Language { get; }
+            
+            public bool Loading { get; }
         }
         public class PersistedState
         {
@@ -33,7 +36,7 @@ namespace Components.Store
 
             protected override State GetInitialState()
             {
-                return new State(DefaultLanguage);
+                return new State(DefaultLanguage, true);
             }
             public static async Task LoadPersistedStateAsync(ILocalStorageService localStorage, IDispatcher dispatcher)
             {
@@ -56,7 +59,7 @@ namespace Components.Store
         
         // ReSharper disable once UnusedMember.Global
         [ReducerMethod]
-        public static State ReduceChangeLanguageAction(State state, ChangeLanguageAction action) => state;
+        public static State ReduceChangeLanguageAction(State state, ChangeLanguageAction action) => new State(state.Language, true);
         
         // ReSharper disable once UnusedMember.Global
         public class ChangeLanguageActionEffect : Effect<ChangeLanguageAction>
@@ -94,7 +97,7 @@ namespace Components.Store
         
         // ReSharper disable once UnusedMember.Global
         [ReducerMethod]
-        public static State ReduceChangeLanguageAction(State state, StoreNewLanguageAction action) => new State(action.Language);
+        public static State ReduceChangeLanguageAction(State state, StoreNewLanguageAction action) => new State(action.Language, false);
         
 
     }

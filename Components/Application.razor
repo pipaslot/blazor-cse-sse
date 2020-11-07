@@ -5,17 +5,22 @@
 <Fluxor.Blazor.Web.StoreInitializer />
 
 <Router AppAssembly="typeof(Application).Assembly" @key=@LanguageState.Value.Language>
+    
+        
     <Found Context="routeData">
-        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
+        @* <Spinner Show="LanguageState.Value.Loading"/> *@
+        @if (!LanguageState.Value.Loading){
+            <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)"/>
+        }
     </Found>
-    <NotFound>
-        <CascadingAuthenticationState>
-            <LayoutView Layout="typeof(MainLayout)">
-                <h1>Page not found</h1>
-                <p>Sorry, but there's nothing here!</p>
-            </LayoutView>
-        </CascadingAuthenticationState>
-    </NotFound>
+        <NotFound>
+            <CascadingAuthenticationState>
+                <LayoutView Layout="typeof(MainLayout)">
+                    <h1>Page not found</h1>
+                    <p>Sorry, but there's nothing here!</p>
+                </LayoutView>
+            </CascadingAuthenticationState>
+        </NotFound>
 </Router>
 
 @code{

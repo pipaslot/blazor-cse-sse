@@ -21,7 +21,7 @@ namespace Components.Store
 
             public string UserName { get; }
 
-            public bool IsAuthenticated => BearerToken != null && BearerToken.ValidTo > DateTime.Now;
+            public bool IsAuthenticated => BearerToken != null && BearerToken.ValidTo > DateTime.UtcNow;
         }
 
         public class PersistedState
