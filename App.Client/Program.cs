@@ -20,8 +20,8 @@ namespace App.Client
         
         private static void ConfigureServices(IServiceCollection services)
         {
-            //services.AddLogging(builder => builder
-            //    .AddBrowserConsole());
+            // services.AddLogging(builder => builder
+            //     .AddBrowserConsole());
             services.AddOptions();
             services.AddApplicationComponents<ResourceManagerClientFactory>();
             services.AddAuthorizationCore();

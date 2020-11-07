@@ -22,12 +22,18 @@ namespace App.Client.Services
             _httpClient = httpClient;
             _dispatcher = dispatcher;
             _authenticationState = authenticationState;
+            _authenticationState.StateChanged += AuthenticationState_StateChanged;
+        }
+
+        private void AuthenticationState_StateChanged(object sender, Authentication.State state)
+        {
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
         public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var authState = _authenticationState.Value;
-            if (authState.IsAuthenticated){
+            if (!authState.IsAuthenticated){
                 return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
             }
 
