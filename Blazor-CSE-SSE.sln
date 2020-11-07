@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Jwt", "Core.Jwt\Core.J
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Localization", "Core.Localization\Core.Localization.csproj", "{6759C434-1780-4612-A358-E7EC96A2F88C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessLogic", "BusinessLogic", "{339386CD-80D1-42A3-85E6-FEC719470F12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_CSE|Any CPU = Debug_CSE|Any CPU
@@ -345,5 +347,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28CBB597-0CEE-400A-942D-9E517FB0E939}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EFE135ED-E69C-408D-8B58-CDDB55D965C4} = {339386CD-80D1-42A3-85E6-FEC719470F12}
+		{6759C434-1780-4612-A358-E7EC96A2F88C} = {339386CD-80D1-42A3-85E6-FEC719470F12}
 	EndGlobalSection
 EndGlobal
