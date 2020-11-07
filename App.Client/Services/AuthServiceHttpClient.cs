@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace App.Client.Services
 {
-    public class AuthServiceHttpClient : AuthenticationStateProvider, IAuthService
+    public class AuthServiceHttpClient : AuthenticationStateProvider, IAuthService, IDisposable
     {
         private readonly HttpClient _httpClient;
         private readonly IDispatcher _dispatcher;
@@ -67,6 +68,11 @@ namespace App.Client.Services
             _dispatcher.Dispatch(new Authentication.SignOutAction());
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            _authenticationState.StateChanged -= AuthenticationState_StateChanged;
         }
     }
 }

@@ -12,7 +12,7 @@
             </MatAppBarSection>
             <MatAppBarSection Align="@MatAppBarSectionAlign.End">
                 <AuthorizeView>
-                    <span>Hello, @context.User.Identity.Name</span>
+                    <span>@LayoutResource.Hello, @context.User.Identity.Name</span>
                 </AuthorizeView>
                 <Components.Layout.Navigation.LanguageSelect />
             </MatAppBarSection>
@@ -40,7 +40,6 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Logger.LogDebug("MainLayout OnInitAsync()");
         var config = await Mediator.Send(new Config.Request());
         _name = config.Name;
     }

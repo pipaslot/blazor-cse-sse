@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Blazored.LocalStorage;
+using Core.Localization;
 using Fluxor;
 
 namespace Components.Store
@@ -61,14 +62,17 @@ namespace Components.Store
         public class ChangeLanguageActionEffect : Effect<ChangeLanguageAction>
         {
             private readonly ILocalStorageService _localStorageService;
+            private readonly ResourceCollection _resourceCollection;
 
-            public ChangeLanguageActionEffect(ILocalStorageService localStorageService)
+            public ChangeLanguageActionEffect(ILocalStorageService localStorageService, ResourceCollection resourceCollection)
             {
                 _localStorageService = localStorageService;
+                _resourceCollection = resourceCollection;
             }
 
             protected override async Task HandleAsync(ChangeLanguageAction action, IDispatcher dispatcher)
             {
+                await _resourceCollection.SetCulture(action.Language);
                 await _localStorageService.SetItemAsync(LocalStorageKey, new PersistedState
                 {
                     Language = action.Language

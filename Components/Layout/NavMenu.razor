@@ -1,10 +1,9 @@
 ﻿@namespace Components.Layout
-@using IState = Fluxor.IState
 @using Components.Store
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 @inject IState<Language.State> LanguageState
 @inject App.Shared.IAuthService AuthService
-@inject IJSRuntime Runtime
+
 
 <MatNavMenu>
     <MatNavItem>
@@ -17,7 +16,7 @@
     </MatNavItem>
     <MatNavItem>
         <NavLink href="/about">
-            <MatIcon>@MatIconNames.Feedback</MatIcon> About
+            <MatIcon>@MatIconNames.Feedback</MatIcon> @LayoutResource.About
         </NavLink>
     </MatNavItem>
 
@@ -25,12 +24,12 @@
         <AuthorizeView>
             <NotAuthorized>
                 <NavLink href="/auth/sign-in">
-                    <MatIcon>@MatIconNames.Favorite</MatIcon> Sign In
+                    <MatIcon>@MatIconNames.Favorite</MatIcon> @LayoutResource.SignIn
                 </NavLink>
             </NotAuthorized>
             <Authorized>
                 <NavLink @onclick="SignOut">
-                    <MatIcon>@MatIconNames.Favorite</MatIcon> Sign Out
+                    <MatIcon>@MatIconNames.Favorite</MatIcon> @LayoutResource.SignOut
                 </NavLink>
             </Authorized>
         </AuthorizeView>
@@ -38,13 +37,6 @@
 </MatNavMenu>
 
 @code{
-    protected override void OnInitialized()
-    {
-        //LayoutResource.Culture = new System.Globalization.CultureInfo("cs");
-        (Runtime as IJSInProcessRuntime)?.Invoke<string>("console.log", LayoutResource.Home);
-        base.OnInitialized();
-    }
-
     void SignOut()
     {
         AuthService.SignOut();
