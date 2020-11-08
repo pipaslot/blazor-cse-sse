@@ -15,3 +15,8 @@ Press F1 and type `Live Sass: Watch Sass`
 - Configuration
 - Logging
 - Localization
+- Fluent validator
+- Bootstrap integration
+- Debugging
+- Live reload
+

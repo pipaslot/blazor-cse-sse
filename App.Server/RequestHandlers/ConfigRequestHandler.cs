@@ -16,7 +16,6 @@ namespace App.Server.RequestHandlers
             _config = config;
         }
 
-
         public Task<Config.Result> Handle(Config.Request request, CancellationToken cancellationToken)
         {
             var config = _config.Value;

@@ -1,5 +1,25 @@
 ﻿@page "/about"
+@inject IMediator Mediator
+@inject ILogger<AboutView> Logger
 
 <h1>About</h1>
 
+<button @onclick="OnSendFormClicked">Send</button>
+
 <h4>Version 2019-12-04</h4>
+
+@code{
+
+    void OnSendFormClicked()
+    {
+        Logger.LogInformation("Sending");
+        Mediator.Send(new ContactForm.Request
+        {
+            Email = "",
+            Firstname = "",
+            Lastname = "",
+            Message = ""
+        });
+    }
+
+}

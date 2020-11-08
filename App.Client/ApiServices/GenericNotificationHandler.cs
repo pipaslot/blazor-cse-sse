@@ -18,7 +18,7 @@ namespace App.Client.ApiServices
 
         public async Task Handle(TRequest request, CancellationToken cancellationToken)
         {
-            await _httpClient.PostJsonAsync("api/mediator/notification", new RequestNotificationContract(request));
+            await _httpClient.PostJsonAsync("api/mediator/notification?type="+typeof(TRequest).FullName, new RequestNotificationContract(request));
         }
     }
 }

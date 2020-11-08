@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.Extensions.Configuration;
+using Pipaslot.Logging;
 
 namespace App.Server
 {
@@ -20,6 +21,10 @@ namespace App.Server
                 .UseConfiguration(new ConfigurationBuilder()
                     .AddCommandLine(args)
                     .Build())
+                .ConfigureLogging(loggingBuilder =>
+                {
+                    loggingBuilder.AddRequestLogger();
+                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

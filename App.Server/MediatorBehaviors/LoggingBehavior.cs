@@ -1,0 +1,35 @@
+﻿using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using Pipaslot.Logging;
+
+namespace App.Server.MediatorBehaviors
+{
+    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    {
+        private readonly ILogger<Program> _logger;
+
+        public LoggingBehavior(ILogger<Program> logger)
+        {
+            _logger = logger;
+        }
+
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        {
+            using (_logger.BeginMethod(request, typeof(TRequest)?.FullName ?? "")){
+                
+                var stopwatch = Stopwatch.StartNew();
+                try{
+                    return await next();
+                }
+                finally{
+                    stopwatch.Stop();
+                    _logger.LogInformation($"Execution time = {stopwatch.ElapsedMilliseconds}ms");
+                }
+            }
+        }
+    }
+
+}

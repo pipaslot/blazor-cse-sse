@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 
 using System.Linq;
 using System.Reflection;
+using App.Server.MediatorBehaviors;
 using App.Server.Services;
 using App.Shared;
 using App.Shared.Requests;
@@ -63,7 +64,7 @@ namespace App.Server
 #endif
 
             //services.AddApplicationComponents<ResourceManagerServerFactory>();
-            App.Client.Program.ConfigureServerAndClientSharedServices<ResourceManagerServerFactory>(services);
+            Client.Program.ConfigureServerAndClientSharedServices<ResourceManagerServerFactory>(services);
 
             //Configure custom services
             services.Configure<Config.Result>(_configuration.GetSection("App"));
@@ -72,6 +73,7 @@ namespace App.Server
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthService,AuthService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
