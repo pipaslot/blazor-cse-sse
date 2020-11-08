@@ -10,20 +10,20 @@
     <Configurations>Debug_CSE;Debug_SSE;Release_CSE;Release_SSE</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_CSE|AnyCPU'">
-    <DefineConstants>ClientSideExecution;UseLocalData;TRACE;DEBUG;OPTIMISER_NG;NETSTANDARD;NETSTANDARD2_0;NETCOREAPP;NETCOREAPP2_1</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug_CSE'">
+    <DefineConstants>ClientSideExecution</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_SSE|AnyCPU'">
-    <DefineConstants>ServerSideExecution;UseLocalData;TRACE;DEBUG;OPTIMISER_NG;NETSTANDARD;NETSTANDARD2_0;NETCOREAPP;NETCOREAPP2_1</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug_SSE'">
+    <DefineConstants>ServerSideExecution</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_CSE|AnyCPU'">
-    <DefineConstants>ClientSideExecution;UseLocalData;RELEASE;OPTIMISER_NG;NETSTANDARD;NETSTANDARD2_0;NETCOREAPP;NETCOREAPP2_1</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)'=='Release_CSE'">
+    <DefineConstants>ClientSideExecution</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_SSE|AnyCPU'">
-    <DefineConstants>ServerSideExecution;UseLocalData;RELEASE;OPTIMISER_NG;NETSTANDARD;NETSTANDARD2_0;NETCOREAPP;NETCOREAPP2_1</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)'=='Release_SSE'">
+    <DefineConstants>ServerSideExecution</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
