@@ -1,21 +1,25 @@
 This is experimental project including folowing features:
-- Blazor Client(WASM) and Server
-- API-less integration
+- Blazor Client/WASM and Blazor Server (Capable to swith between these runitmes)
+- API-less integration (MediatR integration on served and client side)
 - Redux integration (Fluxer nuget package)
-- Local storage persistence
+- Local storage persistence in browser
 - Authentication (Cookies or JWT)
-- Configuration
+- Configuration (with appsetting.json stored on server)
 - Logging
-- Localization
-- Fluent validator
+- Localization (with resx files)
+- Fluent validator (shared validator on server and client)
+
+Not yet fully implemented features
 - Bootstrap integration
-- Debugging
-- Live reload
+- Client side Debugging
 
 
 # VS Code usage
 ## Start application in watch mode (Server Side Execution)
-`cd App.Server/ && dotnet watch run`
+`cd App.Server/ && dotnet watch run -c Debug_SSE`
+
+## Start application in watch mode (Client Side Execution / WASM)
+`cd App.Server/ && dotnet watch run -c Debug_CSE`
 
 ## Build CSS and watch for changes
 Install VS codee ExtensionLive Sass Compiler
