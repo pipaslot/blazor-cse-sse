@@ -1,25 +1,99 @@
 ﻿@page "/about"
 @inject IMediator Mediator
 @inject ILogger<AboutView> Logger
+<div>
+    <h1>About</h1>
+    <p>
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vivamus luctus egestas leo. In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Donec vitae arcu. Donec iaculis gravida nulla. 
+        Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Mauris dictum facilisis augue. 
+        Praesent id justo in neque elementum ultrices. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus.
+    </p>
+</div>
+<div>
+    <h2>Contact us</h2>
+    <Spinner Show="_loading" />
+    <EditForm Model="@_model" OnValidSubmit="@SubmitValidForm">
+        <FluentValidationValidator />
+        <ValidationSummary />
 
-<h1>About</h1>
+        <p>
+            <label>First name: </label>
+            <InputText @bind-Value="@_model.Firstname" />
+            <ValidationMessage For="@(() => _model.Firstname)" />
+        </p>
 
-<button @onclick="OnSendFormClicked">Send</button>
+        <p>
+            <label>Lastname: </label>
+            <InputText @bind-Value="@_model.Lastname" />
+            <ValidationMessage For="@(() => _model.Lastname)" />
+        </p>
 
-<h4>Version 2019-12-04</h4>
+        <p>
+            <label>Email Address: </label>
+            <InputText @bind-Value="@_model.Email" />
+            <ValidationMessage For="@(() => _model.Email)" />
+        </p>
 
+        <p>
+            <label>Message: </label>
+            <InputTextArea @bind-Value="@_model.Message" />
+            <ValidationMessage For="@(() => _model.Message)" />
+        </p>
+
+        <button type="submit">Save</button> <button @onclick="HackFrontendValidation">Send empty form without validation on frontend</button>
+        @if (_wasSent == SendingStatus.Sent)
+        {
+            <p>
+                Thank you for your feedback.
+            </p>
+        }
+        @if (_wasSent == SendingStatus.Failed)
+        {
+            <p>
+                We are sorry, there happen some error.
+            </p>
+        }
+
+    </EditForm>
+</div>
 @code{
 
-    void OnSendFormClicked()
+    bool _loading;
+    SendingStatus _wasSent = SendingStatus.NotSent;
+    ContactForm.Request _model = new ContactForm.Request();
+
+    async Task SubmitValidForm()
     {
-        Logger.LogInformation("Sending");
-        Mediator.Send(new ContactForm.Request
+        _loading = true;
+        var result = await Mediator.Send(_model);
+        if (result.Success)
         {
-            Email = "",
-            Firstname = "",
-            Lastname = "",
-            Message = ""
-        });
+            _model = new ContactForm.Request();
+            _wasSent = SendingStatus.Sent;
+        }
+        _loading = false;
+    }
+
+    async Task HackFrontendValidation()
+    {
+        _loading = true;
+        var result = await Mediator.Send(new ContactForm.Request());
+        if (result.Success)
+        {
+            _wasSent = SendingStatus.Sent;
+        }
+        else
+        {
+            _wasSent = SendingStatus.Failed;
+        }
+        _loading = false;
+    }
+
+    public enum SendingStatus
+    {
+        NotSent,
+        Sent,
+        Failed
     }
 
 }

@@ -18,6 +18,7 @@ using App.Server.Services;
 using App.Shared;
 using App.Shared.Requests;
 using Core.Jwt;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -74,6 +75,14 @@ namespace App.Server
             services.AddScoped<IAuthService,AuthService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+            
+            // Register all validators from App.S
+            services.AddTransient<IValidatorFactory, ValidatorFactory>();
+            services.Scan(scan => scan
+                .FromAssemblyOf<RequestNotificationContract>()
+                .AddClasses(classes => classes.AssignableTo(typeof(IValidator<>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
