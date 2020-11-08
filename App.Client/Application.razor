@@ -8,7 +8,7 @@
     
         
     <Found Context="routeData">
-        @* <Spinner Show="LanguageState.Value.Loading"/> *@
+        <Spinner Show="LanguageState.Value.Loading"/> 
         @if (!LanguageState.Value.Loading){
             <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)"/>
         }

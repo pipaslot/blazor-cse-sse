@@ -8,7 +8,7 @@ namespace App.Client.Store
     public static class Language
     {
         public const string LocalStorageKey = nameof(Authentication);
-        public const string DefaultLanguage = "de";
+        public const string DefaultLanguage = "en";
         public class State
         {
             public State(string language, bool loading)
@@ -41,9 +41,9 @@ namespace App.Client.Store
             public static async Task LoadPersistedStateAsync(ILocalStorageService localStorage, IDispatcher dispatcher)
             {
                 var state = await localStorage.GetItemAsync<PersistedState>(Authentication.LocalStorageKey);
-                if (state != null){
-                    dispatcher.Dispatch(new ChangeLanguageAction(state.Language));
-                }
+                var storedLanguage = state?.Language;
+                var language = !string.IsNullOrWhiteSpace(storedLanguage) ? storedLanguage: DefaultLanguage;
+                dispatcher.Dispatch(new ChangeLanguageAction(language));
             }
         }
 
