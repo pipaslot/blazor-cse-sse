@@ -17,8 +17,6 @@ using App.Server.Services;
 using App.Shared;
 using App.Shared.Requests;
 using Core.Jwt;
-using Components;
-using Components.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -64,7 +62,8 @@ namespace App.Server
             services.AddLiveReload();
 #endif
 
-            services.AddApplicationComponents<ResourceManagerServerFactory>();
+            //services.AddApplicationComponents<ResourceManagerServerFactory>();
+            App.Client.Program.ConfigureServerAndClientSharedServices<ResourceManagerServerFactory>(services);
 
             //Configure custom services
             services.Configure<Config.Result>(_configuration.GetSection("App"));

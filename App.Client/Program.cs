@@ -3,8 +3,12 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using App.Client.ApiServices;
+using App.Client.Resources;
 using App.Shared;
-using Components;
+using Blazored.LocalStorage;
+using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
+using Core.Localization;
+using Fluxor;
 using MediatR;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,16 +22,38 @@ namespace App.Client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<Application>("app");
-            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddTransient(sp => new HttpClient {BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)});
             ConfigureServices(builder.Services);
             await builder.Build().RunAsync();
         }
-        
+
         private static void ConfigureServices(IServiceCollection services)
         {
+            ConfigureServerAndClientSharedServices<ResourceManagerClientFactory>(services);
+            ConfigureOnlyClientSpecificServices(services);
+        }
+        
+        public static void ConfigureServerAndClientSharedServices<TResourceManagerFactory>(IServiceCollection services)where TResourceManagerFactory : class, IResourceManagerFactory
+        {
             services.AddOptions();
-            services.AddApplicationComponents<ResourceManagerClientFactory>();
+
+            //Register all resources
+            services.AddCoreResources<TResourceManagerFactory>()
+                .Register<LayoutResource>();
+
+            services.AddStorage();
+            services.AddFluxor(o =>
+            {
+                o.ScanAssemblies(typeof(Application).Assembly);
+                o.UseReduxDevTools();
+            });
+            services.AddBlazoredLocalStorage();
+        }
+
+        private static void ConfigureOnlyClientSpecificServices(IServiceCollection services)
+        {
             services.AddAuthorizationCore();
+            
             services.AddScoped<AuthServiceHttpClient>();
             services.AddScoped<IAuthService, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
             services.AddScoped<AuthenticationStateProvider, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());

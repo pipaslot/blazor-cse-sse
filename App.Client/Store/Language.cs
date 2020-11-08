@@ -3,7 +3,7 @@ using Blazored.LocalStorage;
 using Core.Localization;
 using Fluxor;
 
-namespace Components.Store
+namespace App.Client.Store
 {
     public static class Language
     {

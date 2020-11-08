@@ -1,4 +1,4 @@
-﻿@namespace Components.Layout
+﻿@namespace App.Client.Layout
 @inherits LayoutComponentBase
 @inject ILogger<MainLayout> Logger 
 @inject IMediator Mediator
@@ -14,7 +14,7 @@
                 <AuthorizeView>
                     <span>@LayoutResource.Hello, @context.User.Identity.Name</span>
                 </AuthorizeView>
-                <Components.Layout.Navigation.LanguageSelect />
+                <App.Client.Layout.Navigation.LanguageSelect />
             </MatAppBarSection>
         </MatAppBarRow>
     </MatAppBar>

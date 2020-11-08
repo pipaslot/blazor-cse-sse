@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using App.Shared;
 using App.Shared.AuthModels;
-using Components.Store;
+using App.Client.Store;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;

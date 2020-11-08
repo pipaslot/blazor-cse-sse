@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Resources;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using App.Shared;
-using Components.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

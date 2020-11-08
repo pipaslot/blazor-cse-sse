@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Resources;
-using System.Threading.Tasks;
-using Components.Resources;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Server.Controllers

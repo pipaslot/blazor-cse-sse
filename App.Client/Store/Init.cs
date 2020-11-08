@@ -2,7 +2,7 @@
 using Blazored.LocalStorage;
 using Fluxor;
 
-namespace Components.Store
+namespace App.Client.Store
 {
     public static class Init
     {

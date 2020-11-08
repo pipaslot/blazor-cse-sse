@@ -4,7 +4,7 @@ using Blazored.LocalStorage;
 using Core.Jwt;
 using Fluxor;
 
-namespace Components.Store
+namespace App.Client.Store
 {
     public static class Authentication
     {

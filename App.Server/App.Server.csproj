@@ -40,8 +40,8 @@
   <ItemGroup>
     <ProjectReference Include="..\App.Shared\App.Shared.csproj" />
     <ProjectReference Include="..\App.Client\App.Client.csproj" />
-    <ProjectReference Include="..\Components\Components.csproj" />
     <ProjectReference Include="..\Core.Jwt\Core.Jwt.csproj" />
+    <ProjectReference Include="..\Core.Localization\Core.Localization.csproj" />
   </ItemGroup>
   
   <ItemGroup>
