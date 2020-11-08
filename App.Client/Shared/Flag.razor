@@ -18,7 +18,7 @@
     public ElementReference Ref {get;set;}
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment ChildContent { get; set; } = default!;
 
     string GetFilename()
     {

@@ -4,8 +4,8 @@
 @inject IMediator Mediator
 @inject ILogger<LanguageSelect> Logger
 
-<Flag Class="layout-navigation-languageSelect-flag" Name="@LanguageState.Value.Language" @onclick="OpenMenu" @ref="flag">@LanguageState.Value.Language.ToUpper()</Flag>
-<MatMenu @ref="menu">
+<Flag Class="layout-navigation-languageSelect-flag" Name="@LanguageState.Value.Language" @onclick="OpenMenu" @ref="_flag">@LanguageState.Value.Language.ToUpper()</Flag>
+<MatMenu @ref="_menu">
     <MatList>
         @foreach (var lang in _languages)
         {
@@ -16,8 +16,8 @@
     </MatList>
 </MatMenu>
 @code{
-    Flag flag;
-    MatMenu menu;
+    Flag _flag = default!;
+    MatMenu _menu = default!;
 
     string[] _languages = { };
     protected override async Task OnInitializedAsync()
@@ -29,7 +29,7 @@
 
     void OpenMenu(MouseEventArgs e)
     {
-        menu.OpenAsync(flag.Ref);
+        _menu.OpenAsync(_flag.Ref);
     }
 
     void SelectLanguage(string language)
