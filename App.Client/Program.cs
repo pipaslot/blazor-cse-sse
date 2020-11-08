@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using App.Client.Services;
+using App.Client.ApiServices;
 using App.Shared;
 using Components;
 using MediatR;

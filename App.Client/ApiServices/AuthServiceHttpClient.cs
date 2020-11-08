@@ -10,7 +10,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace App.Client.Services
+namespace App.Client.ApiServices
 {
     public class AuthServiceHttpClient : AuthenticationStateProvider, IAuthService, IDisposable
     {

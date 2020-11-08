@@ -5,7 +5,7 @@ using App.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Components;
 
-namespace App.Client.Services
+namespace App.Client.ApiServices
 {
     public class GenericRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {

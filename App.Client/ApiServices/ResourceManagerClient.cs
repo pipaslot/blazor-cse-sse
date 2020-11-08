@@ -7,7 +7,7 @@ using Components.Resources;
 using Core.Localization;
 using Microsoft.AspNetCore.Components;
 
-namespace App.Client.Services
+namespace App.Client.ApiServices
 {
     public class ResourceManagerClient : ResourceManagerWithCulture
     {

@@ -2,7 +2,7 @@
 using System.Net.Http;
 using Core.Localization;
 
-namespace App.Client.Services
+namespace App.Client.ApiServices
 {
     public class ResourceManagerClientFactory : IResourceManagerFactory
     {
