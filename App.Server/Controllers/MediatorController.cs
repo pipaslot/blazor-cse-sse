@@ -8,6 +8,7 @@ using App.Shared;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using IMediator = MediatR.IMediator;
 
 namespace App.Server.Controllers
 {

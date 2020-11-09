@@ -58,8 +58,7 @@ namespace App.Client
             services.AddScoped<IAuthService, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
             services.AddScoped<AuthenticationStateProvider, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddTransient(typeof(IRequestHandler<,>), typeof(GenericRequestHandler<,>));
-            services.AddTransient(typeof(INotificationHandler<>), typeof(GenericNotificationHandler<>));
+            services.AddTransient<App.Shared.SafeMediator.IMediator, SaveClientMediator>();
         }
     }
 }

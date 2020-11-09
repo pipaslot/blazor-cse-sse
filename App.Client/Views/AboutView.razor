@@ -49,6 +49,12 @@
                     Thank you for your feedback.
                 </p>
             }
+            @if (_wasSent == SendingStatus.NotAccepted)
+            {
+                <p>
+                    We are sorry, but your message was not accepted.
+                </p>
+            }
             @if (_wasSent == SendingStatus.Failed)
             {
                 <p>
@@ -67,23 +73,22 @@
 
     async Task SubmitValidForm()
     {
-        _loading = true;
-        var result = await Mediator.Send(_model);
-        if (result.Success)
-        {
-            _model = new ContactForm.Request();
-            _wasSent = SendingStatus.Sent;
-        }
-        _loading = false;
+        await SendData(_model);
     }
 
     async Task HackFrontendValidation()
     {
+        await SendData(new ContactForm.Request());
+    }
+
+    private async Task SendData(ContactForm.Request data)
+    {
         _loading = true;
-        var result = await Mediator.Send(new ContactForm.Request());
+        var result = await Mediator.Send(data);
         if (result.Success)
         {
-            _wasSent = SendingStatus.Sent;
+            _wasSent = result.Result.Success ? SendingStatus.Sent : SendingStatus.NotAccepted;
+            _model = new ContactForm.Request();
         }
         else
         {
@@ -96,7 +101,8 @@
     {
         NotSent,
         Sent,
-        Failed
+        Failed,
+        NotAccepted
     }
 
 }

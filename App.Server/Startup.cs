@@ -20,6 +20,7 @@ using App.Shared.Requests;
 using Core.Jwt;
 using FluentValidation;
 using MediatR;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -74,7 +75,12 @@ namespace App.Server
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthService,AuthService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+            services.AddTransient<App.Shared.SafeMediator.IMediator, SaveServerMediator>();
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+#if ServerSideExecution
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));// Not needed for Client side because is already implemented in controllers
+            //services.AddScoped(typeof(IRequestExceptionAction<,>), typeof(MediatorBehaviors.RequestExceptionHandler<,,>));// Not needed for Client side because is already implemented in controllers
+#endif
             
             // Register all validators from App.S
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
