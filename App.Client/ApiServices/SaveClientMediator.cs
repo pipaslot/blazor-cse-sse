@@ -3,14 +3,13 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Shared;
-using App.Shared.SafeMediator;
-using MediatR;
+using App.Shared.Mediator;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace App.Client.ApiServices
 {
-    public class SaveClientMediator : App.Shared.SafeMediator.IMediator
+    public class SaveClientMediator : IMediator
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
@@ -21,11 +20,11 @@ namespace App.Client.ApiServices
             _jsRuntime = jsRuntime;
         }
 
-        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
         {
             try
             {
-                var response = await _httpClient.PostJsonAsync<TResponse>("api/mediator/request?type=" + typeof(IRequest<TResponse>).FullName, new RequestNotificationContract(request));
+                var response = await _httpClient.PostJsonAsync<TResponse>("api/mediator/request?type=" + typeof(IQuery<TResponse>).FullName, new RequestNotificationContract(query));
                 return new MediatorResponse<TResponse>(response);
             }
             catch (Exception e)
@@ -35,16 +34,16 @@ namespace App.Client.ApiServices
             }
         }
 
-        public async Task<MediatorResponse> Publish<TNotification>(TNotification request, CancellationToken cancellationToken = default) where TNotification : INotification
+        public async Task<MediatorResponse> Publish<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
         {
             try
             {
-                await _httpClient.PostJsonAsync("api/mediator/notification?type="+typeof(TNotification).FullName, new RequestNotificationContract(request));
+                await _httpClient.PostJsonAsync("api/mediator/notification?type="+typeof(TCommand).FullName, new RequestNotificationContract(command));
                 return new MediatorResponse();
             }
             catch (Exception e)
             {
-                await _jsRuntime.InvokeAsync<string>("alert", "Server error: "+e.Message);
+                await _jsRuntime.InvokeAsync<string>("alert", cancellationToken, "Server error: "+e.Message);
                 return new MediatorResponse(e.Message);
             }
         }

@@ -1,25 +1,24 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Shared.Mediator;
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.Logging;
-using Pipaslot.Logging;
 
-namespace App.Server.MediatorBehaviors
+namespace App.Server.MediatorPipelines
 {
-    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class ValidationCommandPipeline<TRequest> : ICommandPipeline<TRequest>
     {
         private readonly ILogger<Program> _logger;
         private readonly IValidatorFactory _validatorFactory;
 
-        public ValidationBehavior(ILogger<Program> logger, IValidatorFactory validatorFactory)
+        public ValidationCommandPipeline(ILogger<Program> logger, IValidatorFactory validatorFactory)
         {
             _logger = logger;
             _validatorFactory = validatorFactory;
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task Handle(TRequest request, CancellationToken cancellationToken, QueryHandlerDelegate next)
         {
             var typeValidator = _validatorFactory.GetValidator(typeof(TRequest));
             if (typeValidator != null)
@@ -33,7 +32,7 @@ namespace App.Server.MediatorBehaviors
                 }
             }
 
-            return await next();
+            await next();
         }
     }
 

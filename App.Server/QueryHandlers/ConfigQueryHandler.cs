@@ -1,22 +1,22 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using App.Shared.Mediator;
 using Microsoft.Extensions.Options;
-using Config = App.Shared.Requests.Config;
+using Config = App.Shared.Queries.Config;
 
-namespace App.Server.RequestHandlers
+namespace App.Server.QueryHandlers
 {
     // ReSharper disable once UnusedType.Global
-    public class ConfigRequestHandler : IRequestHandler<Config.Request, Config.Result>
+    public class ConfigQueryHandler : IQueryHandler<Config.Query, Config.Result>
     {
         private readonly IOptions<Config.Result> _config;
 
-        public ConfigRequestHandler(IOptions<Config.Result> config)
+        public ConfigQueryHandler(IOptions<Config.Result> config)
         {
             _config = config;
         }
 
-        public Task<Config.Result> Handle(Config.Request request, CancellationToken cancellationToken)
+        public Task<Config.Result> Handle(Config.Query query, CancellationToken cancellationToken)
         {
             var config = _config.Value;
             return Task.FromResult(new Config.Result

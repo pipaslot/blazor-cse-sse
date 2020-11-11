@@ -5,10 +5,9 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Shared;
+using App.Shared.Mediator;
 using FluentValidation;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using IMediator = MediatR.IMediator;
 
 namespace App.Server.Controllers
 {

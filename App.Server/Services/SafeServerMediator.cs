@@ -1,29 +1,27 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using App.Shared.SafeMediator;
+using App.Shared.Mediator;
 using Microsoft.JSInterop;
 
 namespace App.Server.Services
 {
-    public class SaveServerMediator : App.Shared.SafeMediator.IMediator
+    public class SaveServerMediator : IMediator
     {
-        private readonly MediatR.IMediator _mediator;
+        private readonly ServerMediator _mediator;
         private readonly IJSRuntime _jsRuntime;
 
-        public SaveServerMediator(MediatR.IMediator mediator, IJSRuntime jsRuntime)
+        public SaveServerMediator(ServerMediator mediator, IJSRuntime jsRuntime)
         {
             _mediator = mediator;
             _jsRuntime = jsRuntime;
         }
 
-        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
         {
             try
             {
-                var response = await _mediator.Send(request, cancellationToken);
-                return new MediatorResponse<TResponse>(response);
+                return  await _mediator.Send(query, cancellationToken);
             }
             catch (Exception e)
             {
@@ -32,12 +30,11 @@ namespace App.Server.Services
             }
         }
 
-        public async Task<MediatorResponse> Publish<TNotification>(TNotification request, CancellationToken cancellationToken = default)where TNotification : INotification
+        public async Task<MediatorResponse> Publish<TCommand>(TCommand command, CancellationToken cancellationToken = default)where TCommand : ICommand
         {
             try
             {
-                await _mediator.Publish(request, cancellationToken);
-                return new MediatorResponse();
+                return await _mediator.Publish(command, cancellationToken);
             }
             catch (Exception e)
             {

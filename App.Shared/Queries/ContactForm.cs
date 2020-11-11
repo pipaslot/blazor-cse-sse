@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using App.Shared.Mediator;
 using FluentValidation;
-using MediatR;
 
-namespace App.Shared.Requests
+namespace App.Shared.Queries
 {
     public static class ContactForm
     {
-        public class Request : IRequest<Result>
+        public class Query : IQuery<Result>
         {
             public string Firstname { get; set; } = "";
             public string Lastname { get; set; } = "";
@@ -20,7 +20,7 @@ namespace App.Shared.Requests
             public bool Success { get; set; }
         }
 
-        public class Validator : AbstractValidator<Request>
+        public class Validator : AbstractValidator<Query>
         {
             public Validator()
             {

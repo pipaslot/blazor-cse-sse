@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using App.Shared.Mediator;
 
-namespace App.Shared.Requests
+namespace App.Shared.Queries
 {
     
     public static class Config
     {
-        public class Request : IRequest<Result>
+        public class Query : IQuery<Result>
         {
         
         }

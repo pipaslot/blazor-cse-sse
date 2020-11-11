@@ -1,5 +1,4 @@
 ﻿@namespace App.Client.Layout
-@using IMediator = MediatR.IMediator
 @inherits LayoutComponentBase
 @inject ILogger<MainLayout> Logger 
 @inject IMediator Mediator
@@ -41,8 +40,10 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var config = await Mediator.Send(new Config.Request());
-        _name = config.Name;
+        var config = await Mediator.Send(new Config.Query());
+        if (config.Success){
+            _name = config.Result.Name;
+        }
     }
 
     void ToggleMenu()

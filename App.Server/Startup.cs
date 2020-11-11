@@ -13,14 +13,14 @@ using Microsoft.Extensions.Hosting;
 
 using System.Linq;
 using System.Reflection;
-using App.Server.MediatorBehaviors;
+using App.Server.MediatorPipelines;
+using App.Server.QueryHandlers;
 using App.Server.Services;
 using App.Shared;
-using App.Shared.Requests;
+using App.Shared.Mediator;
+using App.Shared.Queries;
 using Core.Jwt;
 using FluentValidation;
-using MediatR;
-using MediatR.Pipeline;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -74,21 +74,45 @@ namespace App.Server
             services.AddCoreAuth(_configuration.GetSection("Auth"), isClientSide);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthService,AuthService>();
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddTransient<App.Shared.SafeMediator.IMediator, SaveServerMediator>();
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-#if ServerSideExecution
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));// Not needed for Client side because is already implemented in controllers
-            //services.AddScoped(typeof(IRequestExceptionAction<,>), typeof(MediatorBehaviors.RequestExceptionHandler<,,>));// Not needed for Client side because is already implemented in controllers
-#endif
             
-            // Register all validators from App.S
+            // Mediator with pipelines
+            services.AddScoped(typeof(IQueryPipeline<,>), typeof(LoggingQueryPipeline<,>));
+            services.AddScoped(typeof(ICommandPipeline<>), typeof(LoggingCommandPipeline<>));
+#if ServerSideExecution
+            services.AddTransient<IMediator, SaveServerMediator>();
+            services.AddTransient<ServerMediator>();
+            services.AddScoped(typeof(IQueryPipeline<,>), typeof(ValidationQueryPipeline<,>));// Not needed for Client side because is already implemented in controllers
+            services.AddScoped(typeof(ICommandPipeline<>), typeof(ValidationCommandPipeline<>));
+#else
+            services.AddTransient<IMediator, ServerMediator>();
+#endif
+            services.AddScoped(typeof(IQueryPipeline<,>), typeof(HandlerQueryPipeline<,>));
+            services.AddScoped(typeof(ICommandPipeline<>), typeof(HandlerCommandPipeline<>));
+
+
+            //services.AddScoped(typeof(IQueryHandler<IQuery<Config.Result>, Config.Result>), typeof(ConfigQueryHandler));
+
+            services.Scan(scan => scan
+                .FromAssemblyOf<Startup>()
+                .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime()
+            );
+            services.Scan(scan => scan
+                .FromAssemblyOf<Startup>()
+                .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime()
+            );
+            
+            // Register all validators
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
             services.Scan(scan => scan
                 .FromAssemblyOf<RequestNotificationContract>()
                 .AddClasses(classes => classes.AssignableTo(typeof(IValidator<>)))
                 .AsImplementedInterfaces()
-                .WithTransientLifetime());
+                .WithTransientLifetime()
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,22 +1,22 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
+using App.Shared.Mediator;
 using Microsoft.Extensions.Logging;
 using Pipaslot.Logging;
 
-namespace App.Server.MediatorBehaviors
+namespace App.Server.MediatorPipelines
 {
-    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class LoggingQueryPipeline<TRequest, TResponse> : IQueryPipeline<TRequest, TResponse>
     {
         private readonly ILogger<Program> _logger;
 
-        public LoggingBehavior(ILogger<Program> logger)
+        public LoggingQueryPipeline(ILogger<Program> logger)
         {
             _logger = logger;
         }
-
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, QueryHandlerDelegate<TResponse> next)
         {
             using (_logger.BeginMethod(request, typeof(TRequest)?.FullName ?? "")){
                 

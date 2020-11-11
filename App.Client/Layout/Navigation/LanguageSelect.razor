@@ -1,5 +1,4 @@
-﻿@using IMediator = MediatR.IMediator
-@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 @inject IState<Language.State> LanguageState
 @inject IDispatcher Dispatcher
 @inject IMediator Mediator
@@ -23,8 +22,10 @@
     string[] _languages = { };
     protected override async Task OnInitializedAsync()
     {
-        var config = await Mediator.Send(new Config.Request());
-        _languages = config.Languages;
+        var config = await Mediator.Send(new Config.Query());
+        if (config.Success){
+            _languages = config.Result.Languages;
+        }
         await base.OnInitializedAsync();
     }
 

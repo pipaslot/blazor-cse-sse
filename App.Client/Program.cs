@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using App.Client.ApiServices;
 using App.Client.Resources;
@@ -9,7 +8,6 @@ using Blazored.LocalStorage;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using Core.Localization;
 using Fluxor;
-using MediatR;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -57,8 +55,7 @@ namespace App.Client
             services.AddScoped<AuthServiceHttpClient>();
             services.AddScoped<IAuthService, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
             services.AddScoped<AuthenticationStateProvider, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-            services.AddTransient<App.Shared.SafeMediator.IMediator, SaveClientMediator>();
+            services.AddTransient<App.Shared.Mediator.IMediator, SaveClientMediator>();
         }
     }
 }

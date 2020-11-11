@@ -69,7 +69,7 @@
 
     bool _loading;
     SendingStatus _wasSent = SendingStatus.NotSent;
-    ContactForm.Request _model = new ContactForm.Request();
+    ContactForm.Query _model = new ContactForm.Query();
 
     async Task SubmitValidForm()
     {
@@ -78,17 +78,17 @@
 
     async Task HackFrontendValidation()
     {
-        await SendData(new ContactForm.Request());
+        await SendData(new ContactForm.Query());
     }
 
-    private async Task SendData(ContactForm.Request data)
+    private async Task SendData(ContactForm.Query data)
     {
         _loading = true;
         var result = await Mediator.Send(data);
         if (result.Success)
         {
             _wasSent = result.Result.Success ? SendingStatus.Sent : SendingStatus.NotAccepted;
-            _model = new ContactForm.Request();
+            _model = new ContactForm.Query();
         }
         else
         {

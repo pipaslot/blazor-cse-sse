@@ -1,4 +1,4 @@
-﻿namespace App.Shared.SafeMediator
+﻿namespace App.Shared.Mediator
 {
     public class MediatorResponse<TResult> : MediatorResponse
     {
