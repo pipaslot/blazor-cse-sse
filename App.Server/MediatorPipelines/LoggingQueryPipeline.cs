@@ -21,10 +21,12 @@ namespace App.Server.MediatorPipelines
             using (_logger.BeginMethod(query, typeof(TQuery)?.FullName ?? "")){
                 
                 var stopwatch = Stopwatch.StartNew();
-                try{
+                try
+                {
                     return await next();
                 }
-                finally{
+                finally
+                {
                     stopwatch.Stop();
                     _logger.LogInformation($"Execution time = {stopwatch.ElapsedMilliseconds}ms");
                 }

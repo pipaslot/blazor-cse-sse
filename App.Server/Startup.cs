@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
 using System.Linq;
 using System.Reflection;
 using App.Server.MediatorPipelines;
@@ -22,6 +21,11 @@ using Core.Jwt;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+#if ServerSideExecution
+    using Microsoft.AspNetCore.Authentication.Cookies;
+#else
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+#endif
 
 namespace App.Server
 {
@@ -113,9 +117,6 @@ namespace App.Server
 
             if (env.IsDevelopment())
             {
-#if ServerSideExecution
-                app.UseLiveReload();
-#endif
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
             }

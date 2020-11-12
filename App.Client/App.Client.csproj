@@ -6,26 +6,7 @@
     <OutputType>Exe</OutputType>
     <LangVersion>8</LangVersion>
     <RazorLangVersion>3.0</RazorLangVersion>
-
-    <Configurations>Debug_CSE;Debug_SSE;Release_CSE;Release_SSE</Configurations>
-
     <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Debug_CSE'">
-    <DefineConstants>ClientSideExecution</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Debug_SSE'">
-    <DefineConstants>ServerSideExecution</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release_CSE'">
-    <DefineConstants>ClientSideExecution</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release_SSE'">
-    <DefineConstants>ServerSideExecution</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

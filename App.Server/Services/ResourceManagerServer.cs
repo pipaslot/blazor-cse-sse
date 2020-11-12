@@ -20,12 +20,13 @@ namespace App.Server.Services
 
         public override string GetString(string name, CultureInfo? culture)
         {
-            return GetString(name);
+            return GetString(name);// TODO check if culture is really not needed
         }
 
         public override string GetString(string name)
         {
-            return base.GetString(name, _culture) ?? "";
+            var @string = _culture == null ? base.GetString(name) : base.GetString(name, _culture);
+            return @string ?? "";
         }
     }
 }
