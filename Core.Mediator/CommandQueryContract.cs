@@ -5,6 +5,7 @@ namespace Core.Mediator
 {
     public class CommandQueryContract
     {
+        private object _object;
         private CommandQueryContract()
         {
         }
@@ -21,6 +22,6 @@ namespace Core.Mediator
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
         public string ObjectName { get; set; } = string.Empty;
 
-        public object GetObject() => JsonSerializer.Deserialize(Json, Type.GetType(ObjectName));
+        public object GetObject() => _object ??= JsonSerializer.Deserialize(Json, Type.GetType(ObjectName));
     }
 }

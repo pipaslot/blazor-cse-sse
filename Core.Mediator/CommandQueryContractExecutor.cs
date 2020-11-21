@@ -17,14 +17,14 @@ namespace Core.Mediator
             _mediator = mediator;
         }
 
-        public async Task<object> ExecuteQuery(CommandQueryContract commandQuery, CancellationToken cancellationToken)
+        public async Task<MediatorResponse> ExecuteQuery(CommandQueryContract commandQuery, CancellationToken cancellationToken)
         {
             var query = commandQuery.GetObject();
 
             var queryInterfaceType = typeof(IQuery<>);
             var resultType = query.GetType()
                 .GetInterfaces()
-                .FirstOrDefault(t=>t.GetGenericTypeDefinition() == queryInterfaceType)
+                .FirstOrDefault(t => t.GetGenericTypeDefinition() == queryInterfaceType)
                 ?.GetGenericArguments()
                 .FirstOrDefault();
             if (resultType == null)
@@ -35,18 +35,31 @@ namespace Core.Mediator
             var method = _mediator.GetType()
                     .GetMethod(nameof(IMediator.Send))!
                 .MakeGenericMethod(resultType);
+            try
+            {
+                var task = (Task)method.Invoke(_mediator, new[] { query, cancellationToken })!;
+                await task.ConfigureAwait(false);
 
-            var task = (Task)method.Invoke(_mediator, new[] {query, cancellationToken})!;
-            await task.ConfigureAwait(false);
-
-            var resultProperty = task.GetType().GetProperty("Result");
-            return resultProperty?.GetValue(task);
+                var resultProperty = task.GetType().GetProperty("Result");
+                return (MediatorResponse)resultProperty?.GetValue(task);
+            }
+            catch (Exception e)
+            {
+                return new MediatorResponse(e.Message);
+            }
         }
-        
-        public async Task ExecuteCommand(CommandQueryContract commandQuery, CancellationToken cancellationToken)
+
+        public async Task<MediatorResponse> ExecuteCommand(CommandQueryContract commandQuery, CancellationToken cancellationToken)
         {
-            var query = (ICommand)commandQuery.GetObject();
-            await _mediator.Dispatch(query, cancellationToken);
+            try
+            {
+                var query = (ICommand)commandQuery.GetObject();
+                return await _mediator.Dispatch(query, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                return new MediatorResponse(e.Message);
+            }
         }
     }
 }

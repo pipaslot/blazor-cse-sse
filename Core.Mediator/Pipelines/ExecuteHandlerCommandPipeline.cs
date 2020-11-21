@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +27,19 @@ namespace Core.Mediator.Pipelines
             }
             
             var method = commandHandler.GetType().GetMethod(nameof(ICommandHandler<ICommand>.Handle));
-            await (Task)method!.Invoke(commandHandler, new object[] {command, cancellationToken})!;
+            try
+            {
+                await (Task) method!.Invoke(commandHandler, new object[] {command, cancellationToken})!;
+            }
+            catch (TargetInvocationException e)
+            {
+                if (e.InnerException != null)
+                {
+                    throw e.InnerException;
+                }
+
+                throw;
+            }
         }
     }
 }

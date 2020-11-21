@@ -2,6 +2,13 @@
 {
     public class MediatorResponse<TResult> : MediatorResponse
     {
+        /// <summary>
+        /// Constructor for deserialization only
+        /// </summary>
+        public MediatorResponse()
+        {
+        }
+
         public MediatorResponse(TResult result)
         {
             Result = result;
@@ -11,7 +18,8 @@
         {
         }
 
-        public TResult Result { get; }
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
+        public TResult Result { get; set; }
     }
 
     public class MediatorResponse
@@ -26,6 +34,8 @@
         }
 
         public bool Success => string.IsNullOrWhiteSpace(ErrorMessage);
-        public string ErrorMessage { get; }
+        
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
+        public string ErrorMessage { get; set; }
     }
 }

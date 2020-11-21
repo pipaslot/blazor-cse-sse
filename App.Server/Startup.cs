@@ -83,8 +83,8 @@ namespace App.Server
             services.AddMediatorQueryPipeline(typeof(ValidationQueryPipeline<,>)); // Not needed for Client side because is already implemented in controllers
             
 #else
-            services.AddCommandPipeline(typeof(LoggingCommandPipeline<>));
-            services.AddQueryPipeline(typeof(LoggingQueryPipeline<,>));
+            services.AddMediatorCommandPipeline(typeof(LoggingCommandPipeline<>));
+            services.AddMediatorQueryPipeline(typeof(LoggingQueryPipeline<,>));
 #endif
 
             // Automatically register all query handlers from project App.Server

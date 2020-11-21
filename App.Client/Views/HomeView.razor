@@ -6,7 +6,7 @@
 
     <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
 
-    <button @onclick="DispatchErrorCommand">Fire event throwing exception on server side</button>
+    <button @onclick="DispatchErrorCommand">Fire event throwing exception on server side</button> @DispatchError
     @*<BRow>
             <BCol Size="sm-4">4</BCol>
             <BCol Size="sm-4">4</BCol>
@@ -62,9 +62,11 @@
         </BContainer>*@
 </BContainer>
 @code{
+    string DispatchError = "";
 
     async Task DispatchErrorCommand()
     {
-        await Mediator.Dispatch(new ErrorGenerator.Command());
+        var dispatchResult = await Mediator.Dispatch(new ErrorGenerator.Command());
+        DispatchError = dispatchResult.ErrorMessage;
     }
 }

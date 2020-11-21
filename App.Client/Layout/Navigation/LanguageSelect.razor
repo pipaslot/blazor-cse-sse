@@ -23,7 +23,8 @@
     protected override async Task OnInitializedAsync()
     {
         var config = await Mediator.Send(new Config.Query());
-        if (config.Success){
+        if (config.Success)
+        {
             _languages = config.Result.Languages;
         }
         await base.OnInitializedAsync();

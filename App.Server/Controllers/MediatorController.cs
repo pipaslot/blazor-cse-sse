@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Server.Pages;
 using Core.Mediator;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace App.Server.Controllers
                 return BadRequest(JsonSerializer.Serialize(validationErrors));
             }
 
-            var result = _executor.ExecuteQuery(contract, cancellationToken);
+            var result = await _executor.ExecuteQuery(contract, cancellationToken);
             return new JsonResult(result);
         }
         
@@ -47,8 +48,8 @@ namespace App.Server.Controllers
                 return BadRequest(JsonSerializer.Serialize(validationErrors));
             }
 
-            await _executor.ExecuteCommand(contract, cancellationToken);
-            return Ok();
+            var result = await _executor.ExecuteCommand(contract, cancellationToken);
+            return new JsonResult(result);
         }
 
         private async Task<IReadOnlyList<ValidationErrorDto>> Validate(object command)

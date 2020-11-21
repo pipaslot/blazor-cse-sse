@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
 namespace App.Client.ApiServices
@@ -12,23 +13,26 @@ namespace App.Client.ApiServices
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
+        private readonly ILogger<ClientMediator> _logger;
 
-        public ClientMediator(HttpClient httpClient, IJSRuntime jsRuntime)
+        public ClientMediator(HttpClient httpClient, IJSRuntime jsRuntime, ILogger<ClientMediator> logger)
         {
             _httpClient = httpClient;
             _jsRuntime = jsRuntime;
+            _logger = logger;
         }
         
         public async Task<MediatorResponse<TResponse>> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
         {
             try
             {
-                var response = await _httpClient.PostJsonAsync<TResponse>("api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName, new CommandQueryContract(query));
-                return new MediatorResponse<TResponse>(response);
+                var response = await _httpClient.PostJsonAsync<MediatorResponse<TResponse>>("api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName, new CommandQueryContract(query));
+                return response;
             }
             catch (Exception e)
             {
-                await _jsRuntime.InvokeAsync<string>("alert", cancellationToken, "Server error: "+e.Message);
+                _logger.LogError(e, "Query failed");
+                await _jsRuntime.InvokeAsync<string>("alert", cancellationToken, "Request failed");
                 return new MediatorResponse<TResponse>(e.Message);
             }
         }
@@ -37,12 +41,13 @@ namespace App.Client.ApiServices
         {
             try
             {
-                await _httpClient.PostJsonAsync("api/mediator/command?type="+typeof(TCommand).FullName, new CommandQueryContract(command));
-                return new MediatorResponse();
+                var response = await _httpClient.PostJsonAsync<MediatorResponse>("api/mediator/command?type="+typeof(TCommand).FullName, new CommandQueryContract(command));
+                return response;
             }
             catch (Exception e)
             {
-                await _jsRuntime.InvokeAsync<string>("alert", cancellationToken, "Server error: "+e.Message);
+                _logger.LogError(e, "Command failed");
+                await _jsRuntime.InvokeAsync<string>("alert", cancellationToken, "Request failed");
                 return new MediatorResponse(e.Message);
             }
         }

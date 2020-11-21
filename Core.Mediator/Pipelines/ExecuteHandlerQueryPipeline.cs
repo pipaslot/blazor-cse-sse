@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,12 +24,24 @@ namespace Core.Mediator.Pipelines
             var queryHandler = _serviceProvider.GetService(handlerType);
             if (queryHandler == null)
             {
-                throw new Exception("No Query handler was found with expected implementation "+handlerType.FullName);
+                throw new Exception("No Query handler was found with expected implementation " + handlerType.FullName);
             }
 
-            var method = queryHandler.GetType().GetMethod(nameof(IQueryHandler<IQuery<object>,object>.Handle));
-            var task = (Task<TResponse>)method!.Invoke(queryHandler, new object[] {query, cancellationToken})!;
-            return await task;
+            var method = queryHandler.GetType().GetMethod(nameof(IQueryHandler<IQuery<object>, object>.Handle));
+            try
+            {
+                var task = (Task<TResponse>)method!.Invoke(queryHandler, new object[] { query, cancellationToken })!;
+                return await task;
+            }
+            catch (TargetInvocationException e)
+            {
+                if (e.InnerException != null)
+                {
+                    throw e.InnerException;
+                }
+
+                throw;
+            }
         }
     }
 }
