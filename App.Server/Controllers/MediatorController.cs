@@ -33,14 +33,34 @@ namespace App.Server.Controllers
             {
                 return BadRequest(JsonSerializer.Serialize(validationErrors));
             }
-            var result = await _mediator.Send(query, cancellationToken);
+
+            var queryInterfaceType = typeof(IQuery<>);
+            var resultType = query.GetType()
+                .GetInterfaces()
+                .FirstOrDefault(t=>t.GetGenericTypeDefinition() == queryInterfaceType)
+                ?.GetGenericArguments()
+                .FirstOrDefault();
+            if (resultType == null)
+            {
+                throw new Exception($"Object {query.GetType()} is not assignable to type {queryInterfaceType }");
+            }
+
+            var method = _mediator.GetType()
+                    .GetMethod(nameof(IMediator.Send))!
+                .MakeGenericMethod(resultType);
+
+            var task = (Task)method.Invoke(_mediator, new[] {query, cancellationToken})!;
+            await task.ConfigureAwait(false);
+
+            var resultProperty = task.GetType().GetProperty("Result");
+            var result= resultProperty?.GetValue(task);
             return new JsonResult(result);
         }
         
         [HttpPost("notification")]
         public async Task<ActionResult> MediatorNotification([FromBody]RequestNotificationContract commandQuery, CancellationToken cancellationToken)
         {
-            var query = commandQuery.GetObject();
+            var query = (ICommand)commandQuery.GetObject();
             var validationErrors = await Validate( query);
             if (validationErrors.Any())
             {

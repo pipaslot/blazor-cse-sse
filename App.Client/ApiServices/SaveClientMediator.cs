@@ -19,7 +19,7 @@ namespace App.Client.ApiServices
             _httpClient = httpClient;
             _jsRuntime = jsRuntime;
         }
-
+        
         public async Task<MediatorResponse<TResponse>> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
         {
             try
