@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Mediator;
+using Core.Mediator;
 
 namespace App.Server.MediatorPipelines
 {
-    public class HandlerQueryPipeline<TRequest, TResponse> : IQueryPipeline<TRequest, TResponse> where TRequest : IQuery<TResponse>
+    public class ExecuteHandlerQueryPipeline<TRequest, TResponse> : IQueryPipeline<TRequest, TResponse> where TRequest : IQuery<TResponse>
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public HandlerQueryPipeline(IServiceProvider serviceProvider)
+        public ExecuteHandlerQueryPipeline(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -24,11 +24,9 @@ namespace App.Server.MediatorPipelines
                 throw new Exception("No Query handler was found with expected implementation "+handlerType.FullName);
             }
 
-            var method = queryHandler.GetType().GetMethod("Handle");
-            var task = (Task<TResponse>)method.Invoke(queryHandler, new object[] {request, cancellationToken});
+            var method = queryHandler.GetType().GetMethod(nameof(IQueryHandler<IQuery<object>,object>.Handle));
+            var task = (Task<TResponse>)method!.Invoke(queryHandler, new object[] {request, cancellationToken})!;
             return await task;
-            // var response = await queryHandler.Handle(request, cancellationToken);
-            // return response;
         }
     }
 }

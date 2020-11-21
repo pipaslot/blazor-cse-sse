@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Mediator;
+using Core.Mediator;
 
 namespace App.Server.MediatorPipelines
 {
-    public class HandlerCommandPipeline<TRequest> : ICommandPipeline<TRequest> where TRequest : ICommand
+    public class ExecuteHandlerCommandPipeline<TRequest> : ICommandPipeline<TRequest> where TRequest : ICommand
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public HandlerCommandPipeline(IServiceProvider serviceProvider)
+        public ExecuteHandlerCommandPipeline(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

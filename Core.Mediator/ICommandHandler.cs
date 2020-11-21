@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace App.Shared.Mediator
+namespace Core.Mediator
 {
     
     /// <summary>Defines a handler for a command</summary>

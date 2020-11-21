@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Shared;
-using App.Shared.Mediator;
+using Core.Mediator;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -66,7 +65,7 @@ namespace App.Server.Controllers
             {
                 return BadRequest(JsonSerializer.Serialize(validationErrors));
             }
-            await _mediator.Publish(query, cancellationToken);
+            await _mediator.Send(query, cancellationToken);
             return Ok();
         }
 

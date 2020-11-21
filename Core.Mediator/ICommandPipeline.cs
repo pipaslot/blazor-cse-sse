@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace App.Shared.Mediator
+namespace Core.Mediator
 {
     /// <summary>
     /// Pipeline behavior to surround the handler.

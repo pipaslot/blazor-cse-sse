@@ -17,7 +17,7 @@ using App.Server.MediatorPipelines;
 using App.Server.QueryHandlers;
 using App.Server.Services;
 using App.Shared;
-using App.Shared.Mediator;
+using Core.Mediator;
 using App.Shared.Queries;
 using Core.Jwt;
 using FluentValidation;
@@ -86,8 +86,8 @@ namespace App.Server
 #else
             services.AddTransient<IMediator, ServerMediator>();
 #endif
-            services.AddScoped(typeof(IQueryPipeline<,>), typeof(HandlerQueryPipeline<,>));
-            services.AddScoped(typeof(ICommandPipeline<>), typeof(HandlerCommandPipeline<>));
+            services.AddScoped(typeof(IQueryPipeline<,>), typeof(ExecuteHandlerQueryPipeline<,>));
+            services.AddScoped(typeof(ICommandPipeline<>), typeof(ExecuteHandlerCommandPipeline<>));
 
 
             //services.AddScoped(typeof(IQueryHandler<IQuery<Config.Result>, Config.Result>), typeof(ConfigQueryHandler));

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Mediator;
+using Core.Mediator;
 using Microsoft.Extensions.Logging;
 using Pipaslot.Logging;
 

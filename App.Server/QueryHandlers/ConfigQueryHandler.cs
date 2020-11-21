@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Mediator;
+using Core.Mediator;
 using Microsoft.Extensions.Options;
 using Config = App.Shared.Queries.Config;
 

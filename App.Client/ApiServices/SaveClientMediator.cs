@@ -2,8 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Shared;
-using App.Shared.Mediator;
+using Core.Mediator;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -34,7 +33,7 @@ namespace App.Client.ApiServices
             }
         }
 
-        public async Task<MediatorResponse> Publish<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
+        public async Task<MediatorResponse> Send<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
         {
             try
             {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace App.Shared
+namespace Core.Mediator
 {
     public class RequestNotificationContract
     {

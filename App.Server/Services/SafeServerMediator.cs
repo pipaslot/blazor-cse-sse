@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Mediator;
+using Core.Mediator;
 using Microsoft.JSInterop;
 
 namespace App.Server.Services
@@ -30,11 +30,11 @@ namespace App.Server.Services
             }
         }
 
-        public async Task<MediatorResponse> Publish<TCommand>(TCommand command, CancellationToken cancellationToken = default)where TCommand : ICommand
+        public async Task<MediatorResponse> Send<TCommand>(TCommand command, CancellationToken cancellationToken = default)where TCommand : ICommand
         {
             try
             {
-                return await _mediator.Publish(command, cancellationToken);
+                return await _mediator.Send(command, cancellationToken);
             }
             catch (Exception e)
             {

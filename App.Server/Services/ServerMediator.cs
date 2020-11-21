@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Mediator;
+using Core.Mediator;
 
 namespace App.Server.Services
 {
@@ -29,7 +29,7 @@ namespace App.Server.Services
             return new MediatorResponse<TResponse>(response);
         }
 
-        public async Task<MediatorResponse> Publish<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
+        public async Task<MediatorResponse> Send<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
         {
             var handlerType = typeof(ICommandPipeline<>).MakeGenericType(typeof(ICommand));
             var handlerCollectionType = typeof(IEnumerable<>).MakeGenericType(handlerType);

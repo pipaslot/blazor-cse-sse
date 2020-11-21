@@ -1,4 +1,4 @@
-﻿using App.Shared.Mediator;
+﻿using Core.Mediator;
 
 namespace App.Shared.Queries
 {
