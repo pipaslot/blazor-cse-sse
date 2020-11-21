@@ -16,7 +16,7 @@ namespace App.Server.MediatorPipelines
             _logger = logger;
         }
         
-        public async Task Handle(TCommand command, CancellationToken cancellationToken, QueryHandlerDelegate next)
+        public async Task Handle(TCommand command, CancellationToken cancellationToken, CommandHandlerDelegate next)
         {
             using (_logger.BeginMethod(command, typeof(TCommand)?.FullName ?? "")){
                 

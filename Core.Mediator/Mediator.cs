@@ -39,7 +39,7 @@ namespace Core.Mediator
             static Task Seed() => Task.CompletedTask;
             await pipelines
                 .Reverse()
-                .Aggregate((QueryHandlerDelegate) Seed, (next, pipeline) => () => pipeline.Handle(command, cancellationToken, next))();
+                .Aggregate((CommandHandlerDelegate) Seed, (next, pipeline) => () => pipeline.Handle(command, cancellationToken, next))();
 
             return new MediatorResponse();
         }

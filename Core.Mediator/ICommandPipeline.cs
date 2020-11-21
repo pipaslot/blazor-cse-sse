@@ -17,12 +17,12 @@ namespace Core.Mediator
         /// <param name="cancellationToken">Cancellation token</param>
         /// <param name="next">Awaitable delegate for the next action in the pipeline. Eventually this delegate represents the handler.</param>
         /// <returns>Awaitable task</returns>
-        Task Handle(TCommand command, CancellationToken cancellationToken, QueryHandlerDelegate next);
+        Task Handle(TCommand command, CancellationToken cancellationToken, CommandHandlerDelegate next);
     }
 
     /// <summary>
     /// Represents an async continuation for the next task to execute in the pipeline
     /// </summary>
     /// <returns>Awaitable task</returns>
-    public delegate Task QueryHandlerDelegate();
+    public delegate Task CommandHandlerDelegate();
 }

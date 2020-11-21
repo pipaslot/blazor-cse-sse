@@ -73,15 +73,21 @@ namespace App.Server
             services.AddScoped<IAuthService,AuthService>();
             
             // Mediator with pipelines
+#if ServerSideExecution
+            //services.AddTransient<IMediator, SaveServerMediator>();
+            services.AddTransient<IMediator, Mediator>();
+            services.AddScoped(typeof(IQueryPipeline<,>), typeof(ExceptionHandlerQueryPipeline<,>));
+            services.AddScoped(typeof(ICommandPipeline<>), typeof(ExceptionHandlerCommandPipeline<>));
+
+            services.AddScoped(typeof(IQueryPipeline<,>), typeof(ValidationQueryPipeline<,>));// Not needed for Client side because is already implemented in controllers
+            services.AddScoped(typeof(ICommandPipeline<>), typeof(ValidationCommandPipeline<>));// Not needed for Client side because is already implemented in controllers
+            
             services.AddScoped(typeof(IQueryPipeline<,>), typeof(LoggingQueryPipeline<,>));
             services.AddScoped(typeof(ICommandPipeline<>), typeof(LoggingCommandPipeline<>));
-#if ServerSideExecution
-            services.AddTransient<IMediator, SaveServerMediator>();
-            services.AddTransient<ServerMediator>();
-            services.AddScoped(typeof(IQueryPipeline<,>), typeof(ValidationQueryPipeline<,>));// Not needed for Client side because is already implemented in controllers
-            services.AddScoped(typeof(ICommandPipeline<>), typeof(ValidationCommandPipeline<>));
 #else
             services.AddTransient<IMediator, Mediator>();
+            services.AddScoped(typeof(IQueryPipeline<,>), typeof(LoggingQueryPipeline<,>));
+            services.AddScoped(typeof(ICommandPipeline<>), typeof(LoggingCommandPipeline<>));
 #endif
             services.AddScoped(typeof(IQueryPipeline<,>), typeof(ExecuteHandlerQueryPipeline<,>));
             services.AddScoped(typeof(ICommandPipeline<>), typeof(ExecuteHandlerCommandPipeline<>));

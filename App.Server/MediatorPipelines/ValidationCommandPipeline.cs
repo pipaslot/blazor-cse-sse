@@ -18,7 +18,7 @@ namespace App.Server.MediatorPipelines
             _validatorFactory = validatorFactory;
         }
 
-        public async Task Handle(TCommand command, CancellationToken cancellationToken, QueryHandlerDelegate next)
+        public async Task Handle(TCommand command, CancellationToken cancellationToken, CommandHandlerDelegate next)
         {
             var typeValidator = _validatorFactory.GetValidator(typeof(TCommand));
             if (typeValidator != null)

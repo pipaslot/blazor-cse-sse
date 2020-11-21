@@ -16,7 +16,7 @@ namespace Core.Mediator.Pipelines
             _serviceProvider = serviceProvider;
         }
 
-        public async Task Handle(TCommand command, CancellationToken cancellationToken, QueryHandlerDelegate next)
+        public async Task Handle(TCommand command, CancellationToken cancellationToken, CommandHandlerDelegate next)
         {
             var handlerType = typeof(ICommandHandler<>).MakeGenericType(command.GetType());
             var commandHandler = _serviceProvider.GetService(handlerType);
