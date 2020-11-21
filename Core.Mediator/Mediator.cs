@@ -23,18 +23,26 @@ namespace Core.Mediator
         {
             var pipelines = GetQueryPipelines<TResponse>();
             static Task<TResponse> Seed() => Task.FromResult<TResponse>(default!);
-            var response =  await pipelines
-                .Reverse()
-                .Aggregate((QueryHandlerDelegate<TResponse>) Seed, (next, pipeline) => () => pipeline.Handle(query, cancellationToken, next))();
+            try
+            {
+                var response = await pipelines
+                    .Reverse()
+                    .Aggregate((QueryHandlerDelegate<TResponse>)Seed,
+                        (next, pipeline) => () => pipeline.Handle(query, cancellationToken, next))();
 
-            return new MediatorResponse<TResponse>(response);
+                return new MediatorResponse<TResponse>(response);
+            }
+            catch (Exception e)
+            {
+                return new MediatorResponse<TResponse>(e.Message);
+            }
         }
 
         private IEnumerable<IQueryPipeline<IQuery<TResponse>, TResponse>> GetQueryPipelines<TResponse>()
         {
             var handlerType = typeof(IQueryPipeline<,>).MakeGenericType(typeof(IQuery<TResponse>), typeof(TResponse));
             var handlerCollectionType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-            var pipelines = (IEnumerable<IQueryPipeline<IQuery<TResponse>, TResponse>>) _serviceProvider.GetService(handlerCollectionType);
+            var pipelines = (IEnumerable<IQueryPipeline<IQuery<TResponse>, TResponse>>)_serviceProvider.GetService(handlerCollectionType);
             foreach (var pipeline in pipelines)
             {
                 yield return pipeline;
@@ -47,18 +55,25 @@ namespace Core.Mediator
         {
             var pipelines = GetCommandPipelines<TCommand>();
             static Task Seed() => Task.CompletedTask;
-            await pipelines
-                .Reverse()
-                .Aggregate((CommandHandlerDelegate) Seed, (next, pipeline) => () => pipeline.Handle(command, cancellationToken, next))();
+            try
+            {
+                await pipelines
+                    .Reverse()
+                    .Aggregate((CommandHandlerDelegate)Seed, (next, pipeline) => () => pipeline.Handle(command, cancellationToken, next))();
 
-            return new MediatorResponse();
+                return new MediatorResponse();
+            }
+            catch (Exception e)
+            {
+                return new MediatorResponse(e.Message);
+            }
         }
 
         private IEnumerable<ICommandPipeline<TCommand>> GetCommandPipelines<TCommand>() where TCommand : ICommand
         {
             var handlerType = typeof(ICommandPipeline<>).MakeGenericType(typeof(ICommand));
             var handlerCollectionType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-            var pipelines = (IEnumerable<ICommandPipeline<TCommand>>) _serviceProvider.GetService(handlerCollectionType);
+            var pipelines = (IEnumerable<ICommandPipeline<TCommand>>)_serviceProvider.GetService(handlerCollectionType);
             foreach (var pipeline in pipelines)
             {
                 yield return pipeline;
