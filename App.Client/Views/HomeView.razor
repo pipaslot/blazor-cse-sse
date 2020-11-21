@@ -1,10 +1,12 @@
 ﻿@page "/"
-@using Components.Shared
-    <BContainer>
-        <h1>@LayoutResource.Home</h1>
+@inject IMediator Mediator
+<BContainer>
+    <h1>@LayoutResource.Home</h1>
 
-        <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
-        @*<BRow>
+    <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
+
+    <button @onclick="DispatchErrorCommand">Fire event throwing exception on server side</button>
+    @*<BRow>
             <BCol Size="sm-4">4</BCol>
             <BCol Size="sm-4">4</BCol>
             <BCol Size="sm-2">4</BCol>
@@ -57,7 +59,11 @@
                 <BCol Size="sm-4">4</BCol>
             </BRow>
         </BContainer>*@
-    </BContainer>
-        @code{
+</BContainer>
+@code{
 
-        }
+    async Task DispatchErrorCommand()
+    {
+        await Mediator.Dispatch(new ErrorGenerator.Command());
+    }
+}

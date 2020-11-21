@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorPipelines
 {
-    public class ValidationCommandPipeline<TRequest> : ICommandPipeline<TRequest>
+    public class ValidationCommandPipeline<TCommand> : ICommandPipeline<TCommand> where TCommand: notnull
     {
         private readonly ILogger<Program> _logger;
         private readonly IValidatorFactory _validatorFactory;
@@ -18,12 +18,12 @@ namespace App.Server.MediatorPipelines
             _validatorFactory = validatorFactory;
         }
 
-        public async Task Handle(TRequest request, CancellationToken cancellationToken, QueryHandlerDelegate next)
+        public async Task Handle(TCommand command, CancellationToken cancellationToken, QueryHandlerDelegate next)
         {
-            var typeValidator = _validatorFactory.GetValidator(typeof(TRequest));
+            var typeValidator = _validatorFactory.GetValidator(typeof(TCommand));
             if (typeValidator != null)
             {
-                var result = await typeValidator.ValidateAsync(new ValidationContext<object>(request), cancellationToken);
+                var result = await typeValidator.ValidateAsync(new ValidationContext<object>(command), cancellationToken);
 
                 if (result.Errors.Any())
                 {

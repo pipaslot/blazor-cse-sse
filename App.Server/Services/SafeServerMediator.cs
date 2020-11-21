@@ -8,10 +8,10 @@ namespace App.Server.Services
 {
     public class SaveServerMediator : IMediator
     {
-        private readonly ServerMediator _mediator;
+        private readonly Mediator _mediator;
         private readonly IJSRuntime _jsRuntime;
 
-        public SaveServerMediator(ServerMediator mediator, IJSRuntime jsRuntime)
+        public SaveServerMediator(Mediator mediator, IJSRuntime jsRuntime)
         {
             _mediator = mediator;
             _jsRuntime = jsRuntime;
@@ -30,11 +30,11 @@ namespace App.Server.Services
             }
         }
 
-        public async Task<MediatorResponse> Send<TCommand>(TCommand command, CancellationToken cancellationToken = default)where TCommand : ICommand
+        public async Task<MediatorResponse> Dispatch<TCommand>(TCommand command, CancellationToken cancellationToken = default)where TCommand : ICommand
         {
             try
             {
-                return await _mediator.Send(command, cancellationToken);
+                return await _mediator.Dispatch(command, cancellationToken);
             }
             catch (Exception e)
             {

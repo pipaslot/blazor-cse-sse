@@ -20,6 +20,7 @@ using App.Shared;
 using Core.Mediator;
 using App.Shared.Queries;
 using Core.Jwt;
+using Core.Mediator.Pipelines;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -84,13 +85,10 @@ namespace App.Server
             services.AddScoped(typeof(IQueryPipeline<,>), typeof(ValidationQueryPipeline<,>));// Not needed for Client side because is already implemented in controllers
             services.AddScoped(typeof(ICommandPipeline<>), typeof(ValidationCommandPipeline<>));
 #else
-            services.AddTransient<IMediator, ServerMediator>();
+            services.AddTransient<IMediator, Mediator>();
 #endif
             services.AddScoped(typeof(IQueryPipeline<,>), typeof(ExecuteHandlerQueryPipeline<,>));
             services.AddScoped(typeof(ICommandPipeline<>), typeof(ExecuteHandlerCommandPipeline<>));
-
-
-            //services.AddScoped(typeof(IQueryHandler<IQuery<Config.Result>, Config.Result>), typeof(ConfigQueryHandler));
 
             services.Scan(scan => scan
                 .FromAssemblyOf<Startup>()

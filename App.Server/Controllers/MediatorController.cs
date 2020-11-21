@@ -23,7 +23,7 @@ namespace App.Server.Controllers
             _validatorFactory = validatorFactory;
         }
 
-        [HttpPost("request")]
+        [HttpPost("query")]
         public async Task<ActionResult> MediatorRequest([FromBody]RequestNotificationContract commandQuery, CancellationToken cancellationToken)
         {
             var query = commandQuery.GetObject();
@@ -56,7 +56,7 @@ namespace App.Server.Controllers
             return new JsonResult(result);
         }
         
-        [HttpPost("notification")]
+        [HttpPost("command")]
         public async Task<ActionResult> MediatorNotification([FromBody]RequestNotificationContract commandQuery, CancellationToken cancellationToken)
         {
             var query = (ICommand)commandQuery.GetObject();
@@ -65,7 +65,7 @@ namespace App.Server.Controllers
             {
                 return BadRequest(JsonSerializer.Serialize(validationErrors));
             }
-            await _mediator.Send(query, cancellationToken);
+            await _mediator.Dispatch(query, cancellationToken);
             return Ok();
         }
 

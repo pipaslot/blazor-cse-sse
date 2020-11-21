@@ -7,17 +7,17 @@ namespace Core.Mediator
     /// Pipeline behavior to surround the handler.
     /// Implementations add additional behavior and await the next delegate.
     /// </summary>
-    /// <typeparam name="TRequest">Request type</typeparam>
-    public interface ICommandPipeline<in TRequest> where TRequest : notnull
+    /// <typeparam name="TCommand">Request type</typeparam>
+    public interface ICommandPipeline<in TCommand> where TCommand : notnull
     {
         /// <summary>
         /// Pipeline handler. Perform any additional behavior and await the <paramref name="next"/> delegate as necessary
         /// </summary>
-        /// <param name="request">Incoming request</param>
+        /// <param name="command">Incoming request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <param name="next">Awaitable delegate for the next action in the pipeline. Eventually this delegate represents the handler.</param>
         /// <returns>Awaitable task</returns>
-        Task Handle(TRequest request, CancellationToken cancellationToken, QueryHandlerDelegate next);
+        Task Handle(TCommand command, CancellationToken cancellationToken, QueryHandlerDelegate next);
     }
 
     /// <summary>

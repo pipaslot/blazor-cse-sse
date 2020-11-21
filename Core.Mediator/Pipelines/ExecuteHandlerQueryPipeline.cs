@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator;
 
-namespace App.Server.MediatorPipelines
+namespace Core.Mediator.Pipelines
 {
-    public class ExecuteHandlerQueryPipeline<TRequest, TResponse> : IQueryPipeline<TRequest, TResponse> where TRequest : IQuery<TResponse>
+    /// <summary>
+    /// This pipeline must be always registered as the last one, because it is executing query handler
+    /// </summary>
+    public class ExecuteHandlerQueryPipeline<TQuery, TResponse> : IQueryPipeline<TQuery, TResponse> where TQuery : IQuery<TResponse>
     {
         private readonly IServiceProvider _serviceProvider;
 
@@ -14,10 +16,10 @@ namespace App.Server.MediatorPipelines
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, QueryHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TQuery query, CancellationToken cancellationToken, QueryHandlerDelegate<TResponse> next)
         {
-            var requestType = request.GetType();
-            var handlerType = typeof(IQueryHandler<,>).MakeGenericType(requestType, typeof(TResponse));
+            var queryType = query.GetType();
+            var handlerType = typeof(IQueryHandler<,>).MakeGenericType(queryType, typeof(TResponse));
             var queryHandler = _serviceProvider.GetService(handlerType);
             if (queryHandler == null)
             {
@@ -25,7 +27,7 @@ namespace App.Server.MediatorPipelines
             }
 
             var method = queryHandler.GetType().GetMethod(nameof(IQueryHandler<IQuery<object>,object>.Handle));
-            var task = (Task<TResponse>)method!.Invoke(queryHandler, new object[] {request, cancellationToken})!;
+            var task = (Task<TResponse>)method!.Invoke(queryHandler, new object[] {query, cancellationToken})!;
             return await task;
         }
     }

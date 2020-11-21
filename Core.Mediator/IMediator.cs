@@ -10,7 +10,7 @@ namespace Core.Mediator
     {
         Task<MediatorResponse<TResponse>> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default);
 
-        Task<MediatorResponse> Send<TCommand>(TCommand command, CancellationToken cancellationToken = default)
+        Task<MediatorResponse> Dispatch<TCommand>(TCommand command, CancellationToken cancellationToken = default)
             where TCommand : ICommand;
     }
 }

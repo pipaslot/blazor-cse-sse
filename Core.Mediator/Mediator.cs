@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator;
 
-namespace App.Server.Services
+namespace Core.Mediator
 {
-    public class ServerMediator : IMediator
+    /// <summary>
+    /// Mediator which uses command and query pipelines for action wrapping and handler execution
+    /// </summary>
+    public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public ServerMediator(IServiceProvider serviceProvider)
+        public Mediator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -29,7 +31,7 @@ namespace App.Server.Services
             return new MediatorResponse<TResponse>(response);
         }
 
-        public async Task<MediatorResponse> Send<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
+        public async Task<MediatorResponse> Dispatch<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
         {
             var handlerType = typeof(ICommandPipeline<>).MakeGenericType(typeof(ICommand));
             var handlerCollectionType = typeof(IEnumerable<>).MakeGenericType(handlerType);

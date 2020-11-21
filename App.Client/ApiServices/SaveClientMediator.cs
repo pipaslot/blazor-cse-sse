@@ -23,7 +23,7 @@ namespace App.Client.ApiServices
         {
             try
             {
-                var response = await _httpClient.PostJsonAsync<TResponse>("api/mediator/request?type=" + typeof(IQuery<TResponse>).FullName, new RequestNotificationContract(query));
+                var response = await _httpClient.PostJsonAsync<TResponse>("api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName, new RequestNotificationContract(query));
                 return new MediatorResponse<TResponse>(response);
             }
             catch (Exception e)
@@ -33,11 +33,11 @@ namespace App.Client.ApiServices
             }
         }
 
-        public async Task<MediatorResponse> Send<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
+        public async Task<MediatorResponse> Dispatch<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
         {
             try
             {
-                await _httpClient.PostJsonAsync("api/mediator/notification?type="+typeof(TCommand).FullName, new RequestNotificationContract(command));
+                await _httpClient.PostJsonAsync("api/mediator/command?type="+typeof(TCommand).FullName, new RequestNotificationContract(command));
                 return new MediatorResponse();
             }
             catch (Exception e)
