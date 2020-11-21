@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Command;
+using App.Shared.Commands;
 using Core.Mediator;
 
 namespace App.Server.CommandHandlers

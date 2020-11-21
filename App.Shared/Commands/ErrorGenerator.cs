@@ -1,6 +1,6 @@
 ﻿using Core.Mediator;
 
-namespace App.Shared.Command
+namespace App.Shared.Commands
 {
     public static class ErrorGenerator
     {
