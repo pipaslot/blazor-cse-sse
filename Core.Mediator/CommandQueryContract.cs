@@ -3,13 +3,13 @@ using System.Text.Json;
 
 namespace Core.Mediator
 {
-    public class RequestNotificationContract
+    public class CommandQueryContract
     {
-        private RequestNotificationContract()
+        private CommandQueryContract()
         {
         }
 
-        public RequestNotificationContract(object query)
+        public CommandQueryContract(object query)
         {
             Json = JsonSerializer.Serialize(query);
             ObjectName = query.GetType().AssemblyQualifiedName;

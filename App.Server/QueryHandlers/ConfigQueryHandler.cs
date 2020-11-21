@@ -4,7 +4,7 @@ using Core.Mediator;
 using Microsoft.Extensions.Options;
 using Config = App.Shared.Queries.Config;
 
-namespace App.Server.Handlers.Queries
+namespace App.Server.QueryHandlers
 {
     // ReSharper disable once UnusedType.Global
     public class ConfigQueryHandler : IQueryHandler<Config.Query, Config.Result>

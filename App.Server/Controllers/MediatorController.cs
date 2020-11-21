@@ -14,58 +14,40 @@ namespace App.Server.Controllers
     [ApiController]
     public class MediatorController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly CommandQueryContractExecutor _executor;
         private readonly IValidatorFactory _validatorFactory;
 
         public MediatorController(IMediator mediator, IValidatorFactory validatorFactory)
         {
-            _mediator = mediator;
+            _executor = new CommandQueryContractExecutor(mediator);
             _validatorFactory = validatorFactory;
         }
 
         [HttpPost("query")]
-        public async Task<ActionResult> MediatorRequest([FromBody]RequestNotificationContract commandQuery, CancellationToken cancellationToken)
+        public async Task<ActionResult> MediatorQuery([FromBody]CommandQueryContract contract, CancellationToken cancellationToken)
         {
-            var query = commandQuery.GetObject();
+            var query = contract.GetObject();
             var validationErrors = await Validate( query);
             if (validationErrors.Any())
             {
                 return BadRequest(JsonSerializer.Serialize(validationErrors));
             }
 
-            var queryInterfaceType = typeof(IQuery<>);
-            var resultType = query.GetType()
-                .GetInterfaces()
-                .FirstOrDefault(t=>t.GetGenericTypeDefinition() == queryInterfaceType)
-                ?.GetGenericArguments()
-                .FirstOrDefault();
-            if (resultType == null)
-            {
-                throw new Exception($"Object {query.GetType()} is not assignable to type {queryInterfaceType }");
-            }
-
-            var method = _mediator.GetType()
-                    .GetMethod(nameof(IMediator.Send))!
-                .MakeGenericMethod(resultType);
-
-            var task = (Task)method.Invoke(_mediator, new[] {query, cancellationToken})!;
-            await task.ConfigureAwait(false);
-
-            var resultProperty = task.GetType().GetProperty("Result");
-            var result= resultProperty?.GetValue(task);
+            var result = _executor.ExecuteQuery(contract, cancellationToken);
             return new JsonResult(result);
         }
         
         [HttpPost("command")]
-        public async Task<ActionResult> MediatorNotification([FromBody]RequestNotificationContract commandQuery, CancellationToken cancellationToken)
+        public async Task<ActionResult> MediatorCommand([FromBody]CommandQueryContract contract, CancellationToken cancellationToken)
         {
-            var query = (ICommand)commandQuery.GetObject();
+            var query = (ICommand)contract.GetObject();
             var validationErrors = await Validate( query);
             if (validationErrors.Any())
             {
                 return BadRequest(JsonSerializer.Serialize(validationErrors));
             }
-            await _mediator.Dispatch(query, cancellationToken);
+
+            await _executor.ExecuteCommand(contract, cancellationToken);
             return Ok();
         }
 

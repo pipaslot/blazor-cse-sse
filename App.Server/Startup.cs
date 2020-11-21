@@ -19,7 +19,6 @@ using App.Shared.AuthModels;
 using Core.Mediator;
 using App.Shared.Queries;
 using Core.Jwt;
-using Core.Mediator.Pipelines;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -73,24 +72,20 @@ namespace App.Server
             services.AddScoped<IAuthService,AuthService>();
             
             // Mediator with pipelines
+            services.AddTransient<IMediator, Mediator>();
 #if ServerSideExecution
-            //services.AddTransient<IMediator, SaveServerMediator>();
-            services.AddTransient<IMediator, Mediator>();
-            services.AddScoped(typeof(IQueryPipeline<,>), typeof(ExceptionHandlerQueryPipeline<,>));
-            services.AddScoped(typeof(ICommandPipeline<>), typeof(ExceptionHandlerCommandPipeline<>));
+            services.AddMediatorCommandPipeline(typeof(ExceptionHandlerCommandPipeline<>));
+            services.AddMediatorCommandPipeline(typeof(LoggingCommandPipeline<>));
+            services.AddMediatorCommandPipeline(typeof(ValidationCommandPipeline<>)); // Not needed for Client side because is already implemented in controllers
 
-            services.AddScoped(typeof(IQueryPipeline<,>), typeof(ValidationQueryPipeline<,>));// Not needed for Client side because is already implemented in controllers
-            services.AddScoped(typeof(ICommandPipeline<>), typeof(ValidationCommandPipeline<>));// Not needed for Client side because is already implemented in controllers
+            services.AddMediatorQueryPipeline(typeof(ExceptionHandlerQueryPipeline<,>));
+            services.AddMediatorQueryPipeline(typeof(LoggingQueryPipeline<,>));
+            services.AddMediatorQueryPipeline(typeof(ValidationQueryPipeline<,>)); // Not needed for Client side because is already implemented in controllers
             
-            services.AddScoped(typeof(IQueryPipeline<,>), typeof(LoggingQueryPipeline<,>));
-            services.AddScoped(typeof(ICommandPipeline<>), typeof(LoggingCommandPipeline<>));
 #else
-            services.AddTransient<IMediator, Mediator>();
-            services.AddScoped(typeof(IQueryPipeline<,>), typeof(LoggingQueryPipeline<,>));
-            services.AddScoped(typeof(ICommandPipeline<>), typeof(LoggingCommandPipeline<>));
+            services.AddCommandPipeline(typeof(LoggingCommandPipeline<>));
+            services.AddQueryPipeline(typeof(LoggingQueryPipeline<,>));
 #endif
-            services.AddScoped(typeof(IQueryPipeline<,>), typeof(ExecuteHandlerQueryPipeline<,>));
-            services.AddScoped(typeof(ICommandPipeline<>), typeof(ExecuteHandlerCommandPipeline<>));
 
             // Automatically register all query handlers from project App.Server
             services.Scan(scan => scan

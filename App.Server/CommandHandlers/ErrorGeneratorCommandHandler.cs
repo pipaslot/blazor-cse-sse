@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using App.Shared.Commands;
 using Core.Mediator;
 
-namespace App.Server.Handlers.Commands
+namespace App.Server.CommandHandlers
 {
     public class ErrorGeneratorCommandHandler : ICommandHandler<ErrorGenerator.Command>
     {

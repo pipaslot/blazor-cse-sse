@@ -7,7 +7,7 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// This pipeline must be always registered as the last one, because it is executing query handler
     /// </summary>
-    public class ExecuteHandlerQueryPipeline<TQuery, TResponse> : IQueryPipeline<TQuery, TResponse> where TQuery : IQuery<TResponse>
+    internal class ExecuteHandlerQueryPipeline<TQuery, TResponse> : IQueryPipeline<TQuery, TResponse> where TQuery : IQuery<TResponse>
     {
         private readonly IServiceProvider _serviceProvider;
 

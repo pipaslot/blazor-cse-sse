@@ -7,7 +7,7 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// This pipeline must be always registered as the last one, because it is executing command handler
     /// </summary>
-    public class ExecuteHandlerCommandPipeline<TCommand> : ICommandPipeline<TCommand> where TCommand : ICommand
+    internal class ExecuteHandlerCommandPipeline<TCommand> : ICommandPipeline<TCommand> where TCommand : ICommand
     {
         private readonly IServiceProvider _serviceProvider;
 

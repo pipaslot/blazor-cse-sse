@@ -23,7 +23,7 @@ namespace App.Client.ApiServices
         {
             try
             {
-                var response = await _httpClient.PostJsonAsync<TResponse>("api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName, new RequestNotificationContract(query));
+                var response = await _httpClient.PostJsonAsync<TResponse>("api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName, new CommandQueryContract(query));
                 return new MediatorResponse<TResponse>(response);
             }
             catch (Exception e)
@@ -37,7 +37,7 @@ namespace App.Client.ApiServices
         {
             try
             {
-                await _httpClient.PostJsonAsync("api/mediator/command?type="+typeof(TCommand).FullName, new RequestNotificationContract(command));
+                await _httpClient.PostJsonAsync("api/mediator/command?type="+typeof(TCommand).FullName, new CommandQueryContract(command));
                 return new MediatorResponse();
             }
             catch (Exception e)
