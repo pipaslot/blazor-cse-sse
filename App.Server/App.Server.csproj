@@ -25,9 +25,13 @@
 
   <ItemGroup>
     <Compile Remove="Configuration\**" />
+    <Compile Remove="logs\**" />
     <Content Remove="Configuration\**" />
+    <Content Remove="logs\**" />
     <EmbeddedResource Remove="Configuration\**" />
+    <EmbeddedResource Remove="logs\**" />
     <None Remove="Configuration\**" />
+    <None Remove="logs\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +55,10 @@
     <Watch Include="..\**\*.razor" />
     <!--<Watch Include="..\**\*.css" />
     <Watch Include="..\**\*.js" />-->
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Watch Remove="logs\**" />
   </ItemGroup>
 
 

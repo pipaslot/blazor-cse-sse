@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -11,13 +9,25 @@ namespace Core.Jwt
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddCoreAuth(this IServiceCollection services, IConfiguration configuration, bool isClientSide)
+        public static IServiceCollection AddCoreAuthForClient(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddCoreAuth(configuration, JwtBearerDefaults.AuthenticationScheme);
+            return services;
+        }
+
+        public static IServiceCollection AddCoreAuthForServer(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddCoreAuth(configuration, CookieAuthenticationDefaults.AuthenticationScheme);
+            return services;
+        }
+
+        public static IServiceCollection AddCoreAuth(this IServiceCollection services, IConfiguration configuration, string authenticationScheme)
         {
             services.Configure<AuthOptions>(configuration);
 
             var authOptions = new AuthOptions();
             configuration.Bind(authOptions);
-            services.AddAuthentication(isClientSide ? JwtBearerDefaults.AuthenticationScheme : CookieAuthenticationDefaults.AuthenticationScheme)
+            services.AddAuthentication(authenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters =

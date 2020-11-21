@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator;
 using Microsoft.Extensions.Options;
 using Config = App.Shared.Queries.Config;
 
-namespace App.Server.QueryHandlers
+namespace App.Server.Handlers.Queries
 {
     // ReSharper disable once UnusedType.Global
     public class ConfigQueryHandler : IQueryHandler<Config.Query, Config.Result>

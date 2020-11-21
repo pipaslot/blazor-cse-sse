@@ -1,5 +1,4 @@
-﻿#if ClientSideExecution
-#else
+﻿#if ServerSideExecution
 using System.Net.Http;
 using Westwind.AspNetCore.LiveReload;
 #endif
@@ -14,9 +13,9 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using System.Reflection;
 using App.Server.MediatorPipelines;
-using App.Server.QueryHandlers;
 using App.Server.Services;
 using App.Shared;
+using App.Shared.AuthModels;
 using Core.Mediator;
 using App.Shared.Queries;
 using Core.Jwt;
@@ -46,15 +45,6 @@ namespace App.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var isClientSide = false;
-#if ClientSideExecution
-            isClientSide = true;
-#else
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-
-#endif
-
             services.AddMvc();
 
             services.AddResponseCompression(opts =>
@@ -63,16 +53,22 @@ namespace App.Server
                     new[] { "application/octet-stream" });
             });
 #if ServerSideExecution
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
             services.AddLiveReload();
 #endif
 
-            //services.AddApplicationComponents<ResourceManagerServerFactory>();
             Client.Program.ConfigureServerAndClientSharedServices<ResourceManagerServerFactory>(services);
-
-            //Configure custom services
+            
             services.Configure<Config.Result>(_configuration.GetSection("App"));
+
             services.AddAuthorization();
-            services.AddCoreAuth(_configuration.GetSection("Auth"), isClientSide);
+#if ServerSideExecution
+            services.AddCoreAuthForServer(_configuration.GetSection("Auth"));
+#else
+            services.AddCoreAuthForClient(_configuration.GetSection("Auth"));
+#endif
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthService,AuthService>();
             
@@ -90,12 +86,15 @@ namespace App.Server
             services.AddScoped(typeof(IQueryPipeline<,>), typeof(ExecuteHandlerQueryPipeline<,>));
             services.AddScoped(typeof(ICommandPipeline<>), typeof(ExecuteHandlerCommandPipeline<>));
 
+            // Automatically register all query handlers from project App.Server
             services.Scan(scan => scan
                 .FromAssemblyOf<Startup>()
                 .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()
             );
+
+            // Automatically register all command handlers from project App.Server
             services.Scan(scan => scan
                 .FromAssemblyOf<Startup>()
                 .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
@@ -103,10 +102,10 @@ namespace App.Server
                 .WithTransientLifetime()
             );
             
-            // Register all validators
+            // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
             services.Scan(scan => scan
-                .FromAssemblyOf<RequestNotificationContract>()
+                .FromAssemblyOf<UserCredentials>()
                 .AddClasses(classes => classes.AssignableTo(typeof(IValidator<>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()
@@ -137,15 +136,7 @@ namespace App.Server
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-#if ClientSideExecution
-            app.UseBlazorFrameworkFiles();
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-                endpoints.MapFallbackToFile("index_cse.html");
-            });
-#else
+#if ServerSideExecution
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
@@ -153,6 +144,15 @@ namespace App.Server
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/index_sse");
             });
+            
+#else
+            app.UseBlazorFrameworkFiles();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapFallbackToFile("index_cse.html");
+            });  
 #endif
         }
     }

@@ -10,9 +10,13 @@ namespace App.Server.Controllers
     public class LanguageController : ControllerBase
     {
         [HttpGet("{language}/resources")]
-        public ActionResult GetLayout(string language,string typeName)
+        public ActionResult GetLayout(string language, string typeName)
         {
             var type = Type.GetType(typeName);
+            if (type == null)
+            {
+                return new JsonResult(new Dictionary<string, string>());
+            }
             var resourceManager = new ResourceManager(type);
             var data = resourceManager.ToDictionary(language);
             return new JsonResult(data);
@@ -25,15 +29,19 @@ namespace App.Server.Controllers
         {
             var culture = new System.Globalization.CultureInfo(locale);
             var data = resourceManager.GetResourceSet(culture, true, true)
-                .GetEnumerator();
+                ?.GetEnumerator();
             var res = new Dictionary<string, string>();
-            while (data.MoveNext())
+            if (data != null)
             {
-                if (data.Key != null)
+                while (data.MoveNext())
                 {
-                    res.Add(data.Key.ToString(), data.Value.ToString());
+                    if (data.Key != null)
+                    {
+                        res.Add(data.Key.ToString() ?? "", data.Value?.ToString() ?? "");
+                    }
                 }
             }
+
             return res;
         }
     }

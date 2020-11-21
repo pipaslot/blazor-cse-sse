@@ -4,7 +4,7 @@ using App.Shared.Queries;
 using Core.Mediator;
 using Microsoft.Extensions.Logging;
 
-namespace App.Server.QueryHandlers
+namespace App.Server.Handlers.Queries
 {
     // ReSharper disable once UnusedType.Global
     public class ContactFormQueryHandler : IQueryHandler<ContactForm.Query, ContactForm.Result>

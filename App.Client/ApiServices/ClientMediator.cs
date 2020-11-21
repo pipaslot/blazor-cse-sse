@@ -8,12 +8,12 @@ using Microsoft.JSInterop;
 
 namespace App.Client.ApiServices
 {
-    public class SaveClientMediator : IMediator
+    public class ClientMediator : IMediator
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
 
-        public SaveClientMediator(HttpClient httpClient, IJSRuntime jsRuntime)
+        public ClientMediator(HttpClient httpClient, IJSRuntime jsRuntime)
         {
             _httpClient = httpClient;
             _jsRuntime = jsRuntime;

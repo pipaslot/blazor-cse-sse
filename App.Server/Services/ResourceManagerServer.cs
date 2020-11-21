@@ -11,21 +11,21 @@ namespace App.Server.Services
         {
         }
 
-        private CultureInfo _culture;
+        private CultureInfo? _culture;
         protected override Task OnCultureChanged(string culture)
         {
             _culture = new CultureInfo(culture);
             return Task.CompletedTask;
         }
 
-        public override string GetString(string name, CultureInfo culture)
+        public override string GetString(string name, CultureInfo? culture)
         {
             return GetString(name);
         }
 
         public override string GetString(string name)
         {
-            return base.GetString(name, _culture);
+            return base.GetString(name, _culture) ?? "";
         }
     }
 }
