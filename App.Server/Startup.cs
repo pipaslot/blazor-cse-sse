@@ -73,18 +73,12 @@ namespace App.Server
             
             // Mediator with pipelines
             services.AddTransient<IMediator, Mediator>();
-#if ServerSideExecution
             services.AddMediatorCommandPipeline(typeof(LoggingCommandPipeline<>));
+            services.AddMediatorCommandPipeline(typeof(ValidationCommandPipeline<>));
+
             services.AddMediatorQueryPipeline(typeof(LoggingQueryPipeline<,>));
-            
-            //TODO Get rid of validation from controller
-            services.AddMediatorCommandPipeline(typeof(ValidationCommandPipeline<>)); // Not needed for Client side because is already implemented in controllers
-            services.AddMediatorQueryPipeline(typeof(ValidationQueryPipeline<,>)); // Not needed for Client side because is already implemented in controllers
-            
-#else
-            services.AddMediatorCommandPipeline(typeof(LoggingCommandPipeline<>));
-            services.AddMediatorQueryPipeline(typeof(LoggingQueryPipeline<,>));
-#endif
+            services.AddMediatorQueryPipeline(typeof(ValidationQueryPipeline<,>));
+
 
             // Automatically register all query handlers from project App.Server
             services.Scan(scan => scan
