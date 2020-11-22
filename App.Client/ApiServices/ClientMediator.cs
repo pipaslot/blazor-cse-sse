@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,18 +16,44 @@ namespace App.Client.ApiServices
         private readonly IJSRuntime _jsRuntime;
         private readonly ILogger<ClientMediator> _logger;
 
+        private readonly Dictionary<int, Task> _queryTaskCache = new Dictionary<int, Task>();
+        private readonly object _queryTaskCacheLock = new object();
+
         public ClientMediator(HttpClient httpClient, IJSRuntime jsRuntime, ILogger<ClientMediator> logger)
         {
             _httpClient = httpClient;
             _jsRuntime = jsRuntime;
             _logger = logger;
         }
-        
+
         public async Task<MediatorResponse<TResponse>> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
+        {
+            var contract = new CommandQueryContract(query);
+
+            var task = GetQueryTaskFromCacheOrCreateNewRequest<TResponse>(contract, cancellationToken);
+            return await task;
+        }
+
+        private Task<MediatorResponse<TResponse>> GetQueryTaskFromCacheOrCreateNewRequest<TResponse>(CommandQueryContract contract, CancellationToken cancellationToken = default)
+        {
+            var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
+            lock (_queryTaskCacheLock)
+            {
+                if (_queryTaskCache.TryGetValue(hashCode, out var task))
+                {
+                    return (Task<MediatorResponse<TResponse>>)task;
+                }
+                var newTask = SendQuery<TResponse>(contract, cancellationToken);
+                _queryTaskCache[hashCode] = newTask;
+                return newTask;
+            }
+        }
+
+        private async Task<MediatorResponse<TResponse>> SendQuery<TResponse>(CommandQueryContract contract, CancellationToken cancellationToken = default)
         {
             try
             {
-                var response = await _httpClient.PostJsonAsync<MediatorResponse<TResponse>>("api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName, new CommandQueryContract(query));
+                var response = await _httpClient.PostJsonAsync<MediatorResponse<TResponse>>("api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName, contract);
                 return response;
             }
             catch (Exception e)
@@ -39,9 +66,10 @@ namespace App.Client.ApiServices
 
         public async Task<MediatorResponse> Dispatch<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
         {
+            var contract = new CommandQueryContract(command);
             try
             {
-                var response = await _httpClient.PostJsonAsync<MediatorResponse>("api/mediator/command?type="+typeof(TCommand).FullName, new CommandQueryContract(command));
+                var response = await _httpClient.PostJsonAsync<MediatorResponse>("api/mediator/command?type=" + typeof(TCommand).FullName, contract);
                 return response;
             }
             catch (Exception e)
@@ -51,5 +79,6 @@ namespace App.Client.ApiServices
                 return new MediatorResponse(e.Message);
             }
         }
+
     }
 }
