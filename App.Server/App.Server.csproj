@@ -6,10 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug_CSE'">
-    <DefineConstants>ClientSideExecution</DefineConstants>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)'=='Debug_SSE'">
     <DefineConstants>ServerSideExecution</DefineConstants>
   </PropertyGroup>
@@ -44,12 +40,6 @@
     <ProjectReference Include="..\Core.Jwt\Core.Jwt.csproj" />
     <ProjectReference Include="..\Core.Localization\Core.Localization.csproj" />
     <ProjectReference Include="..\Core.Mediator\Core.Mediator.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <!--<Watch Include="..\**\*.razor" />
-    <Watch Include="..\**\*.css" />
-    <Watch Include="..\**\*.js" />-->
   </ItemGroup>
 
 </Project>

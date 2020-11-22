@@ -1,0 +1,66 @@
+﻿@page "/"
+@namespace App.Server.Pages
+@using App.Client
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @if (App.Server.Startup.IsServerSideExecution())
+    {
+        <title>Blazor-SSE</title>
+    }
+    else
+    {
+        <title>Blazor-CSE</title>
+        <link rel="stylesheet" href="css/loading.css" />
+    }
+    <title>Blazor-SSE</title>
+    <base href="~/" />
+    <link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="App.Server.styles.css" />
+</head>
+<body>
+    @if (App.Server.Startup.IsServerSideExecution())
+    {
+        <div id="app">
+            <component type="typeof(Application)" render-mode="ServerPrerendered" />
+        </div>
+    }
+    else
+    {
+        <div id="app">
+            <div class="load-progress">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="22.857142857142858 22.857142857142858 45.714285714285715 45.714285714285715">
+                    <circle fill="transparent" cx="45.714285714285715" cy="45.714285714285715" r="20" stroke-width="5.714285714285714"
+                            stroke-dasharray="125.664" stroke-dashoffset="125.66370614359172px"></circle>
+                </svg>
+            </div>
+        </div>
+    }
+
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    @if (App.Server.Startup.IsServerSideExecution())
+    {
+        <script src="_framework/blazor.server.js"></script>
+    }
+    else
+    {
+        <script src="_framework/blazor.webassembly.js"></script>
+    }
+    <script src="_content/Fluxor.Blazor.Web/scripts/index.js"></script>
+    <script src="_content/MatBlazor/dist/matBlazor.js"></script>
+</body>

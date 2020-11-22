@@ -1,15 +1,10 @@
-﻿#if ServerSideExecution
-using System.Net.Http;
-#endif
-using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics.Eventing.Reader;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using System.Reflection;
 using App.Server.MediatorPipelines;
 using App.Server.Services;
 using App.Shared;
@@ -20,16 +15,19 @@ using Core.Jwt;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-#if ServerSideExecution
-    using Microsoft.AspNetCore.Authentication.Cookies;
-#else
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-#endif
 
 namespace App.Server
 {
     public class Startup
     {
+        public static bool IsServerSideExecution()
+        {
+#if ServerSideExecution
+            return true;
+#else
+            return false;
+#endif
+        }
         public Startup(IHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -42,7 +40,7 @@ namespace App.Server
             _configuration = builder.Build();
         }
 
-        private IConfigurationRoot _configuration;
+        private readonly IConfigurationRoot _configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -120,7 +118,7 @@ namespace App.Server
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
 
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
@@ -128,24 +126,25 @@ namespace App.Server
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseAuthentication();
 #if ServerSideExecution
+            app.UseAuthentication();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/index_sse");
+                endpoints.MapFallbackToPage("/_Host");
             });
-            
 #else
             app.UseBlazorFrameworkFiles();
+            app.UseAuthentication();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
-                endpoints.MapFallbackToFile("index_cse.html");
-            });  
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                endpoints.MapFallbackToPage("/_Host");
+            });
 #endif
         }
     }

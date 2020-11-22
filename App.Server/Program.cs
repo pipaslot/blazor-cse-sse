@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using System.IO;
-using Microsoft.AspNetCore;
-using Microsoft.Extensions.Configuration;
-//using Pipaslot.Logging;
+using Microsoft.Extensions.Hosting;
+using Pipaslot.Logging;
 
 namespace App.Server
 {
@@ -10,22 +8,19 @@ namespace App.Server
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseConfiguration(new ConfigurationBuilder()
-                    .AddCommandLine(args)
-                    .Build())
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
                 .ConfigureLogging(loggingBuilder =>
                 {
-                    //loggingBuilder.AddRequestLogger();
+                    loggingBuilder.AddRequestLogger();
                 })
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
 
     }
 }
