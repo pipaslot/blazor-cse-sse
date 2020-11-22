@@ -1,6 +1,6 @@
 This is experimental project including folowing features:
 - Blazor Client/WASM and Blazor Server (Capable to swith between these runitmes)
-- API-less integration (MediatR integration on served and client side)
+- API-less integration (mediator/CQRS pattern)
 - Redux integration (Fluxer nuget package)
 - Local storage persistence in browser
 - Authentication (Cookies or JWT)
