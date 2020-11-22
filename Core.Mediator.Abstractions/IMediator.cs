@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Core.Mediator
+namespace Core.Mediator.Abstractions
 {
     /// <summary>
     ///     Command / Query dispatched

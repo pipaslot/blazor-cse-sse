@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Mediator.Abstractions;
 
 namespace Core.Mediator.Pipelines
 {

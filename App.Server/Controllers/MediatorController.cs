@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator;
+using Core.Mediator.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Server.Controllers

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Mediator.Abstractions;
 using Core.Mediator.Pipelines;
 
 namespace Core.Mediator

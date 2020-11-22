@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Mediator.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Mediator

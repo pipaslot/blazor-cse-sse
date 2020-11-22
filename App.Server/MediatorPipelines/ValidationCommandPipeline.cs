@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator;
+using Core.Mediator.Abstractions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 

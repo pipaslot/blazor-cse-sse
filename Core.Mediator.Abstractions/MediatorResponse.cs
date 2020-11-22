@@ -1,4 +1,4 @@
-﻿namespace Core.Mediator
+﻿namespace Core.Mediator.Abstractions
 {
     public class MediatorResponse<TResult> : MediatorResponse
     {

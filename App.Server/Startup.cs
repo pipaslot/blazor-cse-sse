@@ -12,6 +12,7 @@ using App.Shared.AuthModels;
 using Core.Mediator;
 using App.Shared.Queries;
 using Core.Jwt;
+using Core.Mediator.Abstractions;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

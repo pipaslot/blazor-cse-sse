@@ -8,6 +8,7 @@ using Blazored.LocalStorage;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using Core.Localization;
 using Core.Mediator;
+using Core.Mediator.Abstractions;
 using Fluxor;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;

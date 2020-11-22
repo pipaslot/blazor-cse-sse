@@ -1,4 +1,4 @@
-﻿using Core.Mediator;
+﻿using Core.Mediator.Abstractions;
 
 namespace App.Shared.Queries
 {

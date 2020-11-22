@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator;
+using Core.Mediator.Abstractions;
 using FluentValidation;
 
 namespace App.Shared.Queries
