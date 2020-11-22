@@ -57,10 +57,8 @@ namespace Core.Mediator
             foreach (var subject in commandTypes)
             {
                 var handlerType = typeof(ICommandHandler<>).MakeGenericType(subject);
-                if (scope.ServiceProvider.GetService(handlerType) == null)
-                {
-                    throw new Exception("No handler was registered for Command type " + subject);
-                }
+                var handlers = scope.ServiceProvider.GetServices(handlerType);
+                CheckCount(handlers, subject, "command");
             }
         }
 
@@ -80,10 +78,21 @@ namespace Core.Mediator
                     .GetGenericArguments()
                     .First();
                 var handlerType = typeof(IQueryHandler<,>).MakeGenericType(subject, resultType);
-                if (scope.ServiceProvider.GetService(handlerType) == null)
-                {
-                    throw new Exception("No handler was registered for Query type " + subject);
-                }
+                var handlers = scope.ServiceProvider.GetServices(handlerType);
+                CheckCount(handlers, subject, "query");
+            }
+        }
+
+        private void CheckCount(IEnumerable<object?> handlers, Type subject, string sujectType)
+        {
+            var count = handlers.Count();
+            if (count == 0)
+            {
+                throw new Exception($"No handler was registered for {sujectType} type: {subject}");
+            }
+            if (count > 1)
+            {
+                throw new Exception($"Multiple {sujectType} handlers were registered for one {sujectType} type: {subject} with classes {string.Join(" AND ", handlers)}");
             }
         }
     }
