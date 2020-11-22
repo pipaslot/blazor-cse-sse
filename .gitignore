@@ -229,3 +229,7 @@ HeatService8.wxs
 !**/UnityEHR/App.config
 !**/UnityPM/App.config
 !**/NG-Blazor/App.Server/Web.config
+
+# Project files
+App.Client/**/*.css
+App.Server/Logs
