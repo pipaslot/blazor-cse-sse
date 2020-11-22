@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Core.Mediator
 {
     public class CommandQueryContract
     {
         private object _object;
-        private CommandQueryContract()
+
+        /// <summary>
+        /// JSON deserialization constructor
+        /// </summary>
+        [JsonConstructor]
+        public CommandQueryContract()
         {
         }
 

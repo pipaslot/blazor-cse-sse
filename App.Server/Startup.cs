@@ -97,7 +97,7 @@ namespace App.Server
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()
             );
-            
+
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
             services.Scan(scan => scan

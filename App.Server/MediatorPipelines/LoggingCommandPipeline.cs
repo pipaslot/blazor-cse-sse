@@ -7,7 +7,7 @@ using Pipaslot.Logging;
 
 namespace App.Server.MediatorPipelines
 {
-    public class LoggingCommandPipeline<TCommand> : ICommandPipeline<TCommand> where TCommand: notnull
+    public class LoggingCommandPipeline<TCommand> : ICommandPipeline<TCommand> where TCommand : notnull
     {
         private readonly ILogger<Program> _logger;
 
@@ -15,16 +15,18 @@ namespace App.Server.MediatorPipelines
         {
             _logger = logger;
         }
-        
+
         public async Task Handle(TCommand command, CancellationToken cancellationToken, CommandHandlerDelegate next)
         {
-            using (_logger.BeginMethod(command, typeof(TCommand)?.FullName ?? "")){
-                
+            using (_logger.BeginMethod(command, typeof(TCommand)?.FullName ?? ""))
+            {
                 var stopwatch = Stopwatch.StartNew();
-                try{
+                try
+                {
                     await next();
                 }
-                finally{
+                finally
+                {
                     stopwatch.Stop();
                     _logger.LogInformation($"Execution time = {stopwatch.ElapsedMilliseconds}ms");
                 }

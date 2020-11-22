@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.Extensions.Configuration;
-using Pipaslot.Logging;
+//using Pipaslot.Logging;
 
 namespace App.Server
 {
@@ -20,7 +20,7 @@ namespace App.Server
                     .Build())
                 .ConfigureLogging(loggingBuilder =>
                 {
-                    loggingBuilder.AddRequestLogger();
+                    //loggingBuilder.AddRequestLogger();
                 })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
