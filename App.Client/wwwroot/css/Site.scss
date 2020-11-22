@@ -1,8 +1,8 @@
-﻿@import '_reset';
-@import '_blazor';
-@import '_mdc';
+﻿@import '../../Styles/_reset';
+@import '../../Styles/_blazor';
+@import '../../Styles/_mdc';
 
-app {
+#app {
     display: flex;
     flex-grow: 1;
     flex-direction:column;
@@ -11,6 +11,3 @@ app {
         display: flex;
     }
 }
-
-@import 'Shared/_index';
-@import 'Layout/_index';

@@ -1,11 +1,11 @@
-@import "../functions/breakpoint";
-@import "../variables";
+/*@import "../Styles/functions/breakpoint";
+@import "../Styles/variables";*/
 .b-col {
   flex-basis: 0;
   flex-grow: 1;
   max-width: 100%;
 }
-
+/*
 //Generate sizing classes for viewport breakpoints
 @each $breakpoint in map-keys($grid-breakpoints) {
   // Generate media query if needed
@@ -31,3 +31,4 @@
     margin-left: 100% / 12 * $i;
   }
 }
+*/

@@ -6,6 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\stipek\.nuget\packages\matblazor\2.2.0\contentFiles\any\netstandard2.1\Properties\launchSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\Site.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\App.Shared\App.Shared.csproj" />
     <ProjectReference Include="..\Core.Jwt\Core.Jwt.csproj" />
     <ProjectReference Include="..\Core.Localization\Core.Localization.csproj" />
@@ -13,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.FluentValidation" Version="1.3.2" />
+    <PackageReference Include="LibSassBuilder" Version="1.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0" PrivateAssets="all" />
     <PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />

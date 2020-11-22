@@ -229,5 +229,3 @@ HeatService8.wxs
 !**/UnityEHR/App.config
 !**/UnityPM/App.config
 !**/NG-Blazor/App.Server/Web.config
-
-Logs/
