@@ -6,21 +6,37 @@ namespace Core.Mediator
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddMediator(this IServiceCollection services)
+        public static void AddMediator(this IServiceCollection services, Action<MediatorConfiguration> optionSetup)
         {
             services.AddTransient<IMediator, Mediator>();
-        }
+            services.AddTransient<HandlerExistenceChecker>();
+            var options = new MediatorConfiguration();
+            optionSetup(options);
 
-        public static IServiceCollection AddMediatorCommandPipeline(this IServiceCollection services, Type commandPipelineType)
-        {
-            services.AddScoped(typeof(ICommandPipeline<>), commandPipelineType);
-            return services;
-        }
+            // Automatically register all query handlers from project App.Server
+            services.Scan(scan => scan
+                .FromAssemblies(options.HandlerAssemblies)
+                .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime()
+            );
 
-        public static IServiceCollection AddMediatorQueryPipeline(this IServiceCollection services, Type queryPipelineType)
-        {
-            services.AddScoped(typeof(IQueryPipeline<,>), queryPipelineType);
-            return services;
+            // Automatically register all command handlers from project App.Server
+            services.Scan(scan => scan
+                .FromAssemblies(options.HandlerAssemblies)
+                .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime()
+            );
+
+            foreach (var pipelineType in options.CommandPipelines)
+            {
+                services.AddScoped(typeof(ICommandPipeline<>), pipelineType);
+            }
+            foreach (var pipelineType in options.QueryPipelines)
+            {
+                services.AddScoped(typeof(IQueryPipeline<,>), pipelineType);
+            }
         }
     }
 }

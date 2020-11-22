@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <Description>Provide lightweight abstraction for command and querz defeinitions and sending requests</Description>
   </PropertyGroup>
 
   <ItemGroup>

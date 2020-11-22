@@ -6,6 +6,7 @@ using Core.Mediator.Abstractions;
 
 namespace App.Server.CommandHandlers
 {
+    // ReSharper disable once UnusedMember.Global
     public class ErrorGeneratorCommandHandler : ICommandHandler<ErrorGenerator.Command>
     {
         public Task Handle(ErrorGenerator.Command command, CancellationToken cancellationToken)
