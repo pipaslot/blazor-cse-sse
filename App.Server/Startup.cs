@@ -1,6 +1,5 @@
 ﻿#if ServerSideExecution
 using System.Net.Http;
-using Westwind.AspNetCore.LiveReload;
 #endif
 using System;
 using System.Collections.Generic;
@@ -58,7 +57,6 @@ namespace App.Server
 #if ServerSideExecution
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddLiveReload();
 #endif
 
             Client.Program.ConfigureServerAndClientSharedServices<ResourceManagerServerFactory>(services);

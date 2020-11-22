@@ -19,18 +19,18 @@ namespace App.Client.ApiServices
             _classType = classType;
         }
 
-        public override string GetString(string name, CultureInfo culture)
+        public override string GetString(string name, CultureInfo? culture)
         {
             return GetString(name);
         }
 
         public override string GetString(string name)
         {
-            if (_translations.TryGetValue(name, out string value))
+            if (_translations.TryGetValue(name, out var value))
             {
                 return value;
             }
-            return base.GetString(name);
+            return base.GetString(name) ?? "";
         }
 
         private Dictionary<string, string> _translations = new Dictionary<string, string>();

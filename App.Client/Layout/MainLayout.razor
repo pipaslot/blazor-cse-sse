@@ -12,7 +12,7 @@
             </MatAppBarSection>
             <MatAppBarSection Align="@MatAppBarSectionAlign.End">
                 <AuthorizeView>
-                    <span>@LayoutResource.Hello, @context.User.Identity.Name</span>
+                    <span>@LayoutResource.Hello, @context.User.Identity?.Name</span>
                 </AuthorizeView>
                 <App.Client.Layout.Navigation.LanguageSelect />
             </MatAppBarSection>

@@ -1,5 +1,5 @@
 ﻿@inherits BaseMatComponent
-    <span  @onclick="OnClick.InvokeAsync" class="@GetClass()">
+<span @onclick="(e)=>OnClick.InvokeAsync(e)" class="@GetClass()">
         <img src="images/flags/@GetFilename()" @ref="Ref" />
         @ChildContent
     </span>
