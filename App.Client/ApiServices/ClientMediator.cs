@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator;
 using Core.Mediator.Abstractions;
-using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
@@ -54,8 +54,12 @@ namespace App.Client.ApiServices
         {
             try
             {
-                var response = await _httpClient.PostJsonAsync<MediatorResponse<TResponse>>("api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName, contract);
-                return response;
+                var url = "api/mediator/query?type=" + typeof(IQuery<TResponse>).FullName;
+                var response = await _httpClient.PostAsJsonAsync(url, contract, cancellationToken);
+                response.EnsureSuccessStatusCode();
+
+                return await response.Content.ReadFromJsonAsync<MediatorResponse<TResponse>>(cancellationToken: cancellationToken)
+                    ?? throw new InvalidOperationException("No data received");
             }
             catch (Exception e)
             {
@@ -70,8 +74,12 @@ namespace App.Client.ApiServices
             var contract = new CommandQueryContract(command);
             try
             {
-                var response = await _httpClient.PostJsonAsync<MediatorResponse>("api/mediator/command?type=" + typeof(TCommand).FullName, contract);
-                return response;
+                var url = "api/mediator/command?type=" + typeof(TCommand).FullName;
+                var response = await _httpClient.PostAsJsonAsync(url, contract, cancellationToken);
+                response.EnsureSuccessStatusCode();
+
+                return await response.Content.ReadFromJsonAsync<MediatorResponse>(cancellationToken: cancellationToken)
+                    ?? throw new InvalidOperationException("No data received");
             }
             catch (Exception e)
             {

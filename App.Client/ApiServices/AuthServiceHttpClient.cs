@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using App.Shared;
 using App.Shared.AuthModels;
 using App.Client.Store;
 using Fluxor;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace App.Client.ApiServices
@@ -50,11 +50,16 @@ namespace App.Client.ApiServices
 
         public async Task SignIn(string username, string password)
         {
-            var result = await _httpClient.PostJsonAsync<SingInResult>("api/auth/sign-in", new UserCredentials
+            var response = await _httpClient.PostAsJsonAsync("api/auth/sign-in", new UserCredentials
             {
                 Username = username,
                 Password = password
             });
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadFromJsonAsync<SingInResult>()
+                         ?? throw new InvalidOperationException("No data received");
+
             if (result.Success){
                 _dispatcher.Dispatch(new Authentication.SignInAction(result.AccessToken, result.Username));
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.AccessToken.Value);

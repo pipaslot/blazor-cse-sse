@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Core.Localization;
-using Microsoft.AspNetCore.Components;
 
 namespace App.Client.ApiServices
 {
@@ -38,7 +38,7 @@ namespace App.Client.ApiServices
         protected override async Task OnCultureChanged(string culture)
         {
             var typeName = _classType.AssemblyQualifiedName;
-            _translations = await _httpClient.GetJsonAsync<Dictionary<string, string>>($"/api/languages/{culture}/resources?typeName=" + typeName);
+            _translations = await _httpClient.GetFromJsonAsync<Dictionary<string, string>>($"/api/languages/{culture}/resources?typeName=" + typeName) ?? throw new InvalidOperationException("No data received");
         }
     }
 }
