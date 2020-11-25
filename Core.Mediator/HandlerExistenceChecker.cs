@@ -40,14 +40,14 @@ namespace Core.Mediator
         /// <summary>
         /// Scan registered assemblies for command and query types and try to resolve their handlers
         /// </summary>
-        public void VerifyAll()
+        public virtual void VerifyAll()
         {
-            Verify<ICommand>("command");
-            Verify<IQuery>("query");
-            Verify<IRequest>("request");
+            Verify<ICommand>("command", true);
+            Verify<IQuery>("query", true);
+            Verify<IRequest>("request", true);
         }
 
-        private void Verify<T>(string subjectType)
+        protected void Verify<T>(string subjectType, bool checkOnlySingleHandlerIsRegistered)
         {
             var queryType = typeof(T);
             var queryTypes = _subjectAssemblies
@@ -71,7 +71,7 @@ namespace Core.Mediator
                 {
                     throw new Exception($"No handler was registered for {subjectType} type: {subject}");
                 }
-                if (handlers.Count() > 1)
+                if (checkOnlySingleHandlerIsRegistered && handlers.Count() > 1)
                 {
                     throw new Exception($"Multiple {subjectType} handlers were registered for one {subjectType} type: {subject} with classes {string.Join(" AND ", handlers)}");
                 }
