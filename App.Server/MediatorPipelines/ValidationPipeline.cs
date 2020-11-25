@@ -20,7 +20,7 @@ namespace App.Server.MediatorPipelines
 
         public bool CanHandle(TQuery request)
         {
-            return request is IQuery<TResponse>;
+            return true;
         }
 
         public async Task<TResponse> Handle(TQuery request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)

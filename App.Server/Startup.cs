@@ -78,6 +78,8 @@ namespace App.Server
                 o.AddHandlersFromAssemblyOf<ConfigQueryHandler>();
                 o.AddPipeline(
                     typeof(LoggingPipeline<,>), 
+                    typeof(CommandSpecificPipeline<,>), 
+                    typeof(QuerySpecificPipeline<,>), 
                     typeof(ValidationPipeline<,>)
                     );
             });
