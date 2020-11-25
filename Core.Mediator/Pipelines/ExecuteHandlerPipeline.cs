@@ -30,7 +30,7 @@ namespace Core.Mediator.Pipelines
             var queryHandler = _serviceProvider.GetService(handlerType);
             if (queryHandler == null)
             {
-                throw new Exception("No Query handler was found with expected implementation " + handlerType.FullName);
+                throw new Exception("No handler was found with expected implementation " + handlerType.FullName);
             }
 
             var method = queryHandler.GetType().GetMethod(nameof(IHandler<IRequest<object>, object>.Handle));

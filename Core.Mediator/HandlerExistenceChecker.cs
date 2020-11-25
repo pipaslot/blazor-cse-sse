@@ -42,57 +42,39 @@ namespace Core.Mediator
         /// </summary>
         public void VerifyAll()
         {
-            VerifyCommands();
-            VerifyQueries();
+            Verify<ICommand>("command");
+            Verify<IQuery>("query");
+            Verify<IRequest>("request");
         }
 
-        private void VerifyCommands()
+        private void Verify<T>(string subjectType)
         {
-            var commandType = typeof(ICommand);
-            var commandTypes = _subjectAssemblies
-                .SelectMany(s => s.GetTypes())
-                .Where(p => !p.IsAbstract && p.IsClass && commandType.IsAssignableFrom(p))
-                .ToArray();
-            using var scope = _services.CreateScope();
-            foreach (var subject in commandTypes)
-            {
-                var handlerType = typeof(ICommandHandler<>).MakeGenericType(subject);
-                var handlers = scope.ServiceProvider.GetServices(handlerType);
-                CheckCount(handlers, subject, "command");
-            }
-        }
-
-        private void VerifyQueries()
-        {
-            var queryType = typeof(IQuery<>);
+            var queryType = typeof(T);
             var queryTypes = _subjectAssemblies
                 .SelectMany(s => s.GetTypes())
-                .Where(p => !p.IsAbstract && p.IsClass && p.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == queryType))
+                .Where(p => !p.IsAbstract 
+                            && p.IsClass 
+                            && p.GetInterfaces().Any(i => i == queryType))
                 .ToArray();
             using var scope = _services.CreateScope();
+            var requestType = typeof(IRequest<>);
             foreach (var subject in queryTypes)
             {
                 var resultType = subject
                     .GetInterfaces()
-                    .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == queryType)
+                    .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == requestType)
                     .GetGenericArguments()
                     .First();
-                var handlerType = typeof(IQueryHandler<,>).MakeGenericType(subject, resultType);
-                var handlers = scope.ServiceProvider.GetServices(handlerType);
-                CheckCount(handlers, subject, "query");
-            }
-        }
-
-        private void CheckCount(IEnumerable<object?> handlers, Type subject, string sujectType)
-        {
-            var count = handlers.Count();
-            if (count == 0)
-            {
-                throw new Exception($"No handler was registered for {sujectType} type: {subject}");
-            }
-            if (count > 1)
-            {
-                throw new Exception($"Multiple {sujectType} handlers were registered for one {sujectType} type: {subject} with classes {string.Join(" AND ", handlers)}");
+                var handlerType = typeof(IHandler<,>).MakeGenericType(subject, resultType);
+                var handlers = scope.ServiceProvider.GetServices(handlerType).ToArray();
+                if (handlers.Count() == 0)
+                {
+                    throw new Exception($"No handler was registered for {subjectType} type: {subject}");
+                }
+                if (handlers.Count() > 1)
+                {
+                    throw new Exception($"Multiple {subjectType} handlers were registered for one {subjectType} type: {subject} with classes {string.Join(" AND ", handlers)}");
+                }
             }
         }
     }

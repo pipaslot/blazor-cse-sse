@@ -51,7 +51,6 @@ namespace Core.Mediator
             }
 
             yield return new ExecuteHandlerCommandPipeline<IRequest<TResponse>, TResponse>(_serviceProvider);
-            yield return new ExecuteHandlerQueryPipeline<IRequest<TResponse>, TResponse>(_serviceProvider);
             yield return new ExecuteHandlerPipeline<IRequest<TResponse>, TResponse>(_serviceProvider);
         }
     }
