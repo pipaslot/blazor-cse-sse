@@ -7,23 +7,28 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorPipelines
 {
-    public class ValidationQueryPipeline<TQuery, TResponse> : IQueryPipeline<TQuery, TResponse> where TQuery: notnull
+    public class ValidationPipeline<TQuery, TResponse> : IPipeline<TQuery, TResponse> where TQuery: IQuery<TResponse>
     {
         private readonly ILogger<Program> _logger;
         private readonly IValidatorFactory _validatorFactory;
 
-        public ValidationQueryPipeline(ILogger<Program> logger, IValidatorFactory validatorFactory)
+        public ValidationPipeline(ILogger<Program> logger, IValidatorFactory validatorFactory)
         {
             _logger = logger;
             _validatorFactory = validatorFactory;
         }
 
-        public async Task<TResponse> Handle(TQuery query, CancellationToken cancellationToken, QueryHandlerDelegate<TResponse> next)
+        public bool CanHandle(TQuery request)
         {
-            var typeValidator = _validatorFactory.GetValidator(query.GetType());
+            return request is IQuery<TResponse>;
+        }
+
+        public async Task<TResponse> Handle(TQuery request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        {
+            var typeValidator = _validatorFactory.GetValidator(request.GetType());
             if (typeValidator != null)
             {
-                var result = await typeValidator.ValidateAsync(new ValidationContext<object>(query), cancellationToken);
+                var result = await typeValidator.ValidateAsync(new ValidationContext<object>(request), cancellationToken);
 
                 if (result.Errors.Any())
                 {

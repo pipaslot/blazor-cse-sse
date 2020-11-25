@@ -9,23 +9,23 @@ namespace Core.Mediator
     /// <summary>
     /// Server side executed receiving CommandQueryContract object through network connection
     /// </summary>
-    public class CommandQueryContractExecutor
+    public class RequestContractExecutor
     {
         private readonly IMediator _mediator;
 
-        public CommandQueryContractExecutor(IMediator mediator)
+        public RequestContractExecutor(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        public async Task<MediatorResponse> ExecuteQuery(CommandQueryContract commandQuery, CancellationToken cancellationToken)
+        public async Task<MediatorResponse> ExecuteQuery(RequestContract request, CancellationToken cancellationToken)
         {
-            var query = commandQuery.GetObject();
+            var query = request.GetObject();
 
-            var queryInterfaceType = typeof(IQuery<>);
+            var queryInterfaceType = typeof(IRequest<>);
             var resultType = query.GetType()
                 .GetInterfaces()
-                .FirstOrDefault(t => t.GetGenericTypeDefinition() == queryInterfaceType)
+                .FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == queryInterfaceType)
                 ?.GetGenericArguments()
                 .FirstOrDefault();
             if (resultType == null)
@@ -50,11 +50,11 @@ namespace Core.Mediator
             }
         }
 
-        public async Task<MediatorResponse> ExecuteCommand(CommandQueryContract commandQuery, CancellationToken cancellationToken)
+        public async Task<MediatorResponse> ExecuteCommand(RequestContract request, CancellationToken cancellationToken)
         {
             try
             {
-                var query = (ICommand)commandQuery.GetObject();
+                var query = (ICommand)request.GetObject();
                 return await _mediator.Dispatch(query, cancellationToken);
             }
             catch (Exception e)

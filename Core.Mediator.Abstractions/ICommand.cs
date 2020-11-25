@@ -3,7 +3,7 @@
     /// <summary>
     /// Command marker
     /// </summary>
-    public interface ICommand
+    public interface ICommand : IRequest<object>
     {
         
     }

@@ -10,24 +10,17 @@ namespace App.Server.Controllers
     [ApiController]
     public class MediatorController : ControllerBase
     {
-        private readonly CommandQueryContractExecutor _executor;
+        private readonly RequestContractExecutor _executor;
 
         public MediatorController(IMediator mediator)
         {
-            _executor = new CommandQueryContractExecutor(mediator);
+            _executor = new RequestContractExecutor(mediator);
         }
 
-        [HttpPost("query")]
-        public async Task<ActionResult> MediatorQuery([FromBody]CommandQueryContract contract, CancellationToken cancellationToken)
+        [HttpPost("request")]
+        public async Task<ActionResult> MediatorQuery([FromBody]RequestContract contract, CancellationToken cancellationToken)
         {
             var result = await _executor.ExecuteQuery(contract, cancellationToken);
-            return new JsonResult(result);
-        }
-        
-        [HttpPost("command")]
-        public async Task<ActionResult> MediatorCommand([FromBody]CommandQueryContract contract, CancellationToken cancellationToken)
-        {
-            var result = await _executor.ExecuteCommand(contract, cancellationToken);
             return new JsonResult(result);
         }
     }

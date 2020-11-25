@@ -76,8 +76,10 @@ namespace App.Server
             services.AddMediator(o =>
             {
                 o.AddHandlersFromAssemblyOf<ConfigQueryHandler>();
-                o.AddCommandPipeline(typeof(LoggingCommandPipeline<>), typeof(ValidationCommandPipeline<>));
-                o.AddQueryPipeline(typeof(LoggingQueryPipeline<,>), typeof(ValidationQueryPipeline<,>));
+                o.AddPipeline(
+                    typeof(LoggingPipeline<,>), 
+                    typeof(ValidationPipeline<,>)
+                    );
             });
             
             // Register all validators from project App.Shared

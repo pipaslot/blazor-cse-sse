@@ -20,15 +20,16 @@ namespace Core.Mediator
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> query, CancellationToken cancellationToken = default)
         {
-            var pipelines = GetQueryPipelines<TResponse>();
+            var pipelines = GetPipelines<TResponse>()
+                .Where(p => p.CanHandle(query));
             static Task<TResponse> Seed() => Task.FromResult<TResponse>(default!);
             try
             {
                 var response = await pipelines
                     .Reverse()
-                    .Aggregate((QueryHandlerDelegate<TResponse>)Seed,
+                    .Aggregate((RequestHandlerDelegate<TResponse>)Seed,
                         (next, pipeline) => () => pipeline.Handle(query, cancellationToken, next))();
 
                 return new MediatorResponse<TResponse>(response);
@@ -39,47 +40,19 @@ namespace Core.Mediator
             }
         }
 
-        private IEnumerable<IQueryPipeline<IQuery<TResponse>, TResponse>> GetQueryPipelines<TResponse>()
+        private IEnumerable<IPipeline<IRequest<TResponse>, TResponse>> GetPipelines<TResponse>()
         {
-            var handlerType = typeof(IQueryPipeline<,>).MakeGenericType(typeof(IQuery<TResponse>), typeof(TResponse));
+            var handlerType = typeof(IPipeline<,>).MakeGenericType(typeof(IRequest<TResponse>), typeof(TResponse));
             var handlerCollectionType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-            var pipelines = (IEnumerable<IQueryPipeline<IQuery<TResponse>, TResponse>>)_serviceProvider.GetService(handlerCollectionType);
+            var pipelines = (IEnumerable<IPipeline<IRequest<TResponse>, TResponse>>)_serviceProvider.GetService(handlerCollectionType);
             foreach (var pipeline in pipelines)
             {
                 yield return pipeline;
             }
 
-            yield return new ExecuteHandlerQueryPipeline<IQuery<TResponse>, TResponse>(_serviceProvider);
-        }
-
-        public async Task<MediatorResponse> Dispatch<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand
-        {
-            var pipelines = GetCommandPipelines<TCommand>();
-            static Task Seed() => Task.CompletedTask;
-            try
-            {
-                await pipelines
-                    .Reverse()
-                    .Aggregate((CommandHandlerDelegate)Seed, (next, pipeline) => () => pipeline.Handle(command, cancellationToken, next))();
-
-                return new MediatorResponse();
-            }
-            catch (Exception e)
-            {
-                return new MediatorResponse(e.Message);
-            }
-        }
-
-        private IEnumerable<ICommandPipeline<TCommand>> GetCommandPipelines<TCommand>() where TCommand : ICommand
-        {
-            var handlerType = typeof(ICommandPipeline<>).MakeGenericType(typeof(ICommand));
-            var handlerCollectionType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-            var pipelines = (IEnumerable<ICommandPipeline<TCommand>>)_serviceProvider.GetService(handlerCollectionType);
-            foreach (var pipeline in pipelines)
-            {
-                yield return pipeline;
-            }
-            yield return new ExecuteHandlerCommandPipeline<TCommand>(_serviceProvider);
+            yield return new ExecuteHandlerCommandPipeline<IRequest<TResponse>, TResponse>(_serviceProvider);
+            yield return new ExecuteHandlerQueryPipeline<IRequest<TResponse>, TResponse>(_serviceProvider);
+            yield return new ExecuteHandlerPipeline<IRequest<TResponse>, TResponse>(_serviceProvider);
         }
     }
 }

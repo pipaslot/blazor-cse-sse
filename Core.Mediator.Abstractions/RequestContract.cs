@@ -2,9 +2,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Core.Mediator
+namespace Core.Mediator.Abstractions
 {
-    public class CommandQueryContract
+    public class RequestContract
     {
         private object _object;
 
@@ -12,11 +12,11 @@ namespace Core.Mediator
         /// JSON deserialization constructor
         /// </summary>
         [JsonConstructor]
-        public CommandQueryContract()
+        public RequestContract()
         {
         }
 
-        public CommandQueryContract(object query)
+        public RequestContract(object query)
         {
             Json = JsonSerializer.Serialize(query);
             ObjectName = query.GetType().AssemblyQualifiedName;

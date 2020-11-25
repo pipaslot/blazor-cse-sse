@@ -28,14 +28,9 @@ namespace Core.Mediator
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()
             );
-
-            foreach (var pipelineType in options.CommandPipelines)
+            foreach (var pipelineType in options.Pipelines)
             {
-                services.AddScoped(typeof(ICommandPipeline<>), pipelineType);
-            }
-            foreach (var pipelineType in options.QueryPipelines)
-            {
-                services.AddScoped(typeof(IQueryPipeline<,>), pipelineType);
+                services.AddScoped(typeof(IPipeline<,>), pipelineType);
             }
         }
     }

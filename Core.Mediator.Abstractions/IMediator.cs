@@ -8,9 +8,6 @@ namespace Core.Mediator.Abstractions
     /// </summary>
     public interface IMediator
     {
-        Task<MediatorResponse<TResponse>> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default);
-
-        Task<MediatorResponse> Dispatch<TCommand>(TCommand command, CancellationToken cancellationToken = default)
-            where TCommand : ICommand;
+        Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> query, CancellationToken cancellationToken = default);
     }
 }
