@@ -6,7 +6,9 @@
 
     <h4>Welcome to the Blazor CSE/SSE demonstration solution</h4>
 
-    <button @onclick="DispatchErrorCommand">Fire event throwing exception on server side</button> @DispatchError
+    <button @onclick="DispatchErrorCommand">Fire event throwing exception on server side</button> 
+    <button @onclick="CallForbiddenOperation">Fire event for which user does not have permission</button> 
+    <div>@DispatchError</div>
     @*<BRow>
             <BCol Size="sm-4">4</BCol>
             <BCol Size="sm-4">4</BCol>
@@ -67,6 +69,12 @@
     async Task DispatchErrorCommand()
     {
         var dispatchResult = await Mediator.Dispatch(new ErrorGenerator.Command());
+        DispatchError = dispatchResult.ErrorMessage;
+    }
+
+    async Task CallForbiddenOperation()
+    {
+        var dispatchResult = await Mediator.Dispatch(new AuthenticationError.Command());
         DispatchError = dispatchResult.ErrorMessage;
     }
 }
