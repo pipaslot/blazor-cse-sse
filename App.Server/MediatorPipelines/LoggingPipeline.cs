@@ -7,7 +7,7 @@ using Pipaslot.Logging;
 
 namespace App.Server.MediatorPipelines
 {
-    public class LoggingPipeline<TQuery, TResponse> : IPipeline<TQuery, TResponse> where TQuery : IRequest<TResponse>
+    public class LoggingPipeline : IPipeline
     {
         private readonly ILogger<Program> _logger;
 
@@ -16,14 +16,14 @@ namespace App.Server.MediatorPipelines
             _logger = logger;
         }
 
-        public bool CanHandle(TQuery request)
+        public bool CanHandle<TRequest>(TRequest request) where TRequest : IRequest
         {
             return true;
         }
 
-        public async Task<TResponse> Handle(TQuery request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next) where TRequest : IRequest<TResponse>
         {
-            using (_logger.BeginMethod(request, typeof(TQuery)?.FullName ?? ""))
+            using (_logger.BeginMethod(request, typeof(TRequest)?.FullName ?? ""))
             {
                 var stopwatch = Stopwatch.StartNew();
                 try

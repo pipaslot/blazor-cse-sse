@@ -22,7 +22,7 @@ namespace Core.Mediator
             );
             foreach (var pipelineType in options.Pipelines)
             {
-                services.AddScoped(typeof(IPipeline<,>), pipelineType);
+                services.AddScoped(typeof(IPipeline), pipelineType);
             }
         }
     }

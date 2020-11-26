@@ -40,17 +40,17 @@ namespace Core.Mediator
             }
         }
 
-        private IEnumerable<IPipeline<IRequest<TResponse>, TResponse>> GetPipelines<TResponse>()
+        private IEnumerable<IPipeline> GetPipelines<TResponse>()
         {
-            var handlerType = typeof(IPipeline<,>).MakeGenericType(typeof(IRequest<TResponse>), typeof(TResponse));
+            var handlerType = typeof(IPipeline);
             var handlerCollectionType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-            var pipelines = (IEnumerable<IPipeline<IRequest<TResponse>, TResponse>>)_serviceProvider.GetService(handlerCollectionType);
+            var pipelines = (IEnumerable<IPipeline>)_serviceProvider.GetService(handlerCollectionType);
             foreach (var pipeline in pipelines)
             {
                 yield return pipeline;
             }
 
-            yield return new SingleHandlerExecutionPipeline<IRequest, IRequest<TResponse>, TResponse>(_serviceProvider);
+            yield return new SingleHandlerExecutionPipeline<IRequest>(_serviceProvider);
         }
     }
 }
