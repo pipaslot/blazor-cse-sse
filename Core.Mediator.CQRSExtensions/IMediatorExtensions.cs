@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator.CQRSExtensions;
+using Core.Mediator.Abstractions;
 
-namespace Core.Mediator.Abstractions
+namespace Core.Mediator.CQRSExtensions
 {
     public static class IMediatorExtensions
     {
