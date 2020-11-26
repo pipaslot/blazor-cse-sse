@@ -26,7 +26,7 @@ namespace App.Client.ApiServices
             _authenticationState.StateChanged += AuthenticationState_StateChanged;
         }
 
-        private void AuthenticationState_StateChanged(object sender, Authentication.State state)
+        private void AuthenticationState_StateChanged(object? sender, Authentication.State state)
         {
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
