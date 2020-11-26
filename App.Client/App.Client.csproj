@@ -13,6 +13,7 @@
     <ProjectReference Include="..\App.Shared\App.Shared.csproj" />
     <ProjectReference Include="..\Core.Jwt\Core.Jwt.csproj" />
     <ProjectReference Include="..\Core.Localization\Core.Localization.csproj" />
+    <ProjectReference Include="..\Core.Mediator\Core.Mediator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

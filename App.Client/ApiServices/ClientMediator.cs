@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Mediator;
 using Core.Mediator.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -28,7 +29,7 @@ namespace App.Client.ApiServices
 
         public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> query, CancellationToken cancellationToken = default)
         {
-            var contract = new RequestContract(query);
+            var contract = RequestContractFactory.Create(query);
 
             var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
             try

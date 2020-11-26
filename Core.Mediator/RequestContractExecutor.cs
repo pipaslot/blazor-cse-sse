@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
@@ -20,7 +21,7 @@ namespace Core.Mediator
 
         public async Task<MediatorResponse> ExecuteQuery(RequestContract request, CancellationToken cancellationToken)
         {
-            var query = request.GetObject();
+            var query = JsonSerializer.Deserialize(request.Json, Type.GetType(request.ObjectName));
 
             var queryInterfaceType = typeof(IRequest<>);
             var resultType = query.GetType()
