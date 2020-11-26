@@ -60,6 +60,7 @@ namespace Core.Mediator.Pipelines
             {
                 if (e.InnerException != null)
                 {
+                    // Unwrap exception
                     throw e.InnerException;
                 }
 

@@ -18,11 +18,7 @@ namespace App.Server.MediatorPipelines
             _validatorFactory = validatorFactory;
         }
 
-        public bool CanHandle<TRequest>(TRequest request) where TRequest : IRequest
-        {
-            return true;
-        }
-
+        
         public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next) where TRequest : IRequest<TResponse>
         {
             var typeValidator = _validatorFactory.GetValidator(request.GetType());

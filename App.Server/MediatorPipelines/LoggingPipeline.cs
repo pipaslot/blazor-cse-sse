@@ -16,11 +16,7 @@ namespace App.Server.MediatorPipelines
             _logger = logger;
         }
 
-        public bool CanHandle<TRequest>(TRequest request) where TRequest : IRequest
-        {
-            return true;
-        }
-
+        
         public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next) where TRequest : IRequest<TResponse>
         {
             using (_logger.BeginMethod(request, typeof(TRequest)?.FullName ?? ""))

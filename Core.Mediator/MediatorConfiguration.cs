@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Core.Mediator
@@ -7,7 +8,7 @@ namespace Core.Mediator
     public class MediatorConfiguration
     {
         internal readonly List<Assembly> HandlerAssemblies = new List<Assembly>();
-        internal readonly List<Type> Pipelines = new List<Type>();
+        internal readonly List<PipelineDefinition> Pipelines = new List<PipelineDefinition>();
 
         /// <summary>
         /// Will scan for types from the assembly of type <typeparamref name="T"/>.
@@ -36,7 +37,17 @@ namespace Core.Mediator
         /// <example>AddQueryPipeline(typeof(LoggingQueryPipeline<,>));</example>
         public MediatorConfiguration AddPipeline(params Type[] pipelines)
         {
-            Pipelines.AddRange(pipelines);
+            Pipelines.AddRange(pipelines.Select(p=>new PipelineDefinition(p)));
+            return this;
+        }
+        /// <summary>
+        /// Register pipelines in their order
+        /// </summary>
+        /// <example>AddQueryPipeline(typeof(LoggingQueryPipeline<,>));</example>
+        /// <typeparam name="TMarker">Type which has t obe implemented by request for which the pipeline will eb applied for</typeparam>
+        public MediatorConfiguration AddPipeline<TMarker>(params Type[] pipelines)
+        {
+            Pipelines.AddRange(pipelines.Select(p=>new PipelineDefinition(p, typeof(TMarker))));
             return this;
         }
     }

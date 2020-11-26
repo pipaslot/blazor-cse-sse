@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
 using Core.Mediator.Pipelines;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Mediator
 {
@@ -20,17 +21,16 @@ namespace Core.Mediator
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> query, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
-            var pipelines = GetPipelines<TResponse>()
-                .Where(p => p.CanHandle(query));
+            var pipelines = GetPipelines(request.GetType());
             static Task<TResponse> Seed() => Task.FromResult<TResponse>(default!);
             try
             {
                 var response = await pipelines
                     .Reverse()
                     .Aggregate((RequestHandlerDelegate<TResponse>)Seed,
-                        (next, pipeline) => () => pipeline.Handle(query, cancellationToken, next))();
+                        (next, pipeline) => () => pipeline.Handle(request, cancellationToken, next))();
 
                 return new MediatorResponse<TResponse>(response);
             }
@@ -40,11 +40,13 @@ namespace Core.Mediator
             }
         }
 
-        private IEnumerable<IPipeline> GetPipelines<TResponse>()
+        private IEnumerable<IPipeline> GetPipelines(Type requestType)
         {
-            var handlerType = typeof(IPipeline);
-            var handlerCollectionType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-            var pipelines = (IEnumerable<IPipeline>)_serviceProvider.GetService(handlerCollectionType);
+            var pipelines = _serviceProvider.GetServices<PipelineDefinition>()
+                .ToArray()
+                .Where(d => d.MarkerType == null || d.MarkerType.IsAssignableFrom(requestType))
+                .Select(d=>(IPipeline)_serviceProvider.GetRequiredService(d.PipelineType));
+           
             foreach (var pipeline in pipelines)
             {
                 yield return pipeline;

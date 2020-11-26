@@ -10,13 +10,6 @@ namespace Core.Mediator.Abstractions
     public interface IPipeline
     {
         /// <summary>
-        /// Returns true if pipeline should be applied to target query
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        bool CanHandle<TRequest>(TRequest request) where TRequest : IRequest;
-
-        /// <summary>
         /// Pipeline handler. Perform any additional behavior and await the <paramref name="next"/> delegate as necessary
         /// </summary>
         /// <param name="request">Incoming request</param>

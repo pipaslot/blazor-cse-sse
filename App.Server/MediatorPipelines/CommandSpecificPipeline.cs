@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
-using Core.Mediator.CQRSExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorPipelines
@@ -15,12 +14,6 @@ namespace App.Server.MediatorPipelines
         {
             _logger = logger;
         }
-
-        public bool CanHandle<TRequest>(TRequest request) where TRequest : IRequest
-        {
-            return request is ICommand;
-        }
-
         public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next) where TRequest : IRequest<TResponse>
         {
             _logger.LogInformation("Hello from " + nameof(CommandSpecificPipeline));
@@ -28,5 +21,4 @@ namespace App.Server.MediatorPipelines
             return await next();
         }
     }
-
 }

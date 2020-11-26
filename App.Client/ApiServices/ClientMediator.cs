@@ -27,9 +27,9 @@ namespace App.Client.ApiServices
             _logger = logger;
         }
 
-        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> query, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
-            var contract = RequestContractFactory.Create(query);
+            var contract = RequestContractFactory.Create(request);
 
             var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
             try
