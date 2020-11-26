@@ -68,13 +68,13 @@
 
     async Task DispatchErrorCommand()
     {
-        var dispatchResult = await Mediator.Dispatch(new ErrorGenerator.Command());
+        var dispatchResult = await Mediator.Send(new ErrorGenerator.Command());
         DispatchError = dispatchResult.ErrorMessage;
     }
 
     async Task CallForbiddenOperation()
     {
-        var dispatchResult = await Mediator.Dispatch(new AuthenticationError.Command());
+        var dispatchResult = await Mediator.Send(new AuthenticationError.Command());
         DispatchError = dispatchResult.ErrorMessage;
     }
 }
