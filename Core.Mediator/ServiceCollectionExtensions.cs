@@ -16,15 +16,7 @@ namespace Core.Mediator
             // Automatically register all query handlers from project App.Server
             services.Scan(scan => scan
                 .FromAssemblies(options.HandlerAssemblies)
-                .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime()
-            );
-
-            // Automatically register all command handlers from project App.Server
-            services.Scan(scan => scan
-                .FromAssemblies(options.HandlerAssemblies)
-                .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
+                .AddClasses(classes => classes.AssignableTo(typeof(IHandler<,>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()
             );

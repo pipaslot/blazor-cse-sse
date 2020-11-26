@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using App.Shared.Commands;
-using Core.Mediator.Abstractions;
+using Core.Mediator.CQRSExtensions;
 
 namespace App.Server.CommandHandlers
 {

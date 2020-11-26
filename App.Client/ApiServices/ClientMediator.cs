@@ -63,7 +63,7 @@ namespace App.Client.ApiServices
         {
             try
             {
-                var url = "api/mediator/request?type=" + typeof(IQuery<TResponse>).FullName;
+                var url = "api/mediator/request?type=" + typeof(IRequest<TResponse>).FullName;
                 var response = await _httpClient.PostAsJsonAsync(url, contract, cancellationToken);
                 response.EnsureSuccessStatusCode();
 

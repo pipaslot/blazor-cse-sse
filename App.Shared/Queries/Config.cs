@@ -1,4 +1,4 @@
-﻿using Core.Mediator.Abstractions;
+﻿using Core.Mediator.CQRSExtensions;
 
 namespace App.Shared.Queries
 {

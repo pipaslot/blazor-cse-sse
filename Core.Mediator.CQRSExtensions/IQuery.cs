@@ -1,4 +1,6 @@
-﻿namespace Core.Mediator.Abstractions
+﻿using Core.Mediator.Abstractions;
+
+namespace Core.Mediator.CQRSExtensions
 {
     /// <summary>
     /// Query marked 

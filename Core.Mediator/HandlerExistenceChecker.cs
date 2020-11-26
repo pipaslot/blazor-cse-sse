@@ -42,17 +42,22 @@ namespace Core.Mediator
         }
 
         /// <summary>
-        /// Scan registered assemblies for command and query types and try to resolve their handlers
+        /// Clear local state
         /// </summary>
-        public virtual void VerifyAll()
+        public void Clear()
         {
             _alreadyVerified.Clear();
-            Verify<ICommand>("command", true);
-            Verify<IQuery>("query", true);
-            Verify<IRequest>("request", true);
         }
 
-        protected void Verify<T>(string subjectType, bool checkOnlySingleHandlerIsRegistered)
+        /// <summary>
+        /// Scan registered assemblies for command and query types and try to resolve their handlers.
+        /// If subject was already checked, then is ignored in next rounds in case uf multiple invocations 
+        /// </summary>
+        /// <typeparam name="T">Subject</typeparam>
+        /// <param name="subjectName">Subject name shown in exception in case of issue</param>
+        /// <param name="checkOnlySingleHandlerIsRegistered">Check that at must one handler is registered</param>
+        /// <returns></returns>
+        public HandlerExistenceChecker Verify<T>(string subjectName, bool checkOnlySingleHandlerIsRegistered)
         {
             var queryTypes = GetSubjects<T>();
             using var scope = _services.CreateScope();
@@ -67,14 +72,16 @@ namespace Core.Mediator
                 var handlers = scope.ServiceProvider.GetServices(handlerType).ToArray();
                 if (handlers.Count() == 0)
                 {
-                    throw new Exception($"No handler was registered for {subjectType} type: {subject}");
+                    throw new Exception($"No handler was registered for {subjectName} type: {subject}");
                 }
                 if (checkOnlySingleHandlerIsRegistered && handlers.Count() > 1)
                 {
-                    throw new Exception($"Multiple {subjectType} handlers were registered for one {subjectType} type: {subject} with classes {string.Join(" AND ", handlers)}");
+                    throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
                 }
                 _alreadyVerified.Add(subject);
             }
+
+            return this;
         }
 
         private Type[] GetSubjects<T>()

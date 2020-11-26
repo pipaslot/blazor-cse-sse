@@ -49,18 +49,5 @@ namespace Core.Mediator
                 return new MediatorResponse(e.Message);
             }
         }
-
-        public async Task<MediatorResponse> ExecuteCommand(RequestContract request, CancellationToken cancellationToken)
-        {
-            try
-            {
-                var query = (ICommand)request.GetObject();
-                return await _mediator.Dispatch(query, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                return new MediatorResponse(e.Message);
-            }
-        }
     }
 }

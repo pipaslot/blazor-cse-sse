@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorPipelines
 {
-    public class ValidationPipeline<TQuery, TResponse> : IPipeline<TQuery, TResponse> where TQuery: IQuery<TResponse>
+    public class ValidationPipeline<TQuery, TResponse> : IPipeline<TQuery, TResponse> where TQuery: IRequest<TResponse>
     {
         private readonly ILogger<Program> _logger;
         private readonly IValidatorFactory _validatorFactory;

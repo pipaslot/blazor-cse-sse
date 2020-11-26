@@ -7,7 +7,7 @@ using Pipaslot.Logging;
 
 namespace App.Server.MediatorPipelines
 {
-    public class LoggingPipeline<TQuery, TResponse> : IPipeline<TQuery, TResponse> where TQuery : IQuery<TResponse>
+    public class LoggingPipeline<TQuery, TResponse> : IPipeline<TQuery, TResponse> where TQuery : IRequest<TResponse>
     {
         private readonly ILogger<Program> _logger;
 

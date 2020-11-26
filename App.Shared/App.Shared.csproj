@@ -15,5 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Core.Jwt\Core.Jwt.csproj" />
     <ProjectReference Include="..\Core.Mediator.Abstractions\Core.Mediator.Abstractions.csproj" />
+    <ProjectReference Include="..\Core.Mediator.CQRSExtensions\Core.Mediator.CQRSExtensions.csproj" />
   </ItemGroup>
 </Project>

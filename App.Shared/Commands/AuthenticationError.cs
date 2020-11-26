@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.Mediator.Abstractions;
+﻿using Core.Mediator.CQRSExtensions;
 
 namespace App.Shared.Commands
 {
