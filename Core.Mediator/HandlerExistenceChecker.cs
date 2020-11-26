@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Core.Mediator.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -89,8 +88,9 @@ namespace Core.Mediator
             var type = typeof(T);
             return _subjectAssemblies
                 .SelectMany(s => s.GetTypes())
-                .Where(p => !p.IsAbstract 
-                            && p.IsClass 
+                .Where(p => p.IsClass
+                            && !p.IsAbstract
+                            && !p.IsInterface
                             && p.GetInterfaces().Any(i => i == type))
                 .ToArray();
         }

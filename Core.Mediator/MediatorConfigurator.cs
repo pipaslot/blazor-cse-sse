@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Core.Mediator.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,12 +30,17 @@ namespace Core.Mediator
         /// </summary>
         public MediatorConfigurator AddHandlersFromAssembly(params Assembly[] assemblies)
         {
-            _services.Scan(scan => scan
-                .FromAssemblies(assemblies)
-                .AddClasses(classes => classes.AssignableTo(typeof(IHandler<,>)))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime()
-            );
+            var handlerType = typeof(IHandler<,>);
+            assemblies
+                .SelectMany(a => a.GetTypes())
+                .Where(t => t.IsClass && !t.IsAbstract && !t.IsInterface)
+                .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType))
+                .Select(t => t.GetInterfaces()
+                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType)
+                    .Select(i => _services.AddTransient(i, t))
+                    .ToArray())
+                // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+                .ToArray();
             return this;
         }
         /// <summary>
