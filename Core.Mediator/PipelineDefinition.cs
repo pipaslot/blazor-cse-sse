@@ -4,11 +4,7 @@ namespace Core.Mediator
 {
     internal class PipelineDefinition
     {
-        public PipelineDefinition(Type pipelineType)
-        {
-            PipelineType = pipelineType;
-        }
-        public PipelineDefinition(Type pipelineType, Type markerType)
+        public PipelineDefinition(Type pipelineType, Type? markerType = null)
         {
             PipelineType = pipelineType;
             MarkerType = markerType;

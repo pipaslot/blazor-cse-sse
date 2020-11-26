@@ -75,15 +75,12 @@ namespace App.Server
             services.AddScoped<IAuthService,AuthService>();
             
             // Mediator with pipelines
-            services.AddMediator(o =>
-            {
-                o.AddHandlersFromAssemblyOf<ConfigQueryHandler>();
-                o.AddPipeline(typeof(LoggingPipeline));
-                o.AddPipeline<ICommand>(typeof(CommandSpecificPipeline));
-                o.AddPipeline<IQuery>(typeof(QuerySpecificPipeline));
-                o.AddPipeline(typeof(ValidationPipeline)
-                );
-            });
+            services.AddMediator()
+                .AddHandlersFromAssemblyOf<ConfigQueryHandler>()
+                .Use<LoggingPipeline>()
+                .Use<CommandSpecificPipeline, ICommand>()
+                .Use<QuerySpecificPipeline, IQuery>()
+                .Use<ValidationPipeline>();
             
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
