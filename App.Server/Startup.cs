@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +13,6 @@ using Core.Mediator;
 using App.Shared.Queries;
 using Core.Jwt;
 using Core.Mediator.Abstractions;
-using Core.Mediator.CQRSExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

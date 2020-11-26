@@ -1,7 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Core.Mediator.CQRSExtensions
+// ReSharper disable once CheckNamespace
+namespace Core.Mediator.Abstractions
 {
     /// <summary>
     /// Minimal command handler implementation

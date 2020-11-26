@@ -1,6 +1,5 @@
-﻿using Core.Mediator.Abstractions;
-
-namespace Core.Mediator.CQRSExtensions
+﻿// ReSharper disable once CheckNamespace
+namespace Core.Mediator.Abstractions
 {
     
     /// <summary>Defines a handler for a query</summary>

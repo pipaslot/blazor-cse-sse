@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator.Abstractions;
 
-namespace Core.Mediator.CQRSExtensions
+// ReSharper disable once CheckNamespace
+namespace Core.Mediator.Abstractions
 {
     public static class IMediatorExtensions
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using App.Shared.Queries;
-using Core.Mediator.CQRSExtensions;
+using Core.Mediator.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace App.Server.QueryHandlers
