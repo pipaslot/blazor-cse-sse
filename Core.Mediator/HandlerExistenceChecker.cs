@@ -12,6 +12,10 @@ namespace Core.Mediator
     {
         private readonly List<Assembly> _subjectAssemblies = new List<Assembly>();
         private readonly IServiceProvider _services;
+        /// <summary>
+        /// We need to ignore handlers on less generic type. For example once command is catch, then we do not expect that generic IHandler will process that command as well.
+        /// </summary>
+        private readonly HashSet<Type> _alreadyVerified = new HashSet<Type>();
 
         public HandlerExistenceChecker(IServiceProvider services)
         {
@@ -42,6 +46,7 @@ namespace Core.Mediator
         /// </summary>
         public virtual void VerifyAll()
         {
+            _alreadyVerified.Clear();
             Verify<ICommand>("command", true);
             Verify<IQuery>("query", true);
             Verify<IRequest>("request", true);
@@ -49,23 +54,16 @@ namespace Core.Mediator
 
         protected void Verify<T>(string subjectType, bool checkOnlySingleHandlerIsRegistered)
         {
-            var queryType = typeof(T);
-            var queryTypes = _subjectAssemblies
-                .SelectMany(s => s.GetTypes())
-                .Where(p => !p.IsAbstract 
-                            && p.IsClass 
-                            && p.GetInterfaces().Any(i => i == queryType))
-                .ToArray();
+            var queryTypes = GetSubjects<T>();
             using var scope = _services.CreateScope();
-            var requestType = typeof(IRequest<>);
             foreach (var subject in queryTypes)
             {
-                var resultType = subject
-                    .GetInterfaces()
-                    .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == requestType)
-                    .GetGenericArguments()
-                    .First();
-                var handlerType = typeof(IHandler<,>).MakeGenericType(subject, resultType);
+                if (_alreadyVerified.Contains(subject))
+                {
+                    continue;
+                }
+
+                var handlerType = GetHandlerType(subject);
                 var handlers = scope.ServiceProvider.GetServices(handlerType).ToArray();
                 if (handlers.Count() == 0)
                 {
@@ -75,7 +73,30 @@ namespace Core.Mediator
                 {
                     throw new Exception($"Multiple {subjectType} handlers were registered for one {subjectType} type: {subject} with classes {string.Join(" AND ", handlers)}");
                 }
+                _alreadyVerified.Add(subject);
             }
+        }
+
+        private Type[] GetSubjects<T>()
+        {
+            var type = typeof(T);
+            return _subjectAssemblies
+                .SelectMany(s => s.GetTypes())
+                .Where(p => !p.IsAbstract 
+                            && p.IsClass 
+                            && p.GetInterfaces().Any(i => i == type))
+                .ToArray();
+        }
+
+        private Type GetHandlerType(Type subject)
+        {
+            var requestType = typeof(IRequest<>);
+            var resultType = subject
+                .GetInterfaces()
+                .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == requestType)
+                .GetGenericArguments()
+                .First();
+            return typeof(IHandler<,>).MakeGenericType(subject, resultType);
         }
     }
 }
