@@ -7,9 +7,9 @@ using Core.Mediator.CQRSExtensions;
 namespace App.Server.CommandHandlers
 {
     // ReSharper disable once UnusedMember.Global
-    public class AuthenticationErrorCommandHandler : ICommandHandler<AuthenticationError.Command>
+    public class AuthenticationErrorCommandHandler : CommandHandler<AuthenticationError.Command>
     {
-        public Task<object> Handle(AuthenticationError.Command command, CancellationToken cancellationToken)
+        protected override Task Execute(AuthenticationError.Command command, CancellationToken cancellationToken)
         {
             //TODO Authentication on command level
             throw new AuthenticationException();
