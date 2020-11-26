@@ -52,7 +52,7 @@ namespace Core.Mediator
                 yield return pipeline;
             }
 
-            yield return new SingleHandlerExecutionPipeline<IRequest>(_serviceProvider);
+            yield return new SingleHandlerExecutionPipeline(_serviceProvider);
         }
     }
 }

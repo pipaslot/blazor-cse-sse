@@ -21,8 +21,16 @@ namespace Core.Mediator
 
         public async Task<MediatorResponse> ExecuteQuery(RequestContract request, CancellationToken cancellationToken)
         {
-            var query = JsonSerializer.Deserialize(request.Json, Type.GetType(request.ObjectName));
-
+            var queryType = Type.GetType(request.ObjectName);
+            if (queryType == null)
+            {
+                throw new Exception($"Can not recognize type {request.ObjectName}");
+            }
+            var query = JsonSerializer.Deserialize(request.Json, queryType);
+            if (query == null)
+            {
+                throw new Exception($"Can not deserialize contract as type {request.ObjectName}");
+            }
             var queryInterfaceType = typeof(IRequest<>);
             var resultType = query.GetType()
                 .GetInterfaces()
@@ -43,7 +51,8 @@ namespace Core.Mediator
                 await task.ConfigureAwait(false);
 
                 var resultProperty = task.GetType().GetProperty("Result");
-                return (MediatorResponse)resultProperty?.GetValue(task);
+                var result = resultProperty?.GetValue(task);
+                return (MediatorResponse)result!;
             }
             catch (Exception e)
             {
