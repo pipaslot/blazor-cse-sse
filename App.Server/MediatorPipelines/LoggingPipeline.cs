@@ -19,7 +19,7 @@ namespace App.Server.MediatorPipelines
         
         public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next) where TRequest : IRequest<TResponse>
         {
-            using (_logger.BeginMethod(request, typeof(TRequest)?.FullName ?? ""))
+            using (_logger.BeginMethod(request, request.GetType().FullName ?? ""))
             {
                 var stopwatch = Stopwatch.StartNew();
                 try
