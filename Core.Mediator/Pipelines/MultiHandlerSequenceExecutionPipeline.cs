@@ -8,7 +8,7 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// Pipeline executing multiple handlers implementing TMarker type. Handlers are executed in row, once previous execution finished.
     /// </summary>
-    public class MultiHandlerSequenceExecutionPipeline : SingleHandlerExecutionPipeline
+    public class MultiHandlerSequenceExecutionPipeline : BasePipeline
     {
         public MultiHandlerSequenceExecutionPipeline(IServiceProvider serviceProvider) : base(serviceProvider)
         {
