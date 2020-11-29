@@ -11,7 +11,7 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// Pipeline executing one handler for request implementing TMarker type
     /// </summary>
-    internal class SingleHandlerExecutionPipeline : IPipeline
+    public class SingleHandlerExecutionPipeline : IPipeline
     {
         private readonly IServiceProvider _serviceProvider;
 
@@ -28,15 +28,15 @@ namespace Core.Mediator.Pipelines
                 throw new Exception($"Multiple handlers were registered for the same request. Remove one from defined type: {string.Join(" OR ", handlers)}");
             }
 
-            var queryHandler = handlers.FirstOrDefault();
-            if (queryHandler == null)
+            var handler = handlers.FirstOrDefault();
+            if (handler == null)
             {
                 throw new Exception("No handler was found for " + request.GetType());
             }
-            return await Execute<TRequest, TResponse>(queryHandler, request, cancellationToken);
+            return await Execute<TRequest, TResponse>(handler, request, cancellationToken);
         }
 
-        protected object?[] GetRegisteredHandlers<TRequest, TResponse>(TRequest request)
+        protected object[] GetRegisteredHandlers<TRequest, TResponse>(TRequest request)
         {
             if (request == null)
             {
@@ -44,7 +44,11 @@ namespace Core.Mediator.Pipelines
             }
             var queryType = request.GetType();
             var handlerType = typeof(IHandler<,>).MakeGenericType(queryType, typeof(TResponse));
-            return _serviceProvider.GetServices(handlerType).ToArray();
+            return _serviceProvider.GetServices(handlerType)
+                .Where(h => h != null)
+                // ReSharper disable once RedundantEnumerableCastCall
+                .Cast<object>()
+                .ToArray();
         }
 
         protected async Task<TResponse> Execute<TRequest, TResponse>(object handler, TRequest request, CancellationToken cancellationToken)
@@ -53,8 +57,12 @@ namespace Core.Mediator.Pipelines
             var method = handler.GetType().GetMethod(nameof(IHandler<IRequest<object>, object>.Handle));
             try
             {
-                var task = (Task<TResponse>)method!.Invoke(handler, new object[] { request, cancellationToken })!;
-                return await task;
+                var task = (Task<TResponse>?)method!.Invoke(handler, new object[] { request, cancellationToken })!;
+                if(task != null){
+                    return await task;
+                }
+
+                return default!;
             }
             catch (TargetInvocationException e)
             {

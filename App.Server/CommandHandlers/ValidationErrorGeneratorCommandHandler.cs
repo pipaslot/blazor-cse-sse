@@ -7,11 +7,11 @@ using Core.Mediator.Abstractions;
 namespace App.Server.CommandHandlers
 {
     // ReSharper disable once UnusedMember.Global
-    public class ErrorGeneratorCommandHandler : ICommandHandler<ErrorGenerator.Command>
+    public class ValidationErrorGeneratorCommandHandler : ICommandHandler<ValidationErrorGenerator.Command>
     {
-        public Task<object?> Handle(ErrorGenerator.Command command, CancellationToken cancellationToken)
+        public Task<object?> Handle(ValidationErrorGenerator.Command command, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

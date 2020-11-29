@@ -2,7 +2,7 @@
 
 namespace App.Shared.Commands
 {
-    public static class ErrorGenerator
+    public static class MultiHandler
     {
         public class Command : ICommand
         {

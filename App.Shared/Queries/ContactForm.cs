@@ -20,6 +20,7 @@ namespace App.Shared.Queries
             public bool Success { get; set; }
         }
 
+        // ReSharper disable once UnusedMember.Global
         public class Validator : AbstractValidator<Query>
         {
             public Validator()

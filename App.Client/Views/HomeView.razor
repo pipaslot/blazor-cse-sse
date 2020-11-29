@@ -8,6 +8,7 @@
 
     <button @onclick="DispatchErrorCommand">Fire event throwing exception on server side</button> 
     <button @onclick="CallForbiddenOperation">Fire event for which user does not have permission</button> 
+    <button @onclick="MultiHandlerCommand">Fire multiple command handlers together for one command</button> 
     <div>@DispatchError</div>
     @*<BRow>
             <BCol Size="sm-4">4</BCol>
@@ -68,13 +69,19 @@
 
     async Task DispatchErrorCommand()
     {
-        var dispatchResult = await Mediator.Send(new ErrorGenerator.Command());
+        var dispatchResult = await Mediator.Send(new ValidationErrorGenerator.Command());
         DispatchError = dispatchResult.ErrorMessage;
     }
 
     async Task CallForbiddenOperation()
     {
         var dispatchResult = await Mediator.Send(new AuthenticationError.Command());
+        DispatchError = dispatchResult.ErrorMessage;
+    }
+
+    async Task MultiHandlerCommand()
+    {
+        var dispatchResult = await Mediator.Send(new MultiHandler.Command());
         DispatchError = dispatchResult.ErrorMessage;
     }
 }

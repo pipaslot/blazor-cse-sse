@@ -13,6 +13,7 @@ using Core.Mediator;
 using App.Shared.Queries;
 using Core.Jwt;
 using Core.Mediator.Abstractions;
+using Core.Mediator.Pipelines;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -78,7 +79,8 @@ namespace App.Server
                 .Use<LoggingPipeline>()
                 .Use<CommandSpecificPipeline, ICommand>()
                 .Use<QuerySpecificPipeline, IQuery>()
-                .Use<ValidationPipeline>();
+                .Use<ValidationPipeline>()
+                .Use<MultiHandlerExecutionPipeline, ICommand>();
             
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
@@ -99,7 +101,7 @@ namespace App.Server
             {
                 handlerExistenceChecker
                     .ScanFromAssemblyOf<Config.Query>()
-                    .Verify<ICommand>("command", true)
+                    .Verify<ICommand>("command", false)
                     .Verify<IQuery>("query", true)
                     .Verify<IRequest>("request", true);
                 app.UseDeveloperExceptionPage();
