@@ -10,7 +10,7 @@ namespace Core.Mediator.Abstractions
         
     }
     /// <summary>
-    /// Query marked 
+    /// Query marker 
     /// </summary>
     public interface IQuery
     {
