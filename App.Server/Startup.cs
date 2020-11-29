@@ -80,7 +80,7 @@ namespace App.Server
                 .Use<CommandSpecificPipeline, ICommand>()
                 .Use<QuerySpecificPipeline, IQuery>()
                 .Use<ValidationPipeline>()
-                .Use<MultiHandlerExecutionPipeline, ICommand>();
+                .Use<MultiHandlerSequenceExecutionPipeline, ICommand>();
             
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
