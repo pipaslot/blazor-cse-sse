@@ -6,7 +6,7 @@ using Core.Mediator.Abstractions;
 namespace Core.Mediator.Pipelines
 {
     /// <summary>
-    /// Pipeline executing one handler for request implementing TMarker type
+    /// Pipeline executing multiple handlers implementing TMarker type
     /// </summary>
     public class MultiHandlerExecutionPipeline : SingleHandlerExecutionPipeline
     {
@@ -23,11 +23,10 @@ namespace Core.Mediator.Pipelines
             }
             foreach (var handler in handlers)
             {
-                await Execute<TRequest, TResponse>(handler, request, cancellationToken);
+               await Execute<TRequest, TResponse>(handler, request, cancellationToken);
             }
 
             return default!;
         }
-
     }
 }

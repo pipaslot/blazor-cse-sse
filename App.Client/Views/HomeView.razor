@@ -1,6 +1,8 @@
 ﻿@page "/"
 @using App.Shared.Commands
 @inject IMediator Mediator
+
+<Spinner Show="ShowSpinner"></Spinner>
 <BContainer>
     <h1>@LayoutResource.Home</h1>
 
@@ -66,22 +68,28 @@
 </BContainer>
 @code{
     string DispatchError = "";
+    bool ShowSpinner;
 
     async Task DispatchErrorCommand()
     {
-        var dispatchResult = await Mediator.Send(new ValidationErrorGenerator.Command());
-        DispatchError = dispatchResult.ErrorMessage;
+        await Dispatch(new ValidationErrorGenerator.Command());
     }
 
     async Task CallForbiddenOperation()
     {
-        var dispatchResult = await Mediator.Send(new AuthenticationError.Command());
-        DispatchError = dispatchResult.ErrorMessage;
+        await Dispatch(new AuthenticationError.Command());
     }
 
     async Task MultiHandlerCommand()
     {
-        var dispatchResult = await Mediator.Send(new MultiHandler.Command());
+        await Dispatch(new MultiHandler.Command());
+    }
+
+    private async Task Dispatch<TResponse>(IRequest<TResponse> request )
+    {
+        ShowSpinner = true;
+        var dispatchResult = await Mediator.Send(request);
         DispatchError = dispatchResult.ErrorMessage;
+        ShowSpinner = false;
     }
 }

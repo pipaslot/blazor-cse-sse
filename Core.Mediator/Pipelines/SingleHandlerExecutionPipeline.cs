@@ -57,15 +57,17 @@ namespace Core.Mediator.Pipelines
             var method = handler.GetType().GetMethod(nameof(IHandler<IRequest<object>, object>.Handle));
             try
             {
-                var task = (Task<TResponse>?)method!.Invoke(handler, new object[] { request, cancellationToken })!;
-                if(task != null){
-                    return await task;
-                }
+                await OnBeforeHandlerExecution(handler, request);
+                var task = (Task<TResponse>?) method!.Invoke(handler, new object[] {request, cancellationToken})!;
+                var result = task != null ? (await task) : default!;
 
-                return default!;
+                await OnSuccessExecution(handler, request, result);
+
+                return result;
             }
             catch (TargetInvocationException e)
             {
+                await OnFailedExecution(handler, request, e.InnerException ?? e);
                 if (e.InnerException != null)
                 {
                     // Unwrap exception
@@ -74,6 +76,50 @@ namespace Core.Mediator.Pipelines
 
                 throw;
             }
+            finally
+            {
+                await OnAfterHandlerExecution(handler, request);
+            }
+        }
+
+        /// <summary>
+        /// Hook method called always before handler execution
+        /// </summary>
+        protected virtual Task OnBeforeHandlerExecution<TRequest>(object handler, TRequest request)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Hook method called always after handler execution
+        /// </summary>
+        protected virtual Task OnAfterHandlerExecution<TRequest>(object handler, TRequest request)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Hook called only after successful handler execution. Is omitted if exception is thrown
+        /// </summary>
+        /// <param name="handler">Request handler</param>
+        /// <param name="request">Handler input data</param>
+        /// <param name="result">Handler result</param>
+        /// <returns></returns>
+        protected virtual Task OnSuccessExecution<TRequest, TResponse>(object handler, TRequest request, TResponse result)
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Hook called only if exception is thrown during handler execution
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <param name="request"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        protected virtual Task OnFailedExecution<TRequest>(object handler, TRequest request, Exception e)
+        {
+            return Task.CompletedTask;
         }
     }
 }
