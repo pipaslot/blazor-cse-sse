@@ -11,7 +11,7 @@ namespace App.Server.CommandHandlers
     {
         public Task<object?> Handle(ValidationErrorGenerator.Command command, CancellationToken cancellationToken)
         {
-            return null;
+            return Task.FromResult<object?>(null);
         }
     }
 }

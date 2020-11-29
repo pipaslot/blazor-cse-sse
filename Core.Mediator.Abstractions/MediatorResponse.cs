@@ -19,7 +19,7 @@
         }
 
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
-        public TResult Result { get; set; }
+        public TResult Result { get; set; } = default!;
     }
 
     public class MediatorResponse
@@ -36,6 +36,6 @@
         public bool Success => string.IsNullOrWhiteSpace(ErrorMessage);
         
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = "";
     }
 }

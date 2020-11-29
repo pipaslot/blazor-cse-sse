@@ -21,7 +21,7 @@ namespace App.Server.CommandHandlers
             using (_logger.BeginMethod())
             {
                 _logger.LogInformation("Handled by handler 1");
-                return null;
+                return Task.FromResult<object?>(null);
             }
         }
     }
@@ -39,7 +39,7 @@ namespace App.Server.CommandHandlers
             using (_logger.BeginMethod())
             {
                 _logger.LogInformation("Handled by handler 2");
-                return null;
+                return Task.FromResult<object?>(null);
             }
         }
     }
