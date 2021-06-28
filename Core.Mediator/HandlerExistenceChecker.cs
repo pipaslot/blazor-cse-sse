@@ -16,6 +16,15 @@ namespace Core.Mediator
         private readonly HashSet<Type> _alreadyVerified = new HashSet<Type>();
         private readonly ServiceResolver _handlerResolver;
 
+        private readonly List<Type> _EventTypes = new List<Type>
+        {
+            typeof(IEvent)
+        };
+        private readonly List<Type> _RequestTypes = new List<Type>
+        {
+            typeof(IRequest)
+        };
+
         public HandlerExistenceChecker(ServiceResolver handlerResolver)
         {
             _handlerResolver = handlerResolver;
@@ -41,11 +50,51 @@ namespace Core.Mediator
         }
 
         /// <summary>
-        /// Clear local state
+        /// Register Own Event Marker interface to perform handler check for all object implementing this marker
         /// </summary>
-        public void Clear()
+        /// <typeparam name="T">Own marker interface</typeparam>
+        public HandlerExistenceChecker SearchCustomEvents<T>() where T : IEvent
         {
-            _alreadyVerified.Clear();
+            var type = typeof(T);
+            if (!type.IsInterface)
+            {
+                throw new ArgumentException($"Interface interiting from {typeof(IEvent).FullName} was expected, but type {type.FullName} was specified instead.");
+            }
+            if (!_EventTypes.Contains(type))
+            {
+                _EventTypes.Add(type);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Register Own Event Marker interface to perform handler check for all object implementing this marker
+        /// </summary>
+        /// <typeparam name="T">Own marker interface</typeparam>
+        public HandlerExistenceChecker SearchCustomRequests<T>() where T : IRequest
+        {
+            var type = typeof(T);
+            if (!type.IsInterface)
+            {
+                throw new ArgumentException($"Interface interiting from {typeof(IRequest).FullName} was expected, but type {type.FullName} was specified instead.");
+            }
+            if (!_RequestTypes.Contains(type))
+            {
+                _RequestTypes.Add(type);
+            }
+            return this;
+        }
+
+        public void Verify()
+        {
+            foreach (var eventIfaceType in _EventTypes)
+            {
+                VerifyEvent(eventIfaceType);
+            }
+            foreach (var requestIfaceType in _RequestTypes)
+            {
+                VerifyRequest(requestIfaceType);
+            }
         }
 
         /// <summary>
@@ -54,10 +103,10 @@ namespace Core.Mediator
         /// </summary>
         /// <typeparam name="T">Subject</typeparam>
         /// <returns></returns>
-        public HandlerExistenceChecker VerifyEvent<T>() where T : IEvent
+        private void VerifyEvent(Type eventInterface)
         {
-            var subjectName = typeof(T).Name;
-            var queryTypes = GetSubjects<T>();
+            var subjectName = eventInterface.Name;
+            var queryTypes = GetSubjects(eventInterface);
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
@@ -78,20 +127,12 @@ namespace Core.Mediator
                 }
                 _alreadyVerified.Add(subject);
             }
-
-            return this;
         }
 
-        /// <summary>
-        /// Scan registered assemblies for command and query types and try to resolve their handlers.
-        /// If subject was already checked, then is ignored in next rounds in case uf multiple invocations 
-        /// </summary>
-        /// <typeparam name="T">Subject</typeparam>
-        /// <returns></returns>
-        public HandlerExistenceChecker VerifyRequest<T>() where T : IRequest
+        private void VerifyRequest(Type requestInterface)
         {
-            var subjectName = typeof(T).Name;
-            var queryTypes = GetSubjects<T>();
+            var subjectName = requestInterface.Name;
+            var queryTypes = GetSubjects(requestInterface);
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
@@ -116,13 +157,10 @@ namespace Core.Mediator
                 }
                 _alreadyVerified.Add(subject);
             }
-
-            return this;
         }
 
-        private Type[] GetSubjects<T>()
+        private Type[] GetSubjects(Type type)
         {
-            var type = typeof(T);
             return _subjectAssemblies
                 .SelectMany(s => s.GetTypes())
                 .Where(p => p.IsClass

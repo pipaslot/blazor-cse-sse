@@ -2,7 +2,7 @@
 namespace Core.Mediator.Abstractions
 {
     /// <summary>
-    /// Query marked 
+    /// Query action with own specific pipelines and handlers.
     /// </summary>
     /// <typeparam name="TResponse">Result data returned from query execution</typeparam>
     public interface IQuery<out TResponse> : IQuery, IRequest<TResponse>
@@ -10,7 +10,7 @@ namespace Core.Mediator.Abstractions
         
     }
     /// <summary>
-    /// Query marker 
+    /// Marker interface for IRequest only. DO NOT INHERIT!
     /// </summary>
     public interface IQuery : IRequest
     {

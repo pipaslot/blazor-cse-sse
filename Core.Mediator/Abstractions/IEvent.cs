@@ -5,7 +5,7 @@ using System.Text;
 namespace Core.Mediator.Abstractions
 {
     /// <summary>
-    /// Base action marker. All derived types can have own specific pipelines and handlers. No reponse is expected.
+    /// Action which does not return data. All derived types can have own specific pipelines and handlers.
     /// </summary>
     public interface IEvent
     {

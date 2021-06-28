@@ -55,7 +55,7 @@ namespace Core.Mediator
             return this;
         }
         /// <summary>
-        /// Register request pipelines in their order
+        /// Register request pipelines in their order applied for all actions
         /// </summary>
         public MediatorConfigurator Use<TPipeline>()
             where TPipeline : IRequestPipeline, IEventPipeline

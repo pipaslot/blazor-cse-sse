@@ -86,10 +86,9 @@ namespace App.Server
             {
                 handlerExistenceChecker
                     .ScanFromAssemblyOf<Config.Query>()
-                    .VerifyEvent<IEvent>()
-                    .VerifyEvent<ICommand>()
-                    .VerifyRequest<IQuery>()
-                    .VerifyRequest<IRequest>();
+                    .SearchCustomEvents<ICommand>()
+                    .SearchCustomRequests<IQuery>()
+                    .Verify();
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
             }
