@@ -63,10 +63,7 @@ namespace Core.Mediator
 
         private IEnumerable<IRequestPipeline> GetRequestPipelines(Type requestType)
         {
-            var pipelines = _serviceProvider.GetServices<PipelineDefinition>()
-                .ToArray()
-                .Where(d => d.MarkerType == null || d.MarkerType.IsAssignableFrom(requestType))
-                .Select(d => (IRequestPipeline)_serviceProvider.GetRequiredService(d.PipelineType));
+            var pipelines = GetPipelines<IRequestPipeline>(requestType);
 
             foreach (var pipeline in pipelines)
             {
@@ -78,10 +75,7 @@ namespace Core.Mediator
 
         private IEnumerable<IEventPipeline> GetEventPipelines(Type requestType)
         {
-            var pipelines = _serviceProvider.GetServices<PipelineDefinition>()
-                .ToArray()
-                .Where(d => d.MarkerType == null || d.MarkerType.IsAssignableFrom(requestType))
-                .Select(d => (IEventPipeline)_serviceProvider.GetRequiredService(d.PipelineType));
+            var pipelines = GetPipelines<IEventPipeline>(requestType);
 
             foreach (var pipeline in pipelines)
             {
@@ -89,6 +83,14 @@ namespace Core.Mediator
             }
 
             yield return new SingleHandlerExecutionEventPipeline(_handlerResolver);
+        }
+
+        private IEnumerable<TItem> GetPipelines<TItem>(Type requestType)
+        {
+            return _serviceProvider.GetServices<PipelineDefinition>()
+                .ToArray()
+                .Where(d => d.MarkerType == null || d.MarkerType.IsAssignableFrom(requestType))
+                .Select(d => (TItem)_serviceProvider.GetRequiredService(d.PipelineType));
         }
     }
 }
