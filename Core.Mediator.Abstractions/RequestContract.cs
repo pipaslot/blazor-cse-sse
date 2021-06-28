@@ -2,6 +2,7 @@
 {
     public class RequestContract
     {
+        public const string Endpoint = "/api/mediator/request";
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
         public string Json { get; set; } = string.Empty;
         

@@ -10,7 +10,10 @@ namespace Core.Mediator
         {
             return new RequestContract
             {
-                Json = JsonSerializer.Serialize(request),
+                Json = JsonSerializer.Serialize(request, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }),
                 ObjectName = request.GetType().AssemblyQualifiedName
             };
         }

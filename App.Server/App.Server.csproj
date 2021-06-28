@@ -39,6 +39,7 @@
     <ProjectReference Include="..\App.Client\App.Client.csproj" />
     <ProjectReference Include="..\Core.Jwt\Core.Jwt.csproj" />
     <ProjectReference Include="..\Core.Localization\Core.Localization.csproj" />
+    <ProjectReference Include="..\Core.Mediator.Server\Core.Mediator.Server.csproj" />
     <ProjectReference Include="..\Core.Mediator\Core.Mediator.csproj" />
   </ItemGroup>
 

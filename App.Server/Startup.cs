@@ -17,6 +17,7 @@ using Core.Mediator.Pipelines;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Core.Mediator.Server;
 
 namespace App.Server
 {
@@ -117,6 +118,7 @@ namespace App.Server
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseMediator();
 #if ServerSideExecution
             app.UseAuthentication();
             app.UseRouting();

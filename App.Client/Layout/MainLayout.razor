@@ -41,7 +41,9 @@
     {
         await base.OnInitializedAsync();
         var config = await Mediator.Send(new Config.Query());
-        if (config.Success){
+
+        if (config.Success)
+        {
             _name = config.Result.Name;
         }
     }
