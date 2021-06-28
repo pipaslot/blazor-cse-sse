@@ -61,7 +61,7 @@ namespace App.Server
 #endif
 
             Client.Program.ConfigureServerAndClientSharedServices<ResourceManagerServerFactory>(services);
-            
+
             services.Configure<Config.Result>(_configuration.GetSection("App"));
 
             services.AddAuthorization();
@@ -70,10 +70,10 @@ namespace App.Server
 #else
             services.AddCoreAuthForClient(_configuration.GetSection("Auth"));
 #endif
-            
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IAuthService,AuthService>();
-            
+            services.AddScoped<IAuthService, AuthService>();
+
             // Mediator with pipelines
             services.AddMediator()
                 .AddHandlersFromAssemblyOf<ConfigQueryHandler>()
@@ -102,9 +102,10 @@ namespace App.Server
             {
                 handlerExistenceChecker
                     .ScanFromAssemblyOf<Config.Query>()
-                    .VerifyEvent<ICommand>("command", false)
-                    .VerifyRequest<IQuery>("query", true)
-                    .VerifyRequest<IRequest>("request", true);
+                    .VerifyEvent<IEvent>(true)
+                    .VerifyEvent<ICommand>(false)
+                    .VerifyRequest<IQuery>(true)
+                    .VerifyRequest<IRequest>(true);
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
             }

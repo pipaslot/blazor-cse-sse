@@ -53,11 +53,11 @@ namespace Core.Mediator
         /// If subject was already checked, then is ignored in next rounds in case uf multiple invocations 
         /// </summary>
         /// <typeparam name="T">Subject</typeparam>
-        /// <param name="subjectName">Subject name shown in exception in case of issue</param>
         /// <param name="checkOnlySingleHandlerIsRegistered">Check that at must one handler is registered</param>
         /// <returns></returns>
-        public HandlerExistenceChecker VerifyEvent<T>(string subjectName, bool checkOnlySingleHandlerIsRegistered) where T : IEvent
+        public HandlerExistenceChecker VerifyEvent<T>(bool checkOnlySingleHandlerIsRegistered) where T : IEvent
         {
+            var subjectName = typeof(T).Name;
             var queryTypes = GetSubjects<T>();
             using var scope = _services.CreateScope();
             foreach (var subject in queryTypes)
@@ -88,11 +88,11 @@ namespace Core.Mediator
         /// If subject was already checked, then is ignored in next rounds in case uf multiple invocations 
         /// </summary>
         /// <typeparam name="T">Subject</typeparam>
-        /// <param name="subjectName">Subject name shown in exception in case of issue</param>
         /// <param name="checkOnlySingleHandlerIsRegistered">Check that at must one handler is registered</param>
         /// <returns></returns>
-        public HandlerExistenceChecker VerifyRequest<T>(string subjectName, bool checkOnlySingleHandlerIsRegistered) where T : IRequest
+        public HandlerExistenceChecker VerifyRequest<T>(bool checkOnlySingleHandlerIsRegistered) where T : IRequest
         {
+            var subjectName = typeof(T).Name;
             var queryTypes = GetSubjects<T>();
             using var scope = _services.CreateScope();
             foreach (var subject in queryTypes)
