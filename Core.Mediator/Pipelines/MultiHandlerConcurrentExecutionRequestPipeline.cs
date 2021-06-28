@@ -9,12 +9,13 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// Pipeline executing multiple handlers implementing TMarker type. All handlers are executed asynchronously at the same time
     /// </summary>
-    public class MultiHandlerConcurrentExecutionRequestPipeline : BaseRequestPipeline
+    public class MultiHandlerConcurrentExecutionRequestPipeline : BaseRequestPipeline, IExecutivePipeline
     {
-        public MultiHandlerConcurrentExecutionRequestPipeline(HandlerResolver handlerResolver) : base(handlerResolver)
+        public MultiHandlerConcurrentExecutionRequestPipeline(ServiceResolver handlerResolver) : base(handlerResolver)
         {
         }
-        
+        public bool ExecuteMultipleHandlers => true;
+
         public override async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
             var handlers = GetRegisteredHandlers<TRequest, TResponse>(request);

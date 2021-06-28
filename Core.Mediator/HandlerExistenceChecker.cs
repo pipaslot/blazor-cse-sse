@@ -14,9 +14,9 @@ namespace Core.Mediator
         /// We need to ignore handlers on less generic type. For example once command is catch, then we do not expect that generic IHandler will process that command as well.
         /// </summary>
         private readonly HashSet<Type> _alreadyVerified = new HashSet<Type>();
-        private readonly HandlerResolver _handlerResolver;
+        private readonly ServiceResolver _handlerResolver;
 
-        public HandlerExistenceChecker(HandlerResolver handlerResolver)
+        public HandlerExistenceChecker(ServiceResolver handlerResolver)
         {
             _handlerResolver = handlerResolver;
         }
@@ -53,9 +53,8 @@ namespace Core.Mediator
         /// If subject was already checked, then is ignored in next rounds in case uf multiple invocations 
         /// </summary>
         /// <typeparam name="T">Subject</typeparam>
-        /// <param name="checkOnlySingleHandlerIsRegistered">Check that at must one handler is registered</param>
         /// <returns></returns>
-        public HandlerExistenceChecker VerifyEvent<T>(bool checkOnlySingleHandlerIsRegistered) where T : IEvent
+        public HandlerExistenceChecker VerifyEvent<T>() where T : IEvent
         {
             var subjectName = typeof(T).Name;
             var queryTypes = GetSubjects<T>();
@@ -71,7 +70,9 @@ namespace Core.Mediator
                 {
                     throw new Exception($"No handler was registered for {subjectName} type: {subject}");
                 }
-                if (checkOnlySingleHandlerIsRegistered && handlers.Count() > 1)
+
+                var executivePipeline = _handlerResolver.GetEventExecutivePipeline(subject);
+                if (!executivePipeline.ExecuteMultipleHandlers && handlers.Count() > 1)
                 {
                     throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
                 }
@@ -86,9 +87,8 @@ namespace Core.Mediator
         /// If subject was already checked, then is ignored in next rounds in case uf multiple invocations 
         /// </summary>
         /// <typeparam name="T">Subject</typeparam>
-        /// <param name="checkOnlySingleHandlerIsRegistered">Check that at must one handler is registered</param>
         /// <returns></returns>
-        public HandlerExistenceChecker VerifyRequest<T>(bool checkOnlySingleHandlerIsRegistered) where T : IRequest
+        public HandlerExistenceChecker VerifyRequest<T>() where T : IRequest
         {
             var subjectName = typeof(T).Name;
             var queryTypes = GetSubjects<T>();
@@ -109,7 +109,8 @@ namespace Core.Mediator
                 {
                     throw new Exception($"No handler was registered for {subjectName} type: {subject}");
                 }
-                if (checkOnlySingleHandlerIsRegistered && handlers.Count() > 1)
+                var executivePipeline = _handlerResolver.GetRequestExecutivePipeline(subject);
+                if (!executivePipeline.ExecuteMultipleHandlers && handlers.Count() > 1)
                 {
                     throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
                 }

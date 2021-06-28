@@ -9,11 +9,12 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// Pipeline executing one handler for request implementing TMarker type
     /// </summary>
-    public class SingleHandlerExecutionRequestPipeline : BaseRequestPipeline
+    public class SingleHandlerExecutionRequestPipeline : BaseRequestPipeline, IExecutivePipeline
     {
-        public SingleHandlerExecutionRequestPipeline(HandlerResolver handlerResolver) : base(handlerResolver)
+        public SingleHandlerExecutionRequestPipeline(ServiceResolver handlerResolver) : base(handlerResolver)
         {
         }
+        public bool ExecuteMultipleHandlers => false;
 
         public override async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {

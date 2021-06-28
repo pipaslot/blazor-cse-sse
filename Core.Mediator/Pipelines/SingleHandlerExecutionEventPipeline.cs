@@ -9,15 +9,16 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// Pipeline executing one handler for request implementing TMarker type
     /// </summary>
-    public class SingleHandlerExecutionEventPipeline : BaseEventPipeline
+    public class SingleHandlerExecutionEventPipeline : BaseEventPipeline, IExecutivePipeline
     {
-        public SingleHandlerExecutionEventPipeline(HandlerResolver handlerResolver) : base(handlerResolver)
+        public SingleHandlerExecutionEventPipeline(ServiceResolver handlerResolver) : base(handlerResolver)
         {
         }
+        public bool ExecuteMultipleHandlers => false;
 
         public override async Task Handle<TEvent>(TEvent @event, CancellationToken cancellationToken, EventHandlerDelegate next)
         {
-            var handlers = GetRegisteredHandlers<TEvent>(@event);
+            var handlers = GetRegisteredHandlers(@event);
             if (handlers.Length > 1)
             {
                 throw new Exception($"Multiple handlers were registered for the same request. Remove one from defined type: {string.Join(" OR ", handlers)}");
@@ -28,7 +29,7 @@ namespace Core.Mediator.Pipelines
             {
                 throw new Exception("No handler was found for " + @event.GetType());
             }
-            await Execute<TEvent>(handler, @event, cancellationToken);
+            await Execute(handler, @event, cancellationToken);
         }
     }
 }

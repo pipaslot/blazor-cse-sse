@@ -10,9 +10,9 @@ namespace Core.Mediator.Pipelines
 {
     public abstract class BaseRequestPipeline : IRequestPipeline
     {
-        private readonly HandlerResolver _handlerResolver;
+        private readonly ServiceResolver _handlerResolver;
 
-        protected BaseRequestPipeline(HandlerResolver handlerResolver)
+        protected BaseRequestPipeline(ServiceResolver handlerResolver)
         {
             _handlerResolver = handlerResolver;
         }

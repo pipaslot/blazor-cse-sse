@@ -8,12 +8,13 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// Pipeline executing multiple handlers implementing TMarker type. Handlers are executed in row, once previous execution finished.
     /// </summary>
-    public class MultiHandlerSequenceExecutionRequestPipeline : BaseRequestPipeline
+    public class MultiHandlerSequenceExecutionRequestPipeline : BaseRequestPipeline, IExecutivePipeline
     {
-        public MultiHandlerSequenceExecutionRequestPipeline(HandlerResolver handlerResolver) : base(handlerResolver)
+        public MultiHandlerSequenceExecutionRequestPipeline(ServiceResolver handlerResolver) : base(handlerResolver)
         {
         }
-        
+        public bool ExecuteMultipleHandlers => true;
+
         public override async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
             var handlers = GetRegisteredHandlers<TRequest, TResponse>(request);

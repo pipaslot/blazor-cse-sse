@@ -10,9 +10,9 @@ namespace Core.Mediator.Pipelines
 {
     public abstract class BaseEventPipeline : IEventPipeline
     {
-        private readonly HandlerResolver _handlerResolver;
+        private readonly ServiceResolver _handlerResolver;
 
-        protected BaseEventPipeline(HandlerResolver handlerResolver)
+        protected BaseEventPipeline(ServiceResolver handlerResolver)
         {
             _handlerResolver = handlerResolver;
         }

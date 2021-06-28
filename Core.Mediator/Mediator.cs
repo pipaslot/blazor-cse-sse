@@ -15,9 +15,9 @@ namespace Core.Mediator
     public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly HandlerResolver _handlerResolver;
+        private readonly ServiceResolver _handlerResolver;
 
-        public Mediator(IServiceProvider serviceProvider, HandlerResolver handlerResolver)
+        public Mediator(IServiceProvider serviceProvider, ServiceResolver handlerResolver)
         {
             _serviceProvider = serviceProvider;
             _handlerResolver = handlerResolver;
@@ -25,7 +25,7 @@ namespace Core.Mediator
 
         public async Task<MediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default)
         {
-            var pipelines = GetEventPipelines(@event.GetType());
+            var pipelines = _handlerResolver.GetEventPipelines(@event.GetType());
             static Task Seed() => Task.CompletedTask;
             try
             {
@@ -44,7 +44,7 @@ namespace Core.Mediator
 
         public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
-            var pipelines = GetRequestPipelines(request.GetType());
+            var pipelines = _handlerResolver.GetRequestPipelines(request.GetType());
             static Task<TResponse> Seed() => Task.FromResult<TResponse>(default!);
             try
             {
@@ -59,38 +59,6 @@ namespace Core.Mediator
             {
                 return new MediatorResponse<TResponse>(e.Message);
             }
-        }
-
-        private IEnumerable<IRequestPipeline> GetRequestPipelines(Type requestType)
-        {
-            var pipelines = GetPipelines<IRequestPipeline>(requestType);
-
-            foreach (var pipeline in pipelines)
-            {
-                yield return pipeline;
-            }
-
-            yield return new SingleHandlerExecutionRequestPipeline(_handlerResolver);
-        }
-
-        private IEnumerable<IEventPipeline> GetEventPipelines(Type requestType)
-        {
-            var pipelines = GetPipelines<IEventPipeline>(requestType);
-
-            foreach (var pipeline in pipelines)
-            {
-                yield return pipeline;
-            }
-
-            yield return new SingleHandlerExecutionEventPipeline(_handlerResolver);
-        }
-
-        private IEnumerable<TItem> GetPipelines<TItem>(Type requestType)
-        {
-            return _serviceProvider.GetServices<PipelineDefinition>()
-                .ToArray()
-                .Where(d => d.MarkerType == null || d.MarkerType.IsAssignableFrom(requestType))
-                .Select(d => (TItem)_serviceProvider.GetRequiredService(d.PipelineType));
         }
     }
 }
