@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Mediator.Abstractions\Core.Mediator.Abstractions.csproj" />
+    <ProjectReference Include="..\Core.Mediator\Core.Mediator.csproj" />
   </ItemGroup>
 
 </Project>
