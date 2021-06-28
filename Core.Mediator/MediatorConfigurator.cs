@@ -68,24 +68,23 @@ namespace Core.Mediator
 
         /// <summary>
         /// Register pipeline for action classes implementing marker type only
-        /// <typeparam name="TMarker">Action interface/typeparam>
         /// </summary>
-        public MediatorConfigurator UseRequestOnly<TPipeline, TMarker>()
+        /// <typeparam name="TActionMarker">Action interface</typeparam>
+        public MediatorConfigurator UseRequestOnly<TPipeline, TActionMarker>()
             where TPipeline : IRequestPipeline
-            where TMarker : IRequest
+            where TActionMarker : IRequest
         {
-            return RegisterPipelines(typeof(TPipeline), typeof(TMarker));
+            return RegisterPipelines(typeof(TPipeline), typeof(TActionMarker));
         }
-
         /// <summary>
         /// Register pipeline for action classes implementing marker type only
-        /// <typeparam name="TMarker">Action interface/typeparam>
         /// </summary>
-        public MediatorConfigurator UseEventOnly<TPipeline, TMarker>()
+        /// <typeparam name="TActionMarker">Action interface</typeparam>
+        public MediatorConfigurator UseEventOnly<TPipeline, TActionMarker>()
             where TPipeline : IEventPipeline
-            where TMarker : IEvent
+            where TActionMarker : IEvent
         {
-            return RegisterPipelines(typeof(TPipeline), typeof(TMarker));
+            return RegisterPipelines(typeof(TPipeline), typeof(TActionMarker));
         }
 
         private MediatorConfigurator RegisterPipelines(Type pipeline, Type? markerType = null)

@@ -65,7 +65,7 @@ namespace App.Server
                 .UseEventOnly<CommandSpecificPipeline, ICommand>()
                 .UseRequestOnly<QuerySpecificPipeline, IQuery>()
                 .Use<ValidationPipeline>()
-                .UseEventOnly<MultiHandlerSequenceExecutionEventPipeline, ICommand>();
+                .UseEventOnlySequenceMultiHandler<ICommand>();
 
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
