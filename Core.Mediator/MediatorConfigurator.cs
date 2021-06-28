@@ -30,23 +30,35 @@ namespace Core.Mediator
         /// </summary>
         public MediatorConfigurator AddHandlersFromAssembly(params Assembly[] assemblies)
         {
-            var handlerType = typeof(IHandler<,>);
-            assemblies
+            var handlerTypes = new[]
+            {
+                typeof(IRequestHandler<,>),
+                typeof(IEventHandler<>)
+            };
+            var types = assemblies
                 .SelectMany(a => a.GetTypes())
                 .Where(t => t.IsClass && !t.IsAbstract && !t.IsInterface)
-                .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType))
-                .Select(t => t.GetInterfaces()
-                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType)
-                    .Select(i => _services.AddTransient(i, t))
-                    .ToArray())
-                // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-                .ToArray();
+                .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && handlerTypes.Contains(i.GetGenericTypeDefinition())))
+                .Select(t => new
+                {
+                    Type = t,
+                    Interfaces = t.GetInterfaces()
+                        .Where(i => i.IsGenericType && handlerTypes.Contains(i.GetGenericTypeDefinition()))
+                });
+            foreach (var pair in types)
+            {
+                foreach (var iface in pair.Interfaces)
+                {
+                    _services.AddTransient(iface, pair.Type);
+                }
+            }
             return this;
         }
         /// <summary>
         /// Register request pipelines in their order
         /// </summary>
-        public MediatorConfigurator UseRequest<TPipeline>() where TPipeline : IRequestPipeline
+        public MediatorConfigurator Use<TPipeline>()
+            where TPipeline : IRequestPipeline, IEventPipeline
         {
             return RegisterPipelines(typeof(TPipeline));
         }
@@ -55,7 +67,20 @@ namespace Core.Mediator
         /// Register pipelines in their order with restricted request type implementation
         /// <typeparam name="TMarker">Only requests implementing TMarker class or interface will be processed by this pipeline</typeparam>
         /// </summary>
-        public MediatorConfigurator UseRequest<TPipeline, TMarker>() where TPipeline : IRequestPipeline
+        public MediatorConfigurator UseRequestOnly<TPipeline, TMarker>()
+            where TPipeline : IRequestPipeline
+            where TMarker : IRequest
+        {
+            return RegisterPipelines(typeof(TPipeline), typeof(TMarker));
+        }
+
+        /// <summary>
+        /// Register pipelines in their order with restricted request type implementation
+        /// <typeparam name="TMarker">Only requests implementing TMarker class or interface will be processed by this pipeline</typeparam>
+        /// </summary>
+        public MediatorConfigurator UseEventOnly<TPipeline, TMarker>()
+            where TPipeline : IEventPipeline
+            where TMarker : IEvent
         {
             return RegisterPipelines(typeof(TPipeline), typeof(TMarker));
         }

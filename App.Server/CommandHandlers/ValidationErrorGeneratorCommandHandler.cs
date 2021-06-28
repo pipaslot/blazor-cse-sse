@@ -9,9 +9,9 @@ namespace App.Server.CommandHandlers
     // ReSharper disable once UnusedMember.Global
     public class ValidationErrorGeneratorCommandHandler : ICommandHandler<ValidationErrorGenerator.Command>
     {
-        public Task<object?> Handle(ValidationErrorGenerator.Command command, CancellationToken cancellationToken)
+        public Task Handle(ValidationErrorGenerator.Command command, CancellationToken cancellationToken)
         {
-            return Task.FromResult<object?>(null);
+            return Task.CompletedTask;
         }
     }
 }

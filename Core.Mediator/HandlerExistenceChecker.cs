@@ -56,7 +56,7 @@ namespace Core.Mediator
         /// <param name="subjectName">Subject name shown in exception in case of issue</param>
         /// <param name="checkOnlySingleHandlerIsRegistered">Check that at must one handler is registered</param>
         /// <returns></returns>
-        public HandlerExistenceChecker Verify<T>(string subjectName, bool checkOnlySingleHandlerIsRegistered)
+        public HandlerExistenceChecker VerifyEvent<T>(string subjectName, bool checkOnlySingleHandlerIsRegistered) where T : IEvent
         {
             var queryTypes = GetSubjects<T>();
             using var scope = _services.CreateScope();
@@ -67,7 +67,42 @@ namespace Core.Mediator
                     continue;
                 }
 
-                var handlerType = GetHandlerType(subject);
+                var handlerType = GetEventHandlerType(subject);
+                var handlers = scope.ServiceProvider.GetServices(handlerType).ToArray();
+                if (handlers.Count() == 0)
+                {
+                    throw new Exception($"No handler was registered for {subjectName} type: {subject}");
+                }
+                if (checkOnlySingleHandlerIsRegistered && handlers.Count() > 1)
+                {
+                    throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
+                }
+                _alreadyVerified.Add(subject);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Scan registered assemblies for command and query types and try to resolve their handlers.
+        /// If subject was already checked, then is ignored in next rounds in case uf multiple invocations 
+        /// </summary>
+        /// <typeparam name="T">Subject</typeparam>
+        /// <param name="subjectName">Subject name shown in exception in case of issue</param>
+        /// <param name="checkOnlySingleHandlerIsRegistered">Check that at must one handler is registered</param>
+        /// <returns></returns>
+        public HandlerExistenceChecker VerifyRequest<T>(string subjectName, bool checkOnlySingleHandlerIsRegistered) where T : IRequest
+        {
+            var queryTypes = GetSubjects<T>();
+            using var scope = _services.CreateScope();
+            foreach (var subject in queryTypes)
+            {
+                if (_alreadyVerified.Contains(subject))
+                {
+                    continue;
+                }
+
+                var handlerType = GetRequestHandlerType(subject);
                 var handlers = scope.ServiceProvider.GetServices(handlerType).ToArray();
                 if (handlers.Count() == 0)
                 {
@@ -94,8 +129,12 @@ namespace Core.Mediator
                             && p.GetInterfaces().Any(i => i == type))
                 .ToArray();
         }
+        private Type GetEventHandlerType(Type subject)
+        {
+            return typeof(IEventHandler<>).MakeGenericType(subject);
+        }
 
-        private Type GetHandlerType(Type subject)
+        private Type GetRequestHandlerType(Type subject)
         {
             var requestType = typeof(IRequest<>);
             var resultType = subject
@@ -103,7 +142,7 @@ namespace Core.Mediator
                 .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == requestType)
                 .GetGenericArguments()
                 .First();
-            return typeof(IHandler<,>).MakeGenericType(subject, resultType);
+            return typeof(IRequestHandler<,>).MakeGenericType(subject, resultType);
         }
     }
 }

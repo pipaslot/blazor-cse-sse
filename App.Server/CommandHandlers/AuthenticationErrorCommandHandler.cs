@@ -12,7 +12,7 @@ namespace App.Server.CommandHandlers
         protected override Task Execute(AuthenticationError.Command command, CancellationToken cancellationToken)
         {
             //TODO Authentication on command level
-            throw new AuthenticationException();
+            throw new AuthenticationException("Authentication failed");
         }
     }
 }

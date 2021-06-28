@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
@@ -6,11 +7,11 @@ using Core.Mediator.Abstractions;
 namespace Core.Mediator.Pipelines
 {
     /// <summary>
-    /// Pipeline executing multiple handlers implementing TMarker type. Handlers are executed in row, once previous execution finished.
+    /// Pipeline executing multiple handlers implementing TMarker type. All handlers are executed asynchronously at the same time
     /// </summary>
-    public class MultiHandlerSequenceExecutionPipeline : BasePipeline
+    public class MultiHandlerConcurrentExecutionRequestPipeline : BaseRequestPipeline
     {
-        public MultiHandlerSequenceExecutionPipeline(IServiceProvider serviceProvider) : base(serviceProvider)
+        public MultiHandlerConcurrentExecutionRequestPipeline(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
         
@@ -21,10 +22,11 @@ namespace Core.Mediator.Pipelines
             {
                 throw new Exception("No handler was found for " + request.GetType());
             }
-            foreach (var handler in handlers)
-            {
-               await Execute<TRequest, TResponse>(handler, request, cancellationToken);
-            }
+
+            var tasks = handlers
+                .Select(handler => Execute<TRequest, TResponse>(handler, request, cancellationToken))
+                .ToArray();
+            await Task.WhenAll(tasks);
 
             return default!;
         }

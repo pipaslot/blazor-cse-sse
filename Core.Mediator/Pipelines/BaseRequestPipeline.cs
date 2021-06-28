@@ -8,11 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Mediator.Pipelines
 {
-    public abstract class BasePipeline : IRequestPipeline
+    public abstract class BaseRequestPipeline : IRequestPipeline
     {
         private readonly IServiceProvider _serviceProvider;
 
-        protected BasePipeline(IServiceProvider serviceProvider)
+        protected BaseRequestPipeline(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -26,7 +26,7 @@ namespace Core.Mediator.Pipelines
                 return new object[0];
             }
             var queryType = request.GetType();
-            var handlerType = typeof(IHandler<,>).MakeGenericType(queryType, typeof(TResponse));
+            var handlerType = typeof(IRequestHandler<,>).MakeGenericType(queryType, typeof(TResponse));
             return _serviceProvider.GetServices(handlerType)
                 .Where(h => h != null)
                 // ReSharper disable once RedundantEnumerableCastCall
@@ -40,7 +40,7 @@ namespace Core.Mediator.Pipelines
         protected async Task<TResponse> Execute<TRequest, TResponse>(object handler, TRequest request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            var method = handler.GetType().GetMethod(nameof(IHandler<IRequest<object>, object>.Handle));
+            var method = handler.GetType().GetMethod(nameof(IRequestHandler<IRequest<object>, object>.Handle));
             try
             {
                 await OnBeforeHandlerExecution(handler, request);

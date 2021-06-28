@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using App.Shared.Commands;
 using Core.Mediator.Abstractions;
 using Microsoft.Extensions.Logging;
-using Pipaslot.Logging;
 
 namespace App.Server.CommandHandlers
 {
@@ -16,7 +15,7 @@ namespace App.Server.CommandHandlers
             _logger = logger;
         }
 
-        public Task<object?> Handle(Infinite.Command request, CancellationToken cancellationToken)
+        public Task Handle(Infinite.Command request, CancellationToken cancellationToken)
         {
             while (true)
             {
@@ -24,7 +23,7 @@ namespace App.Server.CommandHandlers
                 Thread.Sleep(1000);
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    return Task.FromResult((object?)null);
+                    return Task.CompletedTask;
                 }
             }
         }

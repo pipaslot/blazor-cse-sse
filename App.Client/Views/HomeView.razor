@@ -88,16 +88,20 @@
         await Dispatch(new MultiHandler.Command());
     }
 
-    private async Task Dispatch<TResponse>(IRequest<TResponse> request)
+    private async Task Dispatch(ICommand request)
     {
         ShowSpinner = true;
-        var dispatchResult = await Mediator.Send(request);
+        var dispatchResult = await Mediator.Fire(request);
         DispatchError = dispatchResult.ErrorMessage;
         ShowSpinner = false;
     }
 
     private async Task StartInfiniteCommand()
     {
-        await Mediator.Send(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
+        ShowSpinner = true;
+        Mediator.Fire(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
+        await Task.Delay(5000);
+        infiniteCommandCancellationTokenSource.Cancel();
+        ShowSpinner = false;
     }
 }

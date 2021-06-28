@@ -16,7 +16,7 @@ namespace App.Server.CommandHandlers
             _logger = logger;
         }
 
-        public Task<object?> Handle(MultiHandler.Command request, CancellationToken cancellationToken)
+        public Task Handle(MultiHandler.Command request, CancellationToken cancellationToken)
         {
             using (_logger.BeginMethod())
             {
@@ -34,7 +34,7 @@ namespace App.Server.CommandHandlers
             _logger = logger;
         }
 
-        public Task<object?> Handle(MultiHandler.Command request, CancellationToken cancellationToken)
+        public Task Handle(MultiHandler.Command request, CancellationToken cancellationToken)
         {
             using (_logger.BeginMethod())
             {

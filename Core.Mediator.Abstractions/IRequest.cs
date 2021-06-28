@@ -3,13 +3,13 @@
     /// <summary>
     /// Base request marker. All derived types can have own specific pipelines and handlers
     /// </summary>
-    /// <typeparam name="TResponse">Result data returned from query execution</typeparam>
+    /// <typeparam name="TResponse">Result data returned from handler execution</typeparam>
     public interface IRequest<out TResponse> : IRequest
     {
         
     }
     /// <summary>
-    /// Marker interface
+    /// Marker interface. 
     /// </summary>
     public interface IRequest
     {

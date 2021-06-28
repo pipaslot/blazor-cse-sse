@@ -76,12 +76,12 @@ namespace App.Server
             // Mediator with pipelines
             services.AddMediator()
                 .AddHandlersFromAssemblyOf<ConfigQueryHandler>()
-                .UseRequest<LoggingPipeline>()
-                .UseRequest<CommandSpecificPipeline, ICommand>()
-                .UseRequest<QuerySpecificPipeline, IQuery>()
-                .UseRequest<ValidationPipeline>()
-                .UseRequest<MultiHandlerSequenceExecutionPipeline, ICommand>();
-            
+                .Use<LoggingPipeline>()
+                .UseEventOnly<CommandSpecificPipeline, ICommand>()
+                .UseRequestOnly<QuerySpecificPipeline, IQuery>()
+                .Use<ValidationPipeline>()
+                .UseEventOnly<MultiHandlerSequenceExecutionEventPipeline, ICommand>();
+
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
             services.Scan(scan => scan
@@ -101,9 +101,9 @@ namespace App.Server
             {
                 handlerExistenceChecker
                     .ScanFromAssemblyOf<Config.Query>()
-                    .Verify<ICommand>("command", false)
-                    .Verify<IQuery>("query", true)
-                    .Verify<IRequest>("request", true);
+                    .VerifyEvent<ICommand>("command", false)
+                    .VerifyRequest<IQuery>("query", true)
+                    .VerifyRequest<IRequest>("request", true);
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
             }

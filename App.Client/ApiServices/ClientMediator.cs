@@ -27,14 +27,14 @@ namespace App.Client.ApiServices
             _logger = logger;
         }
 
-        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse> Fire(IEvent request, CancellationToken cancellationToken = default)
         {
             var contract = RequestContractFactory.Create(request);
 
             var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
             try
             {
-                var task = GetQueryTaskFromCacheOrCreateNewRequest<TResponse>(hashCode, contract, cancellationToken);
+                var task = GetRequestTaskFromCacheOrCreateNewRequest<object>(hashCode, contract, cancellationToken);
                 return await task;
             }
             finally
@@ -46,7 +46,26 @@ namespace App.Client.ApiServices
             }
         }
 
-        private Task<MediatorResponse<TResponse>> GetQueryTaskFromCacheOrCreateNewRequest<TResponse>(int hashCode, RequestContract contract, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        {
+            var contract = RequestContractFactory.Create(request);
+
+            var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
+            try
+            {
+                var task = GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(hashCode, contract, cancellationToken);
+                return await task;
+            }
+            finally
+            {
+                lock (_queryTaskCacheLock)
+                {
+                    _queryTaskCache.Remove(hashCode);
+                }
+            }
+        }
+
+        private Task<MediatorResponse<TResponse>> GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(int hashCode, RequestContract contract, CancellationToken cancellationToken = default)
         {
             lock (_queryTaskCacheLock)
             {
@@ -54,13 +73,13 @@ namespace App.Client.ApiServices
                 {
                     return (Task<MediatorResponse<TResponse>>)task;
                 }
-                var newTask = SendQuery<TResponse>(contract, cancellationToken);
+                var newTask = SendRequest<TResponse>(contract, cancellationToken);
                 _queryTaskCache[hashCode] = newTask;
                 return newTask;
             }
         }
 
-        private async Task<MediatorResponse<TResponse>> SendQuery<TResponse>(RequestContract contract, CancellationToken cancellationToken = default)
+        private async Task<MediatorResponse<TResponse>> SendRequest<TResponse>(RequestContract contract, CancellationToken cancellationToken = default)
         {
             try
             {

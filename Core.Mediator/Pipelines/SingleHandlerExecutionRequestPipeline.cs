@@ -9,9 +9,9 @@ namespace Core.Mediator.Pipelines
     /// <summary>
     /// Pipeline executing one handler for request implementing TMarker type
     /// </summary>
-    public class SingleHandlerExecutionPipeline : BasePipeline
+    public class SingleHandlerExecutionRequestPipeline : BaseRequestPipeline
     {
-        public SingleHandlerExecutionPipeline(IServiceProvider serviceProvider) : base(serviceProvider)
+        public SingleHandlerExecutionRequestPipeline(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 

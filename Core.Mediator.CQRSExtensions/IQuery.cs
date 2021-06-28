@@ -12,7 +12,7 @@ namespace Core.Mediator.Abstractions
     /// <summary>
     /// Query marker 
     /// </summary>
-    public interface IQuery
+    public interface IQuery : IRequest
     {
         
     }
