@@ -40,12 +40,12 @@ namespace Core.Mediator
             }
         }
 
-        private IEnumerable<IPipeline> GetPipelines(Type requestType)
+        private IEnumerable<IRequestPipeline> GetPipelines(Type requestType)
         {
             var pipelines = _serviceProvider.GetServices<PipelineDefinition>()
                 .ToArray()
                 .Where(d => d.MarkerType == null || d.MarkerType.IsAssignableFrom(requestType))
-                .Select(d=>(IPipeline)_serviceProvider.GetRequiredService(d.PipelineType));
+                .Select(d=>(IRequestPipeline)_serviceProvider.GetRequiredService(d.PipelineType));
            
             foreach (var pipeline in pipelines)
             {

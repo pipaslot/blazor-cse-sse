@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorPipelines
 {
-    public class CommandSpecificPipeline : IPipeline
+    public class CommandSpecificPipeline : IRequestPipeline
     {
         private readonly ILogger<Program> _logger;
 

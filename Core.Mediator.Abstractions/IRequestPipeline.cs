@@ -7,7 +7,7 @@ namespace Core.Mediator.Abstractions
     /// Pipeline behavior to surround the handler.
     /// Implementations add additional behavior and await the next delegate.
     /// </summary>
-    public interface IPipeline
+    public interface IRequestPipeline
     {
         /// <summary>
         /// Pipeline handler. Perform any additional behavior and await the <paramref name="next"/> delegate as necessary

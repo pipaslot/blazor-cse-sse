@@ -76,11 +76,11 @@ namespace App.Server
             // Mediator with pipelines
             services.AddMediator()
                 .AddHandlersFromAssemblyOf<ConfigQueryHandler>()
-                .Use<LoggingPipeline>()
-                .Use<CommandSpecificPipeline, ICommand>()
-                .Use<QuerySpecificPipeline, IQuery>()
-                .Use<ValidationPipeline>()
-                .Use<MultiHandlerSequenceExecutionPipeline, ICommand>();
+                .UseRequest<LoggingPipeline>()
+                .UseRequest<CommandSpecificPipeline, ICommand>()
+                .UseRequest<QuerySpecificPipeline, IQuery>()
+                .UseRequest<ValidationPipeline>()
+                .UseRequest<MultiHandlerSequenceExecutionPipeline, ICommand>();
             
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();

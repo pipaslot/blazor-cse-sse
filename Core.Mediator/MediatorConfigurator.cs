@@ -44,9 +44,9 @@ namespace Core.Mediator
             return this;
         }
         /// <summary>
-        /// Register pipelines in their order
+        /// Register request pipelines in their order
         /// </summary>
-        public MediatorConfigurator Use<TPipeline>() where TPipeline : IPipeline
+        public MediatorConfigurator UseRequest<TPipeline>() where TPipeline : IRequestPipeline
         {
             return RegisterPipelines(typeof(TPipeline));
         }
@@ -55,7 +55,7 @@ namespace Core.Mediator
         /// Register pipelines in their order with restricted request type implementation
         /// <typeparam name="TMarker">Only requests implementing TMarker class or interface will be processed by this pipeline</typeparam>
         /// </summary>
-        public MediatorConfigurator Use<TPipeline, TMarker>() where TPipeline : IPipeline
+        public MediatorConfigurator UseRequest<TPipeline, TMarker>() where TPipeline : IRequestPipeline
         {
             return RegisterPipelines(typeof(TPipeline), typeof(TMarker));
         }

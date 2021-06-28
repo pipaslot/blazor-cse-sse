@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Mediator.Pipelines
 {
-    public abstract class BasePipeline : IPipeline
+    public abstract class BasePipeline : IRequestPipeline
     {
         private readonly IServiceProvider _serviceProvider;
 
