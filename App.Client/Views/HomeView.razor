@@ -98,6 +98,6 @@
 
     private async Task StartInfiniteCommand()
     {
-        await Mediator.Fire(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
+        await Mediator.Send(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
     }
 }

@@ -24,7 +24,7 @@ namespace App.Server.CommandHandlers
                 Thread.Sleep(1000);
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    return Task.CompletedTask;
+                    return Task.FromResult((object?)null);
                 }
             }
         }
