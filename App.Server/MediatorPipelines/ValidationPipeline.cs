@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
@@ -35,6 +36,10 @@ namespace App.Server.MediatorPipelines
 
         private async Task Validate<TTarget>(TTarget target, CancellationToken cancellationToken)
         {
+            if(target == null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
             var typeValidator = _validatorFactory.GetValidator(target.GetType());
             if (typeValidator != null)
             {

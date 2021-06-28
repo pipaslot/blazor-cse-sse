@@ -8,41 +8,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    @if (Startup.IsServerSideExecution())
-    {
-        <title>Blazor-SSE</title>
-    }
-    else
-    {
-        <title>Blazor-CSE</title>
-        <link rel="stylesheet" href="css/loading.css" />
-    }
-    
+    <title>Blazor-CSE</title>
+    <link rel="stylesheet" href="css/loading.css" />
+
+
     <link rel="stylesheet" href="css/Site.css" />
     <link rel="stylesheet" href="App.Client.styles.css" />
     <link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
     <base href="/" />
 </head>
 <body>
-    @if (Startup.IsServerSideExecution())
-    {
-    <div id="app">
-        <component type="typeof(Client.Application)" render-mode="ServerPrerendered" />
-    </div>
-    <div id="blazor-error-ui">
-        <environment include="Staging,Production">
-            An error has occurred. This application may no longer respond until reloaded.
-        </environment>
-        <environment include="Development">
-            An unhandled exception has occurred. See browser dev tools for details.
-        </environment>
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
-    <script src="_framework/blazor.server.js"></script>
-    }
-    else
-    {
     <div id="app">
         <div class="load-progress">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="22.857142857142858 22.857142857142858 45.714285714285715 45.714285714285715">
@@ -52,7 +27,6 @@
         </div>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
-    }
 
     <script src="_content/Fluxor.Blazor.Web/scripts/index.js"></script>
     <script src="_content/MatBlazor/dist/matBlazor.js"></script>

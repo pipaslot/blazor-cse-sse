@@ -2,16 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Configurations>Debug_CSE;Debug_SSE;Release_CSE;Release_SSE</Configurations>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Debug_SSE'">
-    <DefineConstants>ServerSideExecution</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release_SSE'">
-    <DefineConstants>ServerSideExecution</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

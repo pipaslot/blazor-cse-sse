@@ -23,14 +23,6 @@ namespace App.Server
 {
     public class Startup
     {
-        public static bool IsServerSideExecution()
-        {
-#if ServerSideExecution
-            return true;
-#else
-            return false;
-#endif
-        }
         public Startup(IHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -55,24 +47,16 @@ namespace App.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
-#if ServerSideExecution
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-#endif
 
             Client.Program.ConfigureServerAndClientSharedServices<ResourceManagerServerFactory>(services);
 
             services.Configure<Config.Result>(_configuration.GetSection("App"));
 
             services.AddAuthorization();
-#if ServerSideExecution
-            services.AddCoreAuthForServer(_configuration.GetSection("Auth"));
-#else
             services.AddCoreAuthForClient(_configuration.GetSection("Auth"));
-#endif
+
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IAuthService, AuthService>();
 
             // Mediator with pipelines
             services.AddMediator()
@@ -102,7 +86,7 @@ namespace App.Server
             {
                 handlerExistenceChecker
                     .ScanFromAssemblyOf<Config.Query>()
-                    .VerifyEvent<IEvent>(true)
+                    .VerifyEvent<IEvent>(false)
                     .VerifyEvent<ICommand>(false)
                     .VerifyRequest<IQuery>(true)
                     .VerifyRequest<IRequest>(true);
@@ -120,16 +104,7 @@ namespace App.Server
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseMediator();
-#if ServerSideExecution
-            app.UseAuthentication();
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-            });
-#else
+
             app.UseBlazorFrameworkFiles();
             app.UseAuthentication();
             app.UseRouting();
@@ -139,7 +114,6 @@ namespace App.Server
                 endpoints.MapControllers();
                 endpoints.MapFallbackToPage("/_Host");
             });
-#endif
         }
     }
 

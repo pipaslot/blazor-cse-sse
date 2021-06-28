@@ -51,7 +51,7 @@ namespace Core.Mediator
             }
         }
 
-        private async Task<string> ExecuteRequest(object? query, CancellationToken cancellationToken)
+        private async Task<string> ExecuteRequest(object query, CancellationToken cancellationToken)
         {
             var queryInterfaceType = typeof(IRequest<>);
             var resultType = query.GetType()

@@ -99,6 +99,7 @@
     private async Task StartInfiniteCommand()
     {
         ShowSpinner = true;
+        //Do not await
         Mediator.Fire(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
         await Task.Delay(5000);
         infiniteCommandCancellationTokenSource.Cancel();

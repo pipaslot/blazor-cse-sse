@@ -1,9 +1,9 @@
 This is experimental project including folowing features:
-- Blazor Client/WASM and Blazor Server (Capable to swith between these runitmes)
+- Blazor Client/WASM
 - API-less integration (mediator/CQRS pattern)
 - Redux integration (Fluxer nuget package)
 - Local storage persistence in browser
-- Authentication (Cookies or JWT)
+- Authentication via JWT
 - Configuration (with appsetting.json stored on server)
 - Logging
 - Localization (with resx files)
@@ -11,14 +11,11 @@ This is experimental project including folowing features:
 
 Not yet fully implemented features
 - Bootstrap integration
-- Client side Debugging
 
 
 # VS Code usage
-## Start application in watch mode (Server Side Execution)
-`cd App.Server/ && dotnet watch run -c Debug_SSE`
 
-## Start application in watch mode (Client Side Execution / WASM)
+## Start application in watch mode 
 `cd App.Server/ && dotnet watch run -c Debug_CSE`
 
 ## Build CSS and watch for changes
