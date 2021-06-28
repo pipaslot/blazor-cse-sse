@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using App.Shared.Commands
+@using System.Threading
 @inject IMediator Mediator
 
 <Spinner Show="ShowSpinner"></Spinner>
@@ -11,6 +12,7 @@
     <button @onclick="DispatchErrorCommand">Fire event throwing exception on server side</button> 
     <button @onclick="CallForbiddenOperation">Fire event for which user does not have permission</button> 
     <button @onclick="MultiHandlerCommand">Fire multiple command handlers together for one command</button> 
+    <button @onclick="StartInfiniteCommand">Fire infinite command canceled on UI after 5 seconds</button> 
     <div>@DispatchError</div>
     @*<BRow>
             <BCol Size="sm-4">4</BCol>
@@ -69,6 +71,7 @@
 @code{
     string DispatchError = "";
     bool ShowSpinner;
+    private CancellationTokenSource infiniteCommandCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
     async Task DispatchErrorCommand()
     {
@@ -85,11 +88,16 @@
         await Dispatch(new MultiHandler.Command());
     }
 
-    private async Task Dispatch<TResponse>(IRequest<TResponse> request )
+    private async Task Dispatch<TResponse>(IRequest<TResponse> request)
     {
         ShowSpinner = true;
         var dispatchResult = await Mediator.Send(request);
         DispatchError = dispatchResult.ErrorMessage;
         ShowSpinner = false;
+    }
+
+    private async Task StartInfiniteCommand()
+    {
+        await Mediator.Fire(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
     }
 }
