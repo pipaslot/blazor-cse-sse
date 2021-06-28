@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Core.Mediator.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Mediator
 {
@@ -15,15 +14,6 @@ namespace Core.Mediator
         /// </summary>
         private readonly HashSet<Type> _alreadyVerified = new HashSet<Type>();
         private readonly ServiceResolver _handlerResolver;
-
-        private readonly List<Type> _EventTypes = new List<Type>
-        {
-            typeof(IEvent)
-        };
-        private readonly List<Type> _RequestTypes = new List<Type>
-        {
-            typeof(IRequest)
-        };
 
         public HandlerExistenceChecker(ServiceResolver handlerResolver)
         {
@@ -49,62 +39,15 @@ namespace Core.Mediator
             return this;
         }
 
-        /// <summary>
-        /// Register Own Event Marker interface to perform handler check for all object implementing this marker
-        /// </summary>
-        /// <typeparam name="T">Own marker interface</typeparam>
-        public HandlerExistenceChecker SearchCustomEvents<T>() where T : IEvent
-        {
-            var type = typeof(T);
-            if (!type.IsInterface)
-            {
-                throw new ArgumentException($"Interface interiting from {typeof(IEvent).FullName} was expected, but type {type.FullName} was specified instead.");
-            }
-            if (!_EventTypes.Contains(type))
-            {
-                _EventTypes.Add(type);
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// Register Own Event Marker interface to perform handler check for all object implementing this marker
-        /// </summary>
-        /// <typeparam name="T">Own marker interface</typeparam>
-        public HandlerExistenceChecker SearchCustomRequests<T>() where T : IRequest
-        {
-            var type = typeof(T);
-            if (!type.IsInterface)
-            {
-                throw new ArgumentException($"Interface interiting from {typeof(IRequest).FullName} was expected, but type {type.FullName} was specified instead.");
-            }
-            if (!_RequestTypes.Contains(type))
-            {
-                _RequestTypes.Add(type);
-            }
-            return this;
-        }
-
         public void Verify()
         {
-            foreach (var eventIfaceType in _EventTypes)
-            {
-                VerifyEvent(eventIfaceType);
-            }
-            foreach (var requestIfaceType in _RequestTypes)
-            {
-                VerifyRequest(requestIfaceType);
-            }
+            VerifyEvent();
+            VerifyRequest();
         }
 
-        /// <summary>
-        /// Scan registered assemblies for command and query types and try to resolve their handlers.
-        /// If subject was already checked, then is ignored in next rounds in case uf multiple invocations 
-        /// </summary>
-        /// <typeparam name="T">Subject</typeparam>
-        /// <returns></returns>
-        private void VerifyEvent(Type eventInterface)
+        private void VerifyEvent()
         {
+            var eventInterface = typeof(IEvent);
             var subjectName = eventInterface.Name;
             var queryTypes = GetSubjects(eventInterface);
             foreach (var subject in queryTypes)
@@ -129,8 +72,9 @@ namespace Core.Mediator
             }
         }
 
-        private void VerifyRequest(Type requestInterface)
+        private void VerifyRequest()
         {
+            var requestInterface = typeof(IRequest);
             var subjectName = requestInterface.Name;
             var queryTypes = GetSubjects(requestInterface);
             foreach (var subject in queryTypes)

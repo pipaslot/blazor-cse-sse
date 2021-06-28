@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Mediator
 {
+    /// <summary>
+    /// Scans assemblies for Handlers and specify pipelines by their order
+    /// </summary>
     public class MediatorConfigurator
     {
         private readonly IServiceCollection _services;
@@ -55,7 +58,7 @@ namespace Core.Mediator
             return this;
         }
         /// <summary>
-        /// Register request pipelines in their order applied for all actions
+        /// Register pipeline for all actions
         /// </summary>
         public MediatorConfigurator Use<TPipeline>()
             where TPipeline : IRequestPipeline, IEventPipeline
@@ -64,8 +67,8 @@ namespace Core.Mediator
         }
 
         /// <summary>
-        /// Register pipelines in their order with restricted request type implementation
-        /// <typeparam name="TMarker">Only requests implementing TMarker class or interface will be processed by this pipeline</typeparam>
+        /// Register pipeline for action classes implementing marker type only
+        /// <typeparam name="TMarker">Action interface/typeparam>
         /// </summary>
         public MediatorConfigurator UseRequestOnly<TPipeline, TMarker>()
             where TPipeline : IRequestPipeline
@@ -75,8 +78,8 @@ namespace Core.Mediator
         }
 
         /// <summary>
-        /// Register pipelines in their order with restricted request type implementation
-        /// <typeparam name="TMarker">Only requests implementing TMarker class or interface will be processed by this pipeline</typeparam>
+        /// Register pipeline for action classes implementing marker type only
+        /// <typeparam name="TMarker">Action interface/typeparam>
         /// </summary>
         public MediatorConfigurator UseEventOnly<TPipeline, TMarker>()
             where TPipeline : IEventPipeline
