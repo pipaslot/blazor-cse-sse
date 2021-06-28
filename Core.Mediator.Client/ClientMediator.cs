@@ -1,36 +1,32 @@
-﻿using System;
+﻿using Core.Mediator.Abstractions;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator;
-using Core.Mediator.Abstractions;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
 
-namespace App.Client.ApiServices
+namespace Core.Mediator.Client
 {
     public class ClientMediator : IMediator
     {
         private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
         private readonly ILogger<ClientMediator> _logger;
 
         private readonly Dictionary<int, Task> _queryTaskCache = new Dictionary<int, Task>();
         private readonly object _queryTaskCacheLock = new object();
 
-        public ClientMediator(HttpClient httpClient, IJSRuntime jsRuntime, ILogger<ClientMediator> logger)
+        public ClientMediator(HttpClient httpClient, ILogger<ClientMediator> logger)
         {
             _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
             _logger = logger;
         }
 
         public async Task<MediatorResponse> Fire(IEvent request, CancellationToken cancellationToken = default)
         {
-            var contract = RequestContractFactory.Create(request);
+            var contract = CreateContract(request);
 
             var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
             try
@@ -49,7 +45,7 @@ namespace App.Client.ApiServices
 
         public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
-            var contract = RequestContractFactory.Create(request);
+            var contract = CreateContract(request);
 
             var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
             try
@@ -82,9 +78,10 @@ namespace App.Client.ApiServices
 
         private async Task<MediatorResponse<TResponse>> SendRequest<TResponse>(RequestContract contract, CancellationToken cancellationToken = default)
         {
+            var typeName = typeof(IRequest<TResponse>).FullName;
             try
             {
-                var url = "api/mediator/request?type=" + typeof(IRequest<TResponse>).FullName;
+                var url = "api/mediator/request?type=" + typeName;
                 var response = await _httpClient.PostAsJsonAsync(url, contract, cancellationToken);
                 response.EnsureSuccessStatusCode();
 
@@ -93,10 +90,21 @@ namespace App.Client.ApiServices
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Query failed");
-                await _jsRuntime.InvokeAsync<string>("alert", cancellationToken, "Request failed");
+                _logger.LogError(e, "Mediator request failed for "+ typeName);
                 return new MediatorResponse<TResponse>(e.Message);
             }
+        }
+
+        private RequestContract CreateContract(object request)
+        {
+            return new RequestContract
+            {
+                Json = JsonSerializer.Serialize(request, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }),
+                ObjectName = request.GetType().AssemblyQualifiedName
+            };
         }
     }
 }

@@ -13,6 +13,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Core.Mediator.Client;
 
 namespace App.Client
 {
