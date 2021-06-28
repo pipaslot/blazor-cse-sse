@@ -10,15 +10,15 @@ namespace Core.Mediator
     public class HandlerExistenceChecker
     {
         private readonly List<Assembly> _subjectAssemblies = new List<Assembly>();
-        private readonly IServiceProvider _services;
         /// <summary>
         /// We need to ignore handlers on less generic type. For example once command is catch, then we do not expect that generic IHandler will process that command as well.
         /// </summary>
         private readonly HashSet<Type> _alreadyVerified = new HashSet<Type>();
+        private readonly HandlerResolver _handlerResolver;
 
-        public HandlerExistenceChecker(IServiceProvider services)
+        public HandlerExistenceChecker(HandlerResolver handlerResolver)
         {
-            _services = services;
+            _handlerResolver = handlerResolver;
         }
 
         /// <summary>
@@ -59,7 +59,6 @@ namespace Core.Mediator
         {
             var subjectName = typeof(T).Name;
             var queryTypes = GetSubjects<T>();
-            using var scope = _services.CreateScope();
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
@@ -67,8 +66,7 @@ namespace Core.Mediator
                     continue;
                 }
 
-                var handlerType = GetEventHandlerType(subject);
-                var handlers = scope.ServiceProvider.GetServices(handlerType).ToArray();
+                var handlers = _handlerResolver.GetEventHandlers(subject).ToArray();
                 if (handlers.Count() == 0)
                 {
                     throw new Exception($"No handler was registered for {subjectName} type: {subject}");
@@ -94,16 +92,19 @@ namespace Core.Mediator
         {
             var subjectName = typeof(T).Name;
             var queryTypes = GetSubjects<T>();
-            using var scope = _services.CreateScope();
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
                 {
                     continue;
                 }
-
-                var handlerType = GetRequestHandlerType(subject);
-                var handlers = scope.ServiceProvider.GetServices(handlerType).ToArray();
+                var requestType = typeof(IRequest<>);
+                var resultType = subject
+                    .GetInterfaces()
+                    .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == requestType)
+                    .GetGenericArguments()
+                    .First();
+                var handlers = _handlerResolver.GetRequestHandlers(subject, resultType);
                 if (handlers.Count() == 0)
                 {
                     throw new Exception($"No handler was registered for {subjectName} type: {subject}");
@@ -128,21 +129,6 @@ namespace Core.Mediator
                             && !p.IsInterface
                             && p.GetInterfaces().Any(i => i == type))
                 .ToArray();
-        }
-        private Type GetEventHandlerType(Type subject)
-        {
-            return typeof(IEventHandler<>).MakeGenericType(subject);
-        }
-
-        private Type GetRequestHandlerType(Type subject)
-        {
-            var requestType = typeof(IRequest<>);
-            var resultType = subject
-                .GetInterfaces()
-                .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == requestType)
-                .GetGenericArguments()
-                .First();
-            return typeof(IRequestHandler<,>).MakeGenericType(subject, resultType);
         }
     }
 }

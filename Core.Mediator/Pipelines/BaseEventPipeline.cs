@@ -10,11 +10,11 @@ namespace Core.Mediator.Pipelines
 {
     public abstract class BaseEventPipeline : IEventPipeline
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly HandlerResolver _handlerResolver;
 
-        protected BaseEventPipeline(IServiceProvider serviceProvider)
+        protected BaseEventPipeline(HandlerResolver handlerResolver)
         {
-            _serviceProvider = serviceProvider;
+            _handlerResolver = handlerResolver;
         }
         /// <summary>
         /// Get all registered handlers from service provider
@@ -25,13 +25,7 @@ namespace Core.Mediator.Pipelines
             {
                 return new object[0];
             }
-            var queryType = request.GetType();
-            var handlerType = typeof(IEventHandler<>).MakeGenericType(queryType);
-            return _serviceProvider.GetServices(handlerType)
-                .Where(h => h != null)
-                // ReSharper disable once RedundantEnumerableCastCall
-                .Cast<object>()
-                .ToArray();
+            return _handlerResolver.GetEventHandlers(request.GetType());
         }
 
         /// <summary>

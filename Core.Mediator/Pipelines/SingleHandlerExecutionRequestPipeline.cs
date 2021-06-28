@@ -11,7 +11,7 @@ namespace Core.Mediator.Pipelines
     /// </summary>
     public class SingleHandlerExecutionRequestPipeline : BaseRequestPipeline
     {
-        public SingleHandlerExecutionRequestPipeline(IServiceProvider serviceProvider) : base(serviceProvider)
+        public SingleHandlerExecutionRequestPipeline(HandlerResolver handlerResolver) : base(handlerResolver)
         {
         }
 

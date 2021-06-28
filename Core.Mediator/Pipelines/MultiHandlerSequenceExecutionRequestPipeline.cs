@@ -10,7 +10,7 @@ namespace Core.Mediator.Pipelines
     /// </summary>
     public class MultiHandlerSequenceExecutionRequestPipeline : BaseRequestPipeline
     {
-        public MultiHandlerSequenceExecutionRequestPipeline(IServiceProvider serviceProvider) : base(serviceProvider)
+        public MultiHandlerSequenceExecutionRequestPipeline(HandlerResolver handlerResolver) : base(handlerResolver)
         {
         }
         

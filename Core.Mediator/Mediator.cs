@@ -15,10 +15,12 @@ namespace Core.Mediator
     public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly HandlerResolver _handlerResolver;
 
-        public Mediator(IServiceProvider serviceProvider)
+        public Mediator(IServiceProvider serviceProvider, HandlerResolver handlerResolver)
         {
             _serviceProvider = serviceProvider;
+            _handlerResolver = handlerResolver;
         }
 
         public async Task<MediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default)
@@ -71,7 +73,7 @@ namespace Core.Mediator
                 yield return pipeline;
             }
 
-            yield return new SingleHandlerExecutionRequestPipeline(_serviceProvider);
+            yield return new SingleHandlerExecutionRequestPipeline(_handlerResolver);
         }
 
         private IEnumerable<IEventPipeline> GetEventPipelines(Type requestType)
@@ -86,7 +88,7 @@ namespace Core.Mediator
                 yield return pipeline;
             }
 
-            yield return new SingleHandlerExecutionEventPipeline(_serviceProvider);
+            yield return new SingleHandlerExecutionEventPipeline(_handlerResolver);
         }
     }
 }
