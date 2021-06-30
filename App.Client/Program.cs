@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using App.Client.ApiServices;
 using App.Client.Resources;
-using App.Shared;
 using Blazored.LocalStorage;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using Core.Localization;
-using Core.Mediator;
 using Core.Mediator.Abstractions;
 using Fluxor;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Core.Mediator.Client;
+using App.Client.Services;
 
 namespace App.Client
 {
@@ -30,7 +28,7 @@ namespace App.Client
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            ConfigureServerAndClientSharedServices<ResourceManagerClientFactory>(services);
+            ConfigureServerAndClientSharedServices<ResourceManagerFactory>(services);
             ConfigureOnlyClientSpecificServices(services);
         }
         
@@ -55,9 +53,8 @@ namespace App.Client
         {
             services.AddAuthorizationCore();
             
-            services.AddScoped<AuthServiceHttpClient>();
-            services.AddScoped<IAuthService, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
-            services.AddScoped<AuthenticationStateProvider, AuthServiceHttpClient>(provider => provider.GetRequiredService<AuthServiceHttpClient>());
+            services.AddScoped<AuthService>();
+            services.AddScoped<AuthenticationStateProvider, AuthService>(provider => provider.GetRequiredService<AuthService>());
             services.AddSingleton<IMediator, ClientMediator>();
         }
     }

@@ -6,14 +6,14 @@ using App.Shared.Queries;
 using Core.Localization;
 using Core.Mediator.Abstractions;
 
-namespace App.Client.ApiServices
+namespace App.Client.Services
 {
-    public class ResourceManagerClient : ResourceManagerWithCulture
+    public class ResourceManager : ResourceManagerWithCulture
     {
         private readonly IMediator _mediator;
         private readonly Type _classType;
 
-        public ResourceManagerClient(Type classType, IMediator mediator) : base(classType.FullName, classType.Assembly)
+        public ResourceManager(Type classType, IMediator mediator) : base(classType.FullName, classType.Assembly)
         {
             _classType = classType;
             _mediator = mediator;
@@ -34,7 +34,7 @@ namespace App.Client.ApiServices
         }
 
         private Dictionary<string, string> _translations = new Dictionary<string, string>();
-        
+
         protected override async Task OnCultureChanged(string culture)
         {
             var typeName = _classType.AssemblyQualifiedName;

@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using App.Shared;
-using App.Shared.AuthModels;
 using App.Client.Store;
 using Fluxor;
 using Microsoft.AspNetCore.Components.Authorization;
+using Core.Mediator.Abstractions;
+using App.Shared.Queries;
 
-namespace App.Client.ApiServices
+namespace App.Client.Services
 {
-    public class AuthServiceHttpClient : AuthenticationStateProvider, IAuthService, IDisposable
+    public class AuthService : AuthenticationStateProvider, IDisposable
     {
         private readonly HttpClient _httpClient;
+        private readonly IMediator _mediator;
         private readonly IDispatcher _dispatcher;
         private readonly IState<Authentication.State> _authenticationState;
 
-        public AuthServiceHttpClient(HttpClient httpClient, IDispatcher dispatcher, IState<Authentication.State> authenticationState)
+        public AuthService(HttpClient httpClient, IDispatcher dispatcher, IState<Authentication.State> authenticationState, IMediator mediator)
         {
             _httpClient = httpClient;
             _dispatcher = dispatcher;
             _authenticationState = authenticationState;
             _authenticationState.StateChanged += AuthenticationState_StateChanged;
+            _mediator = mediator;
         }
 
         private void AuthenticationState_StateChanged(object? sender, Authentication.State state)
@@ -34,11 +35,13 @@ namespace App.Client.ApiServices
         public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var authState = _authenticationState.Value;
-            if (!authState.IsAuthenticated){
+            if (!authState.IsAuthenticated)
+            {
                 return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
             }
 
-            if (authState.BearerToken != null){
+            if (authState.BearerToken != null)
+            {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authState.BearerToken.Value);
             }
 
@@ -50,21 +53,19 @@ namespace App.Client.ApiServices
 
         public async Task SignIn(string username, string password)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/auth/sign-in", new UserCredentials
+            var response = await _mediator.Send(new SignIn.Query
             {
                 Username = username,
                 Password = password
             });
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadFromJsonAsync<SingInResult>()
-                         ?? throw new InvalidOperationException("No data received");
-
-            if (result.Success){
-                _dispatcher.Dispatch(new Authentication.SignInAction(result.AccessToken, result.Username));
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.AccessToken.Value);
-                NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            if (!response.Success)
+            {
+                throw new Exception("Authentication request failed");
             }
+            _dispatcher.Dispatch(new Authentication.SignInAction(response.Result.AccessToken, response.Result.Username));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", response.Result.AccessToken.Value);
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+
         }
 
         public Task SignOut()

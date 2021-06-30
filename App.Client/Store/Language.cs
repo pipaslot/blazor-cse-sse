@@ -7,7 +7,7 @@ namespace App.Client.Store
 {
     public static class Language
     {
-        public const string LocalStorageKey = nameof(Authentication);
+        public const string LocalStorageKey = nameof(Language);
         public const string DefaultLanguage = "en";
         public class State
         {

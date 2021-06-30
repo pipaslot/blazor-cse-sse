@@ -2,20 +2,20 @@
 using Core.Localization;
 using Core.Mediator.Abstractions;
 
-namespace App.Client.ApiServices
+namespace App.Client.Services
 {
-    public class ResourceManagerClientFactory : IResourceManagerFactory
+    public class ResourceManagerFactory : IResourceManagerFactory
     {
         private readonly IMediator _mediator;
 
-        public ResourceManagerClientFactory(IMediator mediator)
+        public ResourceManagerFactory(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         public ResourceManagerWithCulture Create(Type resourceType)
         {
-            return new ResourceManagerClient(resourceType, _mediator);
+            return new ResourceManager(resourceType, _mediator);
         }
     }
 }

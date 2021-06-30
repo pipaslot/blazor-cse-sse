@@ -98,16 +98,16 @@ namespace App.Server
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseMediator();
 
             app.UseBlazorFrameworkFiles();
             app.UseAuthentication();
+            app.UseMediator();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
-                endpoints.MapFallbackToPage("/_Host");
+                //endpoints.MapControllers();
+                endpoints.MapFallbackToPage("/Index");
             });
         }
     }
