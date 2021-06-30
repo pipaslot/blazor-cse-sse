@@ -7,9 +7,9 @@ using Core.Mediator.Abstractions;
 namespace App.Server.CommandHandlers
 {
     // ReSharper disable once UnusedMember.Global
-    public class AuthenticationErrorCommandHandler : CommandHandler<AuthenticationError.Command>
+    public class AuthenticationErrorCommandHandler : ICommandHandler<AuthenticationError.Command>
     {
-        protected override Task Execute(AuthenticationError.Command command, CancellationToken cancellationToken)
+        public Task Handle(AuthenticationError.Command @event, CancellationToken cancellationToken)
         {
             //TODO Authentication on command level
             throw new AuthenticationException("Authentication failed");

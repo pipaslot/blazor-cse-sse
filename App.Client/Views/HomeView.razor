@@ -12,7 +12,7 @@
     <button @onclick="DispatchErrorCommand">Fire event throwing exception on server side</button> 
     <button @onclick="CallForbiddenOperation">Fire event for which user does not have permission</button> 
     <button @onclick="MultiHandlerCommand">Fire multiple command handlers together for one command</button> 
-    <button @onclick="StartInfiniteCommand">Fire infinite command canceled on UI after 5 seconds</button> 
+    <button @onclick="StartInfiniteCommand">Fire infinite command canceled on UI after 3 seconds</button> 
     <div>@DispatchError</div>
     @*<BRow>
             <BCol Size="sm-4">4</BCol>
@@ -99,10 +99,10 @@
     private async Task StartInfiniteCommand()
     {
         ShowSpinner = true;
-        //Do not await
-        Mediator.Fire(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
-        await Task.Delay(5000);
+        var action = Mediator.Fire(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
+        await Task.Delay(3000);
         infiniteCommandCancellationTokenSource.Cancel();
+        await action;
         ShowSpinner = false;
     }
 }
