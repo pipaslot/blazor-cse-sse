@@ -20,9 +20,9 @@ namespace Core.Mediator.Middlewares
 
         public override bool ExecuteMultipleHandlers => false;
 
-        protected override async Task HandleEvent<TEvent>(TEvent @event, CancellationToken cancellationToken)
+        protected override async Task HandleMessage<TMessage>(TMessage message, CancellationToken cancellationToken)
         {
-            var handlers = _handlerResolver.GetEventHandlers(@event?.GetType());
+            var handlers = _handlerResolver.GetMessageHandlers(message?.GetType());
             if (handlers.Length > 1)
             {
                 throw new Exception($"Multiple handlers were registered for the same request. Remove one from defined type: {string.Join(" OR ", handlers)}");
@@ -31,9 +31,9 @@ namespace Core.Mediator.Middlewares
             var handler = handlers.FirstOrDefault();
             if (handler == null)
             {
-                throw new Exception("No handler was found for " + @event?.GetType());
+                throw new Exception("No handler was found for " + message?.GetType());
             }
-            await ExecuteEvent(handler, @event, cancellationToken);
+            await ExecuteMessage(handler, message, cancellationToken);
         }
 
         protected override async Task HandleRequest<TRequest>(TRequest request, MediatorResponse response, CancellationToken cancellationToken)

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Core.Mediator.Abstractions
 {
     /// <summary>
-    ///     Request / Event dispatched
+    ///     Request / Message dispatched
     /// </summary>
     public interface IMediator
     {
@@ -16,6 +16,6 @@ namespace Core.Mediator.Abstractions
         /// <summary>
         /// Execute action without feedback
         /// </summary>
-        Task<IMediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default);
+        Task<IMediatorResponse> Fire(IMessage message, CancellationToken cancellationToken = default);
     }
 }

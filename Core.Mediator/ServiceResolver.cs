@@ -18,13 +18,13 @@ namespace Core.Mediator
         /// <summary>
         /// Get all registered handlers from service provider
         /// </summary>
-        public object[] GetEventHandlers(Type? eventType)
+        public object[] GetMessageHandlers(Type? messageType)
         {
-            if (eventType == null)
+            if (messageType == null)
             {
                 return new object[0];
             }
-            var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
+            var handlerType = typeof(IMessageHandler<>).MakeGenericType(messageType);
             return _serviceProvider.GetServices(handlerType)
                 .Where(h => h != null)
                 // ReSharper disable once RedundantEnumerableCastCall
@@ -65,7 +65,7 @@ namespace Core.Mediator
             {
                 return ep;
             }
-            throw new Exception("Executive pipeline not found");//This should never happen as GetEventPipelines always returns last pipeline as executive
+            throw new Exception("Executive pipeline not found");//This should never happen as GetMessagePipelines always returns last pipeline as executive
         }
 
         public IEnumerable<IMiddleware> GetPipeline(Type requestType)

@@ -9,7 +9,7 @@ namespace App.Server.CommandHandlers
     // ReSharper disable once UnusedMember.Global
     public class AuthenticationErrorCommandHandler : ICommandHandler<AuthenticationError.Command>
     {
-        public Task Handle(AuthenticationError.Command @event, CancellationToken cancellationToken)
+        public Task Handle(AuthenticationError.Command command, CancellationToken cancellationToken)
         {
             //TODO Authentication on command level
             throw new AuthenticationException("Authentication failed");

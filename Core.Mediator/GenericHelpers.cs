@@ -40,9 +40,9 @@ namespace Core.Mediator
                 .ToArray();
         }
 
-        public static Type[] FilterAssignableToEvent(IEnumerable<Type> types)
+        public static Type[] FilterAssignableToMessage(IEnumerable<Type> types)
         {
-            var type = typeof(IEvent);
+            var type = typeof(IMessage);
             return types
                 .Where(p => p.IsClass
                             && !p.IsAbstract

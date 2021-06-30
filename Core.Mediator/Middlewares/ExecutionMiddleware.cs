@@ -10,7 +10,7 @@ namespace Core.Mediator.Middlewares
     public abstract class ExecutionMiddleware : IMiddleware, IExecutionMiddleware
     {
         public abstract bool ExecuteMultipleHandlers { get; }
-        protected abstract Task HandleEvent<TEvent>(TEvent @event, CancellationToken cancellationToken);
+        protected abstract Task HandleMessage<TMessage>(TMessage message, CancellationToken cancellationToken);
         protected abstract Task HandleRequest<TRequest>(TRequest request, MediatorResponse response, CancellationToken cancellationToken);
 
         public async Task Invoke<TAction>(TAction action, MediatorResponse response, MiddlewareDelegate next, CancellationToken cancellationToken)
@@ -20,9 +20,9 @@ namespace Core.Mediator.Middlewares
                 throw new ArgumentNullException(nameof(action));
 
             }
-            if (action is IEvent e)
+            if (action is IMessage e)
             {
-                await HandleEvent(e, cancellationToken);
+                await HandleMessage(e, cancellationToken);
             }
             else
             {
@@ -33,24 +33,24 @@ namespace Core.Mediator.Middlewares
         /// <summary>
         /// Execute handler
         /// </summary>
-        protected async Task ExecuteEvent<TEvent>(object handler, TEvent @event, CancellationToken cancellationToken)
+        protected async Task ExecuteMessage<TMessage>(object handler, TMessage message, CancellationToken cancellationToken)
         {
-            if (@event == null) throw new ArgumentNullException(nameof(@event));
+            if (message == null) throw new ArgumentNullException(nameof(message));
             var method = handler.GetType().GetMethod(nameof(IRequestHandler<IRequest<object>, object>.Handle));
             try
             {
-                await OnBeforeHandlerExecution(handler, @event);
-                var task = (Task?)method!.Invoke(handler, new object[] { @event, cancellationToken })!;
+                await OnBeforeHandlerExecution(handler, message);
+                var task = (Task?)method!.Invoke(handler, new object[] { message, cancellationToken })!;
                 if (task != null)
                 {
                     await task;
                 }
-                await OnSuccessExecution(handler, @event);
+                await OnSuccessExecution(handler, message);
 
             }
             catch (TargetInvocationException e)
             {
-                await OnFailedExecution(handler, @event, e.InnerException ?? e);
+                await OnFailedExecution(handler, message, e.InnerException ?? e);
                 if (e.InnerException != null)
                 {
                     // Unwrap exception
@@ -61,7 +61,7 @@ namespace Core.Mediator.Middlewares
             }
             finally
             {
-                await OnAfterHandlerExecution(handler, @event);
+                await OnAfterHandlerExecution(handler, message);
             }
         }
 
@@ -109,7 +109,7 @@ namespace Core.Mediator.Middlewares
         /// <summary>
         /// Hook method called always before handler execution
         /// </summary>
-        protected virtual Task OnBeforeHandlerExecution<TEvent>(object handler, TEvent request)
+        protected virtual Task OnBeforeHandlerExecution<TMessage>(object handler, TMessage request)
         {
             return Task.CompletedTask;
         }
@@ -117,7 +117,7 @@ namespace Core.Mediator.Middlewares
         /// <summary>
         /// Hook method called always after handler execution
         /// </summary>
-        protected virtual Task OnAfterHandlerExecution<TEvent>(object handler, TEvent request)
+        protected virtual Task OnAfterHandlerExecution<TMessage>(object handler, TMessage request)
         {
             return Task.CompletedTask;
         }
@@ -128,7 +128,7 @@ namespace Core.Mediator.Middlewares
         /// <param name="handler">Request handler</param>
         /// <param name="request">Handler input data</param>
         /// <returns></returns>
-        protected virtual Task OnSuccessExecution<TEvent>(object handler, TEvent request)
+        protected virtual Task OnSuccessExecution<TMessage>(object handler, TMessage request)
         {
             return Task.CompletedTask;
         }
@@ -140,7 +140,7 @@ namespace Core.Mediator.Middlewares
         /// <param name="request"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        protected virtual Task OnFailedExecution<TEvent>(object handler, TEvent request, Exception e)
+        protected virtual Task OnFailedExecution<TMessage>(object handler, TMessage request, Exception e)
         {
             return Task.CompletedTask;
         }

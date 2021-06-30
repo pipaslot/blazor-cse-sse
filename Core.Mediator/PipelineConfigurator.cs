@@ -35,7 +35,7 @@ namespace Core.Mediator
             var handlerTypes = new[]
             {
                 typeof(IRequestHandler<,>),
-                typeof(IEventHandler<>)
+                typeof(IMessageHandler<>)
             };
             var types = assemblies
                 .SelectMany(a => a.GetTypes())

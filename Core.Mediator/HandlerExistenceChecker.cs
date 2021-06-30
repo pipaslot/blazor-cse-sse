@@ -41,14 +41,14 @@ namespace Core.Mediator
 
         public void Verify()
         {
-            VerifyEvent();
-            VerifyRequest();
+            VerifyMessages();
+            VerifyRequests();
         }
 
-        private void VerifyEvent()
+        private void VerifyMessages()
         {
-            var subjectName = typeof(IEvent).Name;
-            var queryTypes = GetEventSubjects();
+            var subjectName = typeof(IMessage).Name;
+            var queryTypes = GetMessageSubjects();
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
@@ -56,14 +56,14 @@ namespace Core.Mediator
                     continue;
                 }
 
-                var handlers = _handlerResolver.GetEventHandlers(subject).ToArray();
+                var handlers = _handlerResolver.GetMessageHandlers(subject).ToArray();
                 var middleware = _handlerResolver.GetExecutiveMiddleware(subject);
                 VerifyHandlerCount(middleware, handlers, subject, subjectName);
                 _alreadyVerified.Add(subject);
             }
         }
 
-        private void VerifyRequest()
+        private void VerifyRequests()
         {
             var subjectName = typeof(IRequest<>).Name;
             var queryTypes = GetRequestSubjects();
@@ -92,11 +92,11 @@ namespace Core.Mediator
             }
         }
 
-        private Type[] GetEventSubjects()
+        private Type[] GetMessageSubjects()
         {
             var types = _subjectAssemblies
                 .SelectMany(s => s.GetTypes());
-            return GenericHelpers.FilterAssignableToEvent(types);
+            return GenericHelpers.FilterAssignableToMessage(types);
         }
 
         private Type[] GetRequestSubjects()

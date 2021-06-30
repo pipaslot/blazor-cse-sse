@@ -18,9 +18,9 @@ namespace Core.Mediator
             _handlerResolver = handlerResolver;
         }
 
-        public async Task<IMediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default)
+        public async Task<IMediatorResponse> Fire(IMessage message, CancellationToken cancellationToken = default)
         {
-            var pipeline = _handlerResolver.GetPipeline(@event.GetType());
+            var pipeline = _handlerResolver.GetPipeline(message.GetType());
             static Task Seed() => Task.CompletedTask;
             var response = new MediatorResponse();
             try
@@ -28,7 +28,7 @@ namespace Core.Mediator
                 await pipeline
                     .Reverse()
                     .Aggregate((MiddlewareDelegate)Seed,
-                        (next, middleware) => () => middleware.Invoke(@event, response, next, cancellationToken))();
+                        (next, middleware) => () => middleware.Invoke(message, response, next, cancellationToken))();
 
                 return new MediatorResponse();
             }
