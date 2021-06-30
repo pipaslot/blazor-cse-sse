@@ -47,9 +47,8 @@ namespace Core.Mediator
 
         private void VerifyEvent()
         {
-            var eventInterface = typeof(IEvent);
-            var subjectName = eventInterface.Name;
-            var queryTypes = GetSubjects(eventInterface);
+            var subjectName = typeof(IEvent).Name;
+            var queryTypes = GetEventSubjects();
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
@@ -66,16 +65,15 @@ namespace Core.Mediator
 
         private void VerifyRequest()
         {
-            var requestInterface = typeof(IRequest);
-            var subjectName = requestInterface.Name;
-            var queryTypes = GetSubjects(requestInterface);
+            var subjectName = typeof(IRequest<>).Name;
+            var queryTypes = GetRequestSubjects();
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
                 {
                     continue;
                 }
-                var resultType = Helpers.GetRequestResultType(subject);
+                var resultType = GenericHelpers.GetRequestResultType(subject);
                 var handlers = _handlerResolver.GetRequestHandlers(subject, resultType);
                 var middleware = _handlerResolver.GetExecutiveMiddleware(subject);
                 VerifyHandlerCount(middleware, handlers, subject, subjectName);
@@ -94,15 +92,18 @@ namespace Core.Mediator
             }
         }
 
-        private Type[] GetSubjects(Type type)
+        private Type[] GetEventSubjects()
         {
-            return _subjectAssemblies
-                .SelectMany(s => s.GetTypes())
-                .Where(p => p.IsClass
-                            && !p.IsAbstract
-                            && !p.IsInterface
-                            && p.GetInterfaces().Any(i => i == type))
-                .ToArray();
+            var types = _subjectAssemblies
+                .SelectMany(s => s.GetTypes());
+            return GenericHelpers.FilterAssignableToEvent(types);
+        }
+
+        private Type[] GetRequestSubjects()
+        {
+            var types = _subjectAssemblies
+                .SelectMany(s => s.GetTypes());
+            return GenericHelpers.FilterAssignableToRequest(types);
         }
     }
 }

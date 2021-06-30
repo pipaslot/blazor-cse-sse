@@ -35,7 +35,7 @@ namespace Core.Mediator.Middlewares
         }
         protected override async Task HandleRequest<TRequest>(TRequest request, MediatorResponse response, CancellationToken cancellationToken)
         {
-            var resultType = Helpers.GetRequestResultType(request?.GetType());
+            var resultType = GenericHelpers.GetRequestResultType(request?.GetType());
             var handlers = _handlerResolver.GetRequestHandlers(request?.GetType(), resultType);
             if (handlers.Length == 0)
             {
