@@ -1,4 +1,8 @@
-﻿namespace Core.Mediator.Abstractions
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
+
+namespace Core.Mediator.Abstractions
 {
     public class MediatorResponse<TResult> : MediatorResponse, IMediatorResponse<TResult>
     {
@@ -9,17 +13,17 @@
         {
         }
 
-        public MediatorResponse(TResult result)
-        {
-            Result = result;
-        }
-
         public MediatorResponse(string errorMessage) : base(errorMessage)
         {
         }
 
-        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
-        public TResult Result { get; set; } = default!;
+        TResult IMediatorResponse<TResult>.Result => (TResult)Result;
+
+        TResult[] IMediatorResponse<TResult>.Results => Results
+            .Select(r => (TResult)r)
+            .ToArray();
+
+        string[] IMediatorResponse<TResult>.ErrorMessages => ErrorMessages.ToArray();
     }
 
     public class MediatorResponse : IMediatorResponse
@@ -30,12 +34,18 @@
 
         public MediatorResponse(string errorMessage)
         {
-            ErrorMessage = errorMessage;
+            ErrorMessages.Add(errorMessage);
         }
 
-        public bool Success => string.IsNullOrWhiteSpace(ErrorMessage);
-        
+        public bool Success => ErrorMessages.Count == 0;
+
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
-        public string ErrorMessage { get; set; } = "";
+        [JsonIgnore]
+        public string ErrorMessage => string.Join(";", ErrorMessages);
+        public List<string> ErrorMessages { get; } = new List<string>();
+
+        [JsonIgnore]
+        public object? Result => Results.FirstOrDefault();
+        public List<object> Results { get; } = new List<object>(1);
     }
 }

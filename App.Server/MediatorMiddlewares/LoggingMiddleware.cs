@@ -8,7 +8,7 @@ using Pipaslot.Logging;
 
 namespace App.Server.MediatorMiddlewares
 {
-    public class LoggingMiddleware : IRequestMiddleware, IEventMiddleware
+    public class LoggingMiddleware : IMiddleware
     {
         private readonly ILogger<Program> _logger;
 
@@ -17,32 +17,9 @@ namespace App.Server.MediatorMiddlewares
             _logger = logger;
         }
 
-
-        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, MiddlewareDelegate<TResponse> next) where TRequest : IRequest<TResponse>
+        public async Task Invoke<TAction>(TAction action, MediatorResponse response, MiddlewareDelegate next, CancellationToken cancellationToken)
         {
-            using (_logger.BeginMethod(request, request.GetType().FullName ?? ""))
-            {
-                var stopwatch = Stopwatch.StartNew();
-                try
-                {
-                    return await next();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Pipeline exception");
-                    throw;
-                }
-                finally
-                {
-                    stopwatch.Stop();
-                    _logger.LogInformation($"Execution time = {stopwatch.ElapsedMilliseconds}ms");
-                }
-            }
-        }
-
-        public async Task Handle<TEvent>(TEvent @event, CancellationToken cancellationToken, MiddlewareDelegate next) where TEvent : IEvent
-        {
-            using (_logger.BeginMethod(@event, @event.GetType().FullName ?? ""))
+            using (_logger.BeginMethod(action, action?.GetType()?.FullName ?? ""))
             {
                 var stopwatch = Stopwatch.StartNew();
                 try
@@ -62,5 +39,4 @@ namespace App.Server.MediatorMiddlewares
             }
         }
     }
-
 }

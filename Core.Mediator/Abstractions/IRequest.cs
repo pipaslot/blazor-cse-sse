@@ -11,7 +11,7 @@
     /// <summary>
     /// Marker interface for IRequest only. DO NOT INHERIT!
     /// </summary>
-    public interface IRequest
+    public interface IRequest : IActionMarker
     {
 
     }

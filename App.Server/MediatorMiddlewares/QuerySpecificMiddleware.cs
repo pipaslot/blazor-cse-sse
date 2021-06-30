@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorMiddlewares
 {
-    public class QuerySpecificMiddleware : IRequestMiddleware
+    public class QuerySpecificMiddleware : IMiddleware
     {
         private readonly ILogger<Program> _logger;
 
@@ -14,12 +14,11 @@ namespace App.Server.MediatorMiddlewares
             _logger = logger;
         }
 
-
-        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, MiddlewareDelegate<TResponse> next) where TRequest : IRequest<TResponse>
+        public async Task Invoke<TAction>(TAction action, MediatorResponse response, MiddlewareDelegate next, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Hello from " + nameof(QuerySpecificMiddleware));
 
-            return await next();
+            await next();
         }
     }
 

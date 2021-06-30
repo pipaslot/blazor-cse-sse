@@ -60,7 +60,7 @@ namespace Core.Mediator
         /// Register middleware in pipeline for all actions
         /// </summary>
         public PipelineConfigurator Use<TPipeline>()
-            where TPipeline : IRequestMiddleware, IEventMiddleware
+            where TPipeline : IMiddleware
         {
             return RegisterMidlewares(typeof(TPipeline));
         }
@@ -69,19 +69,9 @@ namespace Core.Mediator
         /// Register middleware in pipeline for action classes implementing marker type only
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public PipelineConfigurator UseRequestOnly<TPipeline, TActionMarker>()
-            where TPipeline : IRequestMiddleware
-            where TActionMarker : IRequest
-        {
-            return RegisterMidlewares(typeof(TPipeline), typeof(TActionMarker));
-        }
-        /// <summary>
-        /// Register middleware in pipeline for action classes implementing marker type only
-        /// </summary>
-        /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public PipelineConfigurator UseEventOnly<TPipeline, TActionMarker>()
-            where TPipeline : IEventMiddleware
-            where TActionMarker : IEvent
+        public PipelineConfigurator Use<TPipeline, TActionMarker>()
+            where TPipeline : IMiddleware
+            where TActionMarker : IActionMarker
         {
             return RegisterMidlewares(typeof(TPipeline), typeof(TActionMarker));
         }

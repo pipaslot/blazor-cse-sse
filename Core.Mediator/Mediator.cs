@@ -20,14 +20,15 @@ namespace Core.Mediator
 
         public async Task<IMediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default)
         {
-            var pipeline = _handlerResolver.GetEventPipeline(@event.GetType());
+            var pipeline = _handlerResolver.GetPipeline(@event.GetType());
             static Task Seed() => Task.CompletedTask;
+            var response = new MediatorResponse();
             try
             {
                 await pipeline
                     .Reverse()
                     .Aggregate((MiddlewareDelegate)Seed,
-                        (next, middleware) => () => middleware.Handle(@event, cancellationToken, next))();
+                        (next, middleware) => () => middleware.Invoke(@event, response, next, cancellationToken))();
 
                 return new MediatorResponse();
             }
@@ -39,16 +40,17 @@ namespace Core.Mediator
 
         public async Task<IMediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
-            var pipeline = _handlerResolver.GetRequestPipeline(request.GetType());
-            static Task<TResponse> Seed() => Task.FromResult<TResponse>(default!);
+            var pipeline = _handlerResolver.GetPipeline(request.GetType());
+            static Task Seed() => Task.CompletedTask;
+            var response = new MediatorResponse<TResponse>();
             try
             {
-                var response = await pipeline
+                await pipeline
                     .Reverse()
-                    .Aggregate((MiddlewareDelegate<TResponse>)Seed,
-                        (next, middleware) => () => middleware.Handle(request, cancellationToken, next))();
+                    .Aggregate((MiddlewareDelegate)Seed,
+                        (next, middleware) => () => middleware.Invoke(request, response, next, cancellationToken))();
 
-                return new MediatorResponse<TResponse>(response);
+                return response;
             }
             catch (Exception e)
             {

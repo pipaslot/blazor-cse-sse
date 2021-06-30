@@ -7,30 +7,33 @@ using Core.Mediator.Abstractions;
 
 namespace Core.Mediator.Middlewares
 {
-    public abstract class BaseEventMiddleware : IEventMiddleware
+    public abstract class ExecutionMiddleware : IMiddleware, IExecutionMiddleware
     {
-        private readonly ServiceResolver _handlerResolver;
+        public abstract bool ExecuteMultipleHandlers { get; }
+        protected abstract Task HandleEvent<TEvent>(TEvent @event, CancellationToken cancellationToken);
+        protected abstract Task HandleRequest<TRequest>(TRequest request, MediatorResponse response, CancellationToken cancellationToken);
 
-        protected BaseEventMiddleware(ServiceResolver handlerResolver)
+        public async Task Invoke<TAction>(TAction action, MediatorResponse response, MiddlewareDelegate next, CancellationToken cancellationToken)
         {
-            _handlerResolver = handlerResolver;
-        }
-        /// <summary>
-        /// Get all registered handlers from service provider
-        /// </summary>
-        protected object[] GetRegisteredHandlers<TEvent>(TEvent request)
-        {
-            if (request == null)
+            if (action is null)
             {
-                return new object[0];
+                throw new ArgumentNullException(nameof(action));
+
             }
-            return _handlerResolver.GetEventHandlers(request.GetType());
+            if (action is IEvent e)
+            {
+                await HandleEvent(e, cancellationToken);
+            }
+            else
+            {
+                await HandleRequest(action, response, cancellationToken);
+            }
         }
 
         /// <summary>
         /// Execute handler
         /// </summary>
-        protected async Task Execute<TEvent>(object handler, TEvent @event, CancellationToken cancellationToken)
+        protected async Task ExecuteEvent<TEvent>(object handler, TEvent @event, CancellationToken cancellationToken)
         {
             if (@event == null) throw new ArgumentNullException(nameof(@event));
             var method = handler.GetType().GetMethod(nameof(IRequestHandler<IRequest<object>, object>.Handle));
@@ -38,7 +41,7 @@ namespace Core.Mediator.Middlewares
             {
                 await OnBeforeHandlerExecution(handler, @event);
                 var task = (Task?)method!.Invoke(handler, new object[] { @event, cancellationToken })!;
-                if(task != null)
+                if (task != null)
                 {
                     await task;
                 }
@@ -59,6 +62,47 @@ namespace Core.Mediator.Middlewares
             finally
             {
                 await OnAfterHandlerExecution(handler, @event);
+            }
+        }
+
+        /// <summary>
+        /// Execute handler
+        /// </summary>
+        protected async Task ExecuteRequest<TRequest>(object handler, TRequest request, MediatorResponse response, CancellationToken cancellationToken)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            var method = handler.GetType().GetMethod(nameof(IRequestHandler<IRequest<object>, object>.Handle));
+            try
+            {
+                await OnBeforeHandlerExecution(handler, request);
+                var task = (Task?)method!.Invoke(handler, new object[] { request, cancellationToken })!;
+                if (task != null)
+                {
+                    await task.ConfigureAwait(false);
+
+                    var resultProperty = task.GetType().GetProperty("Result");
+                    var result = resultProperty?.GetValue(task);
+                    if (result != null)
+                    {
+                        await OnSuccessExecution(handler, request);
+                        response.Results.Add(result);
+                    }
+                }
+            }
+            catch (TargetInvocationException e)
+            {
+                await OnFailedExecution(handler, request, e.InnerException ?? e);
+                if (e.InnerException != null)
+                {
+                    // Unwrap exception
+                    throw e.InnerException;
+                }
+
+                throw;
+            }
+            finally
+            {
+                await OnAfterHandlerExecution(handler, request);
             }
         }
 
@@ -101,8 +145,5 @@ namespace Core.Mediator.Middlewares
             return Task.CompletedTask;
         }
 
-        public abstract Task Handle<TEvent>(TEvent request,
-            CancellationToken cancellationToken, MiddlewareDelegate next)
-            where TEvent : IEvent;
     }
 }

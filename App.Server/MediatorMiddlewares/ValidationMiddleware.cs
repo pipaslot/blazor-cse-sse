@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorMiddlewares
 {
-    public class ValidationMiddleware : IRequestMiddleware, IEventMiddleware
+    public class ValidationMiddleware : IMiddleware
     {
         private readonly ILogger<Program> _logger;
         private readonly IValidatorFactory _validatorFactory;
@@ -19,31 +19,16 @@ namespace App.Server.MediatorMiddlewares
             _validatorFactory = validatorFactory;
         }
 
-
-        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, MiddlewareDelegate<TResponse> next) where TRequest : IRequest<TResponse>
+        public async Task Invoke<TAction>(TAction action, MediatorResponse response, MiddlewareDelegate next, CancellationToken cancellationToken)
         {
-            await Validate(request, cancellationToken);
-
-            return await next();
-        }
-
-        public async Task Handle<TEvent>(TEvent @event, CancellationToken cancellationToken, MiddlewareDelegate next) where TEvent : IEvent
-        {
-            await Validate(@event, cancellationToken);
-
-            await next();
-        }
-
-        private async Task Validate<TTarget>(TTarget target, CancellationToken cancellationToken)
-        {
-            if (target == null)
+            if (action == null)
             {
-                throw new ArgumentNullException(nameof(target));
+                throw new ArgumentNullException(nameof(action));
             }
-            var typeValidator = _validatorFactory.GetValidator(target.GetType());
+            var typeValidator = _validatorFactory.GetValidator(action.GetType());
             if (typeValidator != null)
             {
-                var result = await typeValidator.ValidateAsync(new ValidationContext<object>(target), cancellationToken);
+                var result = await typeValidator.ValidateAsync(new ValidationContext<object>(action), cancellationToken);
 
                 if (result.Errors.Any())
                 {
@@ -51,6 +36,8 @@ namespace App.Server.MediatorMiddlewares
                     throw new ValidationException(result.Errors);
                 }
             }
+
+            await next();
         }
     }
 }

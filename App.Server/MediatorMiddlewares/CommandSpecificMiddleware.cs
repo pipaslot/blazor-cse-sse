@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorMiddlewares
 {
-    public class CommandSpecificMiddleware : IEventMiddleware
+    public class CommandSpecificMiddleware : IMiddleware
     {
         private readonly ILogger<Program> _logger;
 
@@ -13,7 +13,8 @@ namespace App.Server.MediatorMiddlewares
         {
             _logger = logger;
         }
-        public async Task Handle<TRequest>(TRequest request, CancellationToken cancellationToken, MiddlewareDelegate next) where TRequest : IEvent
+
+        public async Task Invoke<TAction>(TAction action, MediatorResponse response, MiddlewareDelegate next, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Hello from " + nameof(CommandSpecificMiddleware));
 

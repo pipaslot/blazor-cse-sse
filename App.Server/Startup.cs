@@ -59,10 +59,10 @@ namespace App.Server
             services.AddMediator()
                 .AddHandlersFromAssemblyOf<ConfigQueryHandler>()
                 .Use<LoggingMiddleware>()
-                .UseEventOnly<CommandSpecificMiddleware, ICommand>()
-                .UseRequestOnly<QuerySpecificMiddleware, IQuery>()
+                .Use<CommandSpecificMiddleware, ICommand>()
+                .Use<QuerySpecificMiddleware, IQuery>()
                 .Use<ValidationMiddleware>()
-                .UseEventOnlySequenceMultiHandler<ICommand>();
+                .UseSequenceMultiHandler<ICommand>();
 
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -62,13 +63,13 @@ namespace Core.Mediator.Client
             }
         }
 
-        private Task<MediatorResponse<TResponse>> GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(int hashCode, MediatorRequest contract, CancellationToken cancellationToken = default)
+        private Task<IMediatorResponse<TResponse>> GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(int hashCode, MediatorRequest contract, CancellationToken cancellationToken = default)
         {
             lock (_queryTaskCacheLock)
             {
                 if (_queryTaskCache.TryGetValue(hashCode, out var task))
                 {
-                    return (Task<MediatorResponse<TResponse>>)task;
+                    return (Task<IMediatorResponse<TResponse>>)task;
                 }
                 var newTask = SendRequest<TResponse>(contract, cancellationToken);
                 _queryTaskCache[hashCode] = newTask;
@@ -76,7 +77,7 @@ namespace Core.Mediator.Client
             }
         }
 
-        private async Task<MediatorResponse<TResponse>> SendRequest<TResponse>(MediatorRequest contract, CancellationToken cancellationToken = default)
+        private async Task<IMediatorResponse<TResponse>> SendRequest<TResponse>(MediatorRequest contract, CancellationToken cancellationToken = default)
         {
             var typeName = typeof(IRequest<TResponse>);
             try
@@ -85,8 +86,8 @@ namespace Core.Mediator.Client
                 var response = await _httpClient.PostAsJsonAsync(url, contract, cancellationToken);
                 response.EnsureSuccessStatusCode();
 
-                return await response.Content.ReadFromJsonAsync<MediatorResponse<TResponse>>(cancellationToken: cancellationToken)
-                    ?? throw new InvalidOperationException("No data received");
+                var result = await response.Content.ReadFromJsonAsync<MediatorResponseDeserialized<TResponse>>(cancellationToken: cancellationToken);
+                return result?? throw new InvalidOperationException("No data received");
             }
             catch (Exception e)
             {

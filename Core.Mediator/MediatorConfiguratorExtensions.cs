@@ -9,40 +9,20 @@ namespace Core.Mediator
         /// Pipeline running all handlers concurrently. Not further pipeline will be executed after this one for specified Action Marker.
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static PipelineConfigurator UseEventOnlyConcurrentMultiHandler<TActionMarker>(this PipelineConfigurator config)
-            where TActionMarker : IEvent
+        public static PipelineConfigurator UseConcurrentMultiHandler<TActionMarker>(this PipelineConfigurator config)
+            where TActionMarker : IActionMarker
         {
-            return config.UseEventOnly<MultiHandlerConcurrentExecutionEventMiddleware, TActionMarker>();
-        }
-
-        /// <summary>
-        /// Pipeline running all handlers concurrently. Not further pipeline will be executed after this one for specified Action Marker.
-        /// </summary>
-        /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static PipelineConfigurator UseRequestOnlyConcurrentMultiHandler<TActionMarker>(this PipelineConfigurator config)
-            where TActionMarker : IRequest
-        {
-            return config.UseRequestOnly<MultiHandlerConcurrentExecutionRequestMiddleware, TActionMarker>();
+            return config.Use<MultiHandlerConcurrentExecutionMiddleware, TActionMarker>();
         }
 
         /// <summary>
         /// Pipeline running all handlers in sequence one by one. Not further pipeline will be executed after this one for specified Action Marker.
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static PipelineConfigurator UseEventOnlySequenceMultiHandler<TActionMarker>(this PipelineConfigurator config)
-            where TActionMarker : IEvent
+        public static PipelineConfigurator UseSequenceMultiHandler<TActionMarker>(this PipelineConfigurator config)
+            where TActionMarker : IActionMarker
         {
-            return config.UseEventOnly<MultiHandlerSequenceExecutionEventMiddleware, TActionMarker>();
-        }
-
-        /// <summary>
-        /// Pipeline running all handlers in sequence one by one. Not further pipeline will be executed after this one for specified Action Marker.
-        /// </summary>
-        /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static PipelineConfigurator UseRequestOnlySequenceMultiHandler<TActionMarker>(this PipelineConfigurator config)
-            where TActionMarker : IRequest
-        {
-            return config.UseRequestOnly<MultiHandlerSequenceExecutionRequestMiddleware, TActionMarker>();
+            return config.Use<MultiHandlerSequenceExecutionMiddleware, TActionMarker>();
         }
     }
 }

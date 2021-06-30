@@ -58,16 +58,8 @@ namespace Core.Mediator
                 }
 
                 var handlers = _handlerResolver.GetEventHandlers(subject).ToArray();
-                if (handlers.Count() == 0)
-                {
-                    throw new Exception($"No handler was registered for {subjectName} type: {subject}");
-                }
-
-                var executivePipeline = _handlerResolver.GetEventExecutiveMiddleware(subject);
-                if (!executivePipeline.ExecuteMultipleHandlers && handlers.Count() > 1)
-                {
-                    throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
-                }
+                var middleware = _handlerResolver.GetExecutiveMiddleware(subject);
+                VerifyHandlerCount(middleware, handlers, subject, subjectName);
                 _alreadyVerified.Add(subject);
             }
         }
@@ -83,23 +75,22 @@ namespace Core.Mediator
                 {
                     continue;
                 }
-                var requestType = typeof(IRequest<>);
-                var resultType = subject
-                    .GetInterfaces()
-                    .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == requestType)
-                    .GetGenericArguments()
-                    .First();
+                var resultType = Helpers.GetRequestResultType(subject);
                 var handlers = _handlerResolver.GetRequestHandlers(subject, resultType);
-                if (handlers.Count() == 0)
-                {
-                    throw new Exception($"No handler was registered for {subjectName} type: {subject}");
-                }
-                var executivePipeline = _handlerResolver.GetRequestExecutiveMiddleware(subject);
-                if (!executivePipeline.ExecuteMultipleHandlers && handlers.Count() > 1)
-                {
-                    throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
-                }
+                var middleware = _handlerResolver.GetExecutiveMiddleware(subject);
+                VerifyHandlerCount(middleware, handlers, subject, subjectName);
                 _alreadyVerified.Add(subject);
+            }
+        }
+        private void VerifyHandlerCount(IExecutionMiddleware middleware, object[] handlers, Type subject, string subjectName)
+        {
+            if (handlers.Count() == 0)
+            {
+                throw new Exception($"No handler was registered for {subjectName} type: {subject}");
+            }
+            if (!middleware.ExecuteMultipleHandlers && handlers.Count() > 1)
+            {
+                throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
             }
         }
 
