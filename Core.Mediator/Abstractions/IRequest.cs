@@ -9,7 +9,8 @@
         
     }
     /// <summary>
-    /// Marker interface for IRequest only. DO NOT INHERIT!
+    /// Marker interface for IRequest action type. 
+    /// Use only for pipeline configuration to define middlewares applicable for this action type..
     /// </summary>
     public interface IRequest : IActionMarker
     {

@@ -2,7 +2,7 @@
 namespace Core.Mediator.Abstractions
 {
     /// <summary>
-    /// Command action with own specific pipelines and handlers.
+    /// Command action with specific pipeline middlewares and handlers.
     /// </summary>
     public interface ICommand : IEvent
     {

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Core.Mediator.Abstractions
+﻿namespace Core.Mediator.Abstractions
 {
     /// <summary>
-    /// Top level abstraction for actions
+    /// FOR INTERNAL PURPOSE ONLY!
+    /// Top level abstraction for actions. Connects Events and Requests together.
     /// </summary>
     public interface IActionMarker
     {
