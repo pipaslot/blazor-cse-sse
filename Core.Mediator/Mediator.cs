@@ -37,7 +37,7 @@ namespace Core.Mediator
             }
         }
 
-        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
             var pipeline = _handlerResolver.GetRequestPipeline(request.GetType());
             static Task<TResponse> Seed() => Task.FromResult<TResponse>(default!);

@@ -65,7 +65,7 @@ namespace Core.Mediator
             }
 
             var method = _mediator.GetType()
-                    .GetMethod(nameof(IMediator.Send))!
+                    .GetMethod(nameof(IMediator.Execute))!
                 .MakeGenericMethod(resultType);
             try
             {

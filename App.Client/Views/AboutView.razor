@@ -84,7 +84,7 @@
     private async Task SendData(ContactForm.Query data)
     {
         _loading = true;
-        var result = await Mediator.Send(data);
+        var result = await Mediator.Execute(data);
         if (result.Success)
         {
             _wasSent = result.Result.Success ? SendingStatus.Sent : SendingStatus.NotAccepted;

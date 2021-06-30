@@ -43,7 +43,7 @@ namespace Core.Mediator.Client
             }
         }
 
-        public async Task<MediatorResponse<TResponse>> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public async Task<MediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
             var contract = CreateContract(request);
 
