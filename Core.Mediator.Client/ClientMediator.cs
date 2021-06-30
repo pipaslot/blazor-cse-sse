@@ -24,7 +24,7 @@ namespace Core.Mediator.Client
             _logger = logger;
         }
 
-        public async Task<MediatorResponse> Fire(IEvent request, CancellationToken cancellationToken = default)
+        public async Task<IMediatorResponse> Fire(IEvent request, CancellationToken cancellationToken = default)
         {
             var contract = CreateContract(request);
 
@@ -43,7 +43,7 @@ namespace Core.Mediator.Client
             }
         }
 
-        public async Task<MediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public async Task<IMediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
             var contract = CreateContract(request);
 

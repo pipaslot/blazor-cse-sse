@@ -1,6 +1,6 @@
 ﻿namespace Core.Mediator.Abstractions
 {
-    public class MediatorResponse<TResult> : MediatorResponse
+    public class MediatorResponse<TResult> : MediatorResponse, IMediatorResponse<TResult>
     {
         /// <summary>
         /// Constructor for deserialization only
@@ -22,7 +22,7 @@
         public TResult Result { get; set; } = default!;
     }
 
-    public class MediatorResponse
+    public class MediatorResponse : IMediatorResponse
     {
         public MediatorResponse()
         {

@@ -11,11 +11,11 @@ namespace Core.Mediator.Abstractions
         /// <summary>
         /// Execute action and wait for response data
         /// </summary>
-        Task<MediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default);
+        Task<IMediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Execute action without feedback
         /// </summary>
-        Task<MediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default);
+        Task<IMediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default);
     }
 }

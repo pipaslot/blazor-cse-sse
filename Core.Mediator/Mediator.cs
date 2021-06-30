@@ -18,7 +18,7 @@ namespace Core.Mediator
             _handlerResolver = handlerResolver;
         }
 
-        public async Task<MediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default)
+        public async Task<IMediatorResponse> Fire(IEvent @event, CancellationToken cancellationToken = default)
         {
             var pipeline = _handlerResolver.GetEventPipeline(@event.GetType());
             static Task Seed() => Task.CompletedTask;
@@ -37,7 +37,7 @@ namespace Core.Mediator
             }
         }
 
-        public async Task<MediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public async Task<IMediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
             var pipeline = _handlerResolver.GetRequestPipeline(request.GetType());
             static Task<TResponse> Seed() => Task.FromResult<TResponse>(default!);
