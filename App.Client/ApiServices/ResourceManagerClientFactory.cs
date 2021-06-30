@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Net.Http;
 using Core.Localization;
+using Core.Mediator.Abstractions;
 
 namespace App.Client.ApiServices
 {
     public class ResourceManagerClientFactory : IResourceManagerFactory
     {
-        private readonly HttpClient _httpClient;
+        private readonly IMediator _mediator;
 
-        public ResourceManagerClientFactory(HttpClient httpClient)
+        public ResourceManagerClientFactory(IMediator mediator)
         {
-            _httpClient = httpClient;
+            _mediator = mediator;
         }
 
         public ResourceManagerWithCulture Create(Type resourceType)
         {
-            return new ResourceManagerClient(_httpClient, resourceType);
+            return new ResourceManagerClient(resourceType, _mediator);
         }
     }
 }

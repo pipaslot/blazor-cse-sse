@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
+using App.Shared.Queries;
 using Core.Localization;
+using Core.Mediator.Abstractions;
 
 namespace App.Client.ApiServices
 {
     public class ResourceManagerClient : ResourceManagerWithCulture
     {
-        private readonly HttpClient _httpClient;
+        private readonly IMediator _mediator;
         private readonly Type _classType;
 
-        public ResourceManagerClient(HttpClient httpClient, Type classType) : base(classType.FullName, classType.Assembly)
+        public ResourceManagerClient(Type classType, IMediator mediator) : base(classType.FullName, classType.Assembly)
         {
-            _httpClient = httpClient;
             _classType = classType;
+            _mediator = mediator;
         }
 
         public override string GetString(string name, CultureInfo? culture)
@@ -38,7 +38,19 @@ namespace App.Client.ApiServices
         protected override async Task OnCultureChanged(string culture)
         {
             var typeName = _classType.AssemblyQualifiedName;
-            _translations = await _httpClient.GetFromJsonAsync<Dictionary<string, string>>($"/api/languages/{culture}/resources?typeName=" + typeName) ?? throw new InvalidOperationException("No data received");
+            var result = await _mediator.Send(new LanguageResource.Query
+            {
+                Language = culture,
+                TypeName = typeName,
+            });
+            if (result.Success)
+            {
+                _translations = result.Result.Resource;
+            }
+            else
+            {
+                throw new InvalidOperationException("Can not load resource data");
+            }
         }
     }
 }

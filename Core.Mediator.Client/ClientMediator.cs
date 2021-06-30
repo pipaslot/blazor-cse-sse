@@ -78,10 +78,10 @@ namespace Core.Mediator.Client
 
         private async Task<MediatorResponse<TResponse>> SendRequest<TResponse>(RequestContract contract, CancellationToken cancellationToken = default)
         {
-            var typeName = typeof(IRequest<TResponse>).FullName;
+            var typeName = typeof(IRequest<TResponse>);
             try
             {
-                var url = "api/mediator/request?type=" + typeName;
+                var url = RequestContract.Endpoint + $"?type={typeName}";
                 var response = await _httpClient.PostAsJsonAsync(url, contract, cancellationToken);
                 response.EnsureSuccessStatusCode();
 

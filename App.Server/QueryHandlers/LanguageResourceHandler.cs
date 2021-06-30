@@ -1,29 +1,38 @@
-﻿using System;
+﻿using App.Shared.Queries;
+using Core.Mediator.Abstractions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Resources;
-using Microsoft.AspNetCore.Mvc;
 
-namespace App.Server.Controllers
+namespace App.Server.QueryHandlers
 {
-    [Route("api/languages")]
-    [ApiController]
-    public class LanguageController : ControllerBase
+    public class LanguageResourceHandler : IQueryHandler<LanguageResource.Query, LanguageResource.Result>
     {
-        [HttpGet("{language}/resources")]
-        public ActionResult GetLayout(string language, string typeName)
+        public Task<LanguageResource.Result> Handle(LanguageResource.Query request, CancellationToken cancellationToken)
         {
-            var type = Type.GetType(typeName);
+            var resource = GetResource(request);
+            return Task.FromResult(new LanguageResource.Result
+            {
+                Resource = resource
+            });
+        }
+
+        private Dictionary<string, string> GetResource(LanguageResource.Query request)
+        {
+            var type = Type.GetType(request.TypeName);
             if (type == null)
             {
-                return new JsonResult(new Dictionary<string, string>());
+                return new Dictionary<string, string>();
             }
             var resourceManager = new ResourceManager(type);
-            var data = resourceManager.ToDictionary(language);
-            return new JsonResult(data);
+            return resourceManager.ToDictionary(request.Language);
         }
     }
 
-    public static class ResourceManagerExtensions
+    internal static class ResourceManagerExtensions
     {
         public static Dictionary<string, string> ToDictionary(this ResourceManager resourceManager, string locale)
         {
