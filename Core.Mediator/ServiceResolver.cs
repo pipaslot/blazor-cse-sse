@@ -3,7 +3,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.Collections.Generic;
-using Core.Mediator.Pipelines;
+using Core.Mediator.Middlewares;
 
 namespace Core.Mediator
 {
@@ -50,59 +50,59 @@ namespace Core.Mediator
                 .ToArray();
         }
 
-        public IExecutivePipeline GetRequestExecutivePipeline(Type requestType)
+        public IExecutiveMiddleware GetRequestExecutiveMiddleware(Type requestType)
         {
-            var pipeline = GetRequestPipelines(requestType).Last();
-            if (pipeline is IExecutivePipeline ep)
+            var pipeline = GetRequestPipeline(requestType).Last();
+            if (pipeline is IExecutiveMiddleware ep)
             {
                 return ep;
             }
             throw new Exception("Executive pipeline not found");//This should never happen as GetRequestPipelines always returns last pipeline as executive
         }
 
-        public IEnumerable<IRequestPipeline> GetRequestPipelines(Type requestType)
+        public IEnumerable<IRequestMiddleware> GetRequestPipeline(Type requestType)
         {
-            var pipelines = GetPipelines<IRequestPipeline>(requestType);
+            var pipelines = GetPipeline<IRequestMiddleware>(requestType);
 
             foreach (var pipeline in pipelines)
             {
                 yield return pipeline;
-                if (pipeline is IExecutivePipeline)
+                if (pipeline is IExecutiveMiddleware)
                 {
                     yield break;
                 }
             }
 
-            yield return new SingleHandlerExecutionRequestPipeline(this);
+            yield return new SingleHandlerExecutionRequestMiddleware(this);
         }
 
-        public IExecutivePipeline GetEventExecutivePipeline(Type requestType)
+        public IExecutiveMiddleware GetEventExecutiveMiddleware(Type requestType)
         {
-            var pipeline = GetEventPipelines(requestType).Last();
-            if (pipeline is IExecutivePipeline ep)
+            var pipeline = GetEventPipeline(requestType).Last();
+            if (pipeline is IExecutiveMiddleware ep)
             {
                 return ep;
             }
             throw new Exception("Executive pipeline not found");//This should never happen as GetEventPipelines always returns last pipeline as executive
         }
 
-        public IEnumerable<IEventPipeline> GetEventPipelines(Type requestType)
+        public IEnumerable<IEventMiddleware> GetEventPipeline(Type requestType)
         {
-            var pipelines = GetPipelines<IEventPipeline>(requestType);
+            var pipelines = GetPipeline<IEventMiddleware>(requestType);
 
             foreach (var pipeline in pipelines)
             {
                 yield return pipeline;
-                if (pipeline is IExecutivePipeline)
+                if (pipeline is IExecutiveMiddleware)
                 {
                     yield break;
                 }
             }
 
-            yield return new SingleHandlerExecutionEventPipeline(this);
+            yield return new SingleHandlerExecutionEventMiddleware(this);
         }
 
-        private IEnumerable<TItem> GetPipelines<TItem>(Type requestType)
+        private IEnumerable<TItem> GetPipeline<TItem>(Type requestType)
         {
             return _serviceProvider.GetServices<PipelineDefinition>()
                 .ToArray()

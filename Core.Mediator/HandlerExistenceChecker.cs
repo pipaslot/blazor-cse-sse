@@ -63,7 +63,7 @@ namespace Core.Mediator
                     throw new Exception($"No handler was registered for {subjectName} type: {subject}");
                 }
 
-                var executivePipeline = _handlerResolver.GetEventExecutivePipeline(subject);
+                var executivePipeline = _handlerResolver.GetEventExecutiveMiddleware(subject);
                 if (!executivePipeline.ExecuteMultipleHandlers && handlers.Count() > 1)
                 {
                     throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
@@ -94,7 +94,7 @@ namespace Core.Mediator
                 {
                     throw new Exception($"No handler was registered for {subjectName} type: {subject}");
                 }
-                var executivePipeline = _handlerResolver.GetRequestExecutivePipeline(subject);
+                var executivePipeline = _handlerResolver.GetRequestExecutiveMiddleware(subject);
                 if (!executivePipeline.ExecuteMultipleHandlers && handlers.Count() > 1)
                 {
                     throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");

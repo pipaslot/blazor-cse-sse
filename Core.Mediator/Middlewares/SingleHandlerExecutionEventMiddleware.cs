@@ -4,21 +4,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
 
-namespace Core.Mediator.Pipelines
+namespace Core.Mediator.Middlewares
 {
     /// <summary>
     /// Pipeline executing one handler for request implementing TMarker type
     /// </summary>
-    public class SingleHandlerExecutionRequestPipeline : BaseRequestPipeline, IExecutivePipeline
+    public class SingleHandlerExecutionEventMiddleware : BaseEventMiddleware, IExecutiveMiddleware
     {
-        public SingleHandlerExecutionRequestPipeline(ServiceResolver handlerResolver) : base(handlerResolver)
+        public SingleHandlerExecutionEventMiddleware(ServiceResolver handlerResolver) : base(handlerResolver)
         {
         }
         public bool ExecuteMultipleHandlers => false;
 
-        public override async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public override async Task Handle<TEvent>(TEvent @event, CancellationToken cancellationToken, MiddlewareDelegate next)
         {
-            var handlers = GetRegisteredHandlers<TRequest, TResponse>(request);
+            var handlers = GetRegisteredHandlers(@event);
             if (handlers.Length > 1)
             {
                 throw new Exception($"Multiple handlers were registered for the same request. Remove one from defined type: {string.Join(" OR ", handlers)}");
@@ -27,9 +27,9 @@ namespace Core.Mediator.Pipelines
             var handler = handlers.FirstOrDefault();
             if (handler == null)
             {
-                throw new Exception("No handler was found for " + request.GetType());
+                throw new Exception("No handler was found for " + @event.GetType());
             }
-            return await Execute<TRequest, TResponse>(handler, request, cancellationToken);
+            await Execute(handler, @event, cancellationToken);
         }
     }
 }

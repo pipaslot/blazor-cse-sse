@@ -3,19 +3,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
 
-namespace Core.Mediator.Pipelines
+namespace Core.Mediator.Middlewares
 {
     /// <summary>
     /// Pipeline executing multiple handlers implementing TMarker type. Handlers are executed in row, once previous execution finished.
     /// </summary>
-    public class MultiHandlerSequenceExecutionRequestPipeline : BaseRequestPipeline, IExecutivePipeline
+    public class MultiHandlerSequenceExecutionRequestMiddleware : BaseRequestMiddleware, IExecutiveMiddleware
     {
-        public MultiHandlerSequenceExecutionRequestPipeline(ServiceResolver handlerResolver) : base(handlerResolver)
+        public MultiHandlerSequenceExecutionRequestMiddleware(ServiceResolver handlerResolver) : base(handlerResolver)
         {
         }
         public bool ExecuteMultipleHandlers => true;
 
-        public override async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public override async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, MiddlewareDelegate<TResponse> next)
         {
             var handlers = GetRegisteredHandlers<TRequest, TResponse>(request);
             if (handlers.Length == 0)

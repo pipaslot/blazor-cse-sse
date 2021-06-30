@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using App.Server.MediatorPipelines;
 using App.Server.QueryHandlers;
 using App.Server.Services;
 using App.Shared.AuthModels;
@@ -16,6 +15,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Core.Mediator.Server;
+using App.Server.MediatorMiddlewares;
 
 namespace App.Server
 {
@@ -56,13 +56,12 @@ namespace App.Server
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            // Mediator with pipelines
             services.AddMediator()
                 .AddHandlersFromAssemblyOf<ConfigQueryHandler>()
-                .Use<LoggingPipeline>()
-                .UseEventOnly<CommandSpecificPipeline, ICommand>()
-                .UseRequestOnly<QuerySpecificPipeline, IQuery>()
-                .Use<ValidationPipeline>()
+                .Use<LoggingMiddleware>()
+                .UseEventOnly<CommandSpecificMiddleware, ICommand>()
+                .UseRequestOnly<QuerySpecificMiddleware, IQuery>()
+                .Use<ValidationMiddleware>()
                 .UseEventOnlySequenceMultiHandler<ICommand>();
 
             // Register all validators from project App.Shared

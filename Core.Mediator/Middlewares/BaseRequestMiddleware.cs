@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.Mediator.Pipelines
+namespace Core.Mediator.Middlewares
 {
-    public abstract class BaseRequestPipeline : IRequestPipeline
+    public abstract class BaseRequestMiddleware : IRequestMiddleware
     {
         private readonly ServiceResolver _handlerResolver;
 
-        protected BaseRequestPipeline(ServiceResolver handlerResolver)
+        protected BaseRequestMiddleware(ServiceResolver handlerResolver)
         {
             _handlerResolver = handlerResolver;
         }
@@ -103,7 +101,7 @@ namespace Core.Mediator.Pipelines
         }
 
         public abstract Task<TResponse> Handle<TRequest, TResponse>(TRequest request,
-            CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+            CancellationToken cancellationToken, MiddlewareDelegate<TResponse> next)
             where TRequest : IRequest<TResponse>;
     }
 }

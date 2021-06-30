@@ -9,11 +9,11 @@ namespace Core.Mediator
     /// <summary>
     /// Scans assemblies for Handlers and specify pipelines by their order
     /// </summary>
-    public class MediatorConfigurator
+    public class PipelineConfigurator
     {
         private readonly IServiceCollection _services;
 
-        public MediatorConfigurator(IServiceCollection services)
+        public PipelineConfigurator(IServiceCollection services)
         {
             _services = services;
         }
@@ -22,8 +22,7 @@ namespace Core.Mediator
         /// Will scan for types from the assembly of type <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type in which assembly that should be scanned.</typeparam>
-        /// <example>AddHandlersFromAssemblyOf<ConfigQueryHandler>();</example>
-        public MediatorConfigurator AddHandlersFromAssemblyOf<T>()
+        public PipelineConfigurator AddHandlersFromAssemblyOf<T>()
         {
             return AddHandlersFromAssembly(typeof(T).Assembly);
         }
@@ -31,7 +30,7 @@ namespace Core.Mediator
         /// <summary>
         /// Scan assemblies for handler types
         /// </summary>
-        public MediatorConfigurator AddHandlersFromAssembly(params Assembly[] assemblies)
+        public PipelineConfigurator AddHandlersFromAssembly(params Assembly[] assemblies)
         {
             var handlerTypes = new[]
             {
@@ -58,36 +57,36 @@ namespace Core.Mediator
             return this;
         }
         /// <summary>
-        /// Register pipeline for all actions
+        /// Register middleware in pipeline for all actions
         /// </summary>
-        public MediatorConfigurator Use<TPipeline>()
-            where TPipeline : IRequestPipeline, IEventPipeline
+        public PipelineConfigurator Use<TPipeline>()
+            where TPipeline : IRequestMiddleware, IEventMiddleware
         {
-            return RegisterPipelines(typeof(TPipeline));
+            return RegisterMidlewares(typeof(TPipeline));
         }
 
         /// <summary>
-        /// Register pipeline for action classes implementing marker type only
+        /// Register middleware in pipeline for action classes implementing marker type only
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public MediatorConfigurator UseRequestOnly<TPipeline, TActionMarker>()
-            where TPipeline : IRequestPipeline
+        public PipelineConfigurator UseRequestOnly<TPipeline, TActionMarker>()
+            where TPipeline : IRequestMiddleware
             where TActionMarker : IRequest
         {
-            return RegisterPipelines(typeof(TPipeline), typeof(TActionMarker));
+            return RegisterMidlewares(typeof(TPipeline), typeof(TActionMarker));
         }
         /// <summary>
-        /// Register pipeline for action classes implementing marker type only
+        /// Register middleware in pipeline for action classes implementing marker type only
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public MediatorConfigurator UseEventOnly<TPipeline, TActionMarker>()
-            where TPipeline : IEventPipeline
+        public PipelineConfigurator UseEventOnly<TPipeline, TActionMarker>()
+            where TPipeline : IEventMiddleware
             where TActionMarker : IEvent
         {
-            return RegisterPipelines(typeof(TPipeline), typeof(TActionMarker));
+            return RegisterMidlewares(typeof(TPipeline), typeof(TActionMarker));
         }
 
-        private MediatorConfigurator RegisterPipelines(Type pipeline, Type? markerType = null)
+        private PipelineConfigurator RegisterMidlewares(Type pipeline, Type? markerType = null)
         {
             _services.AddSingleton(new PipelineDefinition(pipeline, markerType));
             _services.AddScoped(pipeline);

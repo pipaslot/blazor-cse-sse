@@ -62,7 +62,7 @@ namespace Core.Mediator.Client
             }
         }
 
-        private Task<MediatorResponse<TResponse>> GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(int hashCode, RequestContract contract, CancellationToken cancellationToken = default)
+        private Task<MediatorResponse<TResponse>> GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(int hashCode, DataContract contract, CancellationToken cancellationToken = default)
         {
             lock (_queryTaskCacheLock)
             {
@@ -76,12 +76,12 @@ namespace Core.Mediator.Client
             }
         }
 
-        private async Task<MediatorResponse<TResponse>> SendRequest<TResponse>(RequestContract contract, CancellationToken cancellationToken = default)
+        private async Task<MediatorResponse<TResponse>> SendRequest<TResponse>(DataContract contract, CancellationToken cancellationToken = default)
         {
             var typeName = typeof(IRequest<TResponse>);
             try
             {
-                var url = RequestContract.Endpoint + $"?type={typeName}";
+                var url = DataContract.Endpoint + $"?type={typeName}";
                 var response = await _httpClient.PostAsJsonAsync(url, contract, cancellationToken);
                 response.EnsureSuccessStatusCode();
 
@@ -95,9 +95,9 @@ namespace Core.Mediator.Client
             }
         }
 
-        private RequestContract CreateContract(object request)
+        private DataContract CreateContract(object request)
         {
-            return new RequestContract
+            return new DataContract
             {
                 Json = JsonSerializer.Serialize(request, new JsonSerializerOptions
                 {

@@ -4,15 +4,14 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.Mediator.Pipelines
+namespace Core.Mediator.Middlewares
 {
-    public abstract class BaseEventPipeline : IEventPipeline
+    public abstract class BaseEventMiddleware : IEventMiddleware
     {
         private readonly ServiceResolver _handlerResolver;
 
-        protected BaseEventPipeline(ServiceResolver handlerResolver)
+        protected BaseEventMiddleware(ServiceResolver handlerResolver)
         {
             _handlerResolver = handlerResolver;
         }
@@ -103,7 +102,7 @@ namespace Core.Mediator.Pipelines
         }
 
         public abstract Task Handle<TEvent>(TEvent request,
-            CancellationToken cancellationToken, EventHandlerDelegate next)
+            CancellationToken cancellationToken, MiddlewareDelegate next)
             where TEvent : IEvent;
     }
 }

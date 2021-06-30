@@ -18,7 +18,7 @@ namespace Core.Mediator.Server
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Path == RequestContract.Endpoint && context.Request.Method.ToUpper() == "POST")
+            if (context.Request.Path == DataContract.Endpoint && context.Request.Method.ToUpper() == "POST")
             {
                 var mediator = context.RequestServices.GetService(typeof(IMediator)) as IMediator;
                 if (mediator == null)
@@ -41,7 +41,7 @@ namespace Core.Mediator.Server
             }
         }
 
-        private async Task<RequestContract?> GetContract(HttpContext context)
+        private async Task<DataContract?> GetContract(HttpContext context)
         {
             using (var reader = new StreamReader(context.Request.Body, Encoding.UTF8))
             {
@@ -50,7 +50,7 @@ namespace Core.Mediator.Server
                 {
                     throw new System.Exception("Request body has empty body. JSON was expected.");
                 }
-                return JsonSerializer.Deserialize<RequestContract>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return JsonSerializer.Deserialize<DataContract>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Core.Mediator.Abstractions
 {
-    public class RequestContract
+    public class DataContract
     {
         public const string Endpoint = "/_mediator/request";
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global

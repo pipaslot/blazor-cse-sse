@@ -4,31 +4,32 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
 
-namespace Core.Mediator.Pipelines
+namespace Core.Mediator.Middlewares
 {
     /// <summary>
     /// Pipeline executing multiple handlers implementing TMarker type. All handlers are executed asynchronously at the same time
     /// </summary>
-    public class MultiHandlerConcurrentExecutionEventPipeline : BaseEventPipeline , IExecutivePipeline
+    public class MultiHandlerConcurrentExecutionRequestMiddleware : BaseRequestMiddleware, IExecutiveMiddleware
     {
-        public MultiHandlerConcurrentExecutionEventPipeline(ServiceResolver handlerResolver) : base(handlerResolver)
+        public MultiHandlerConcurrentExecutionRequestMiddleware(ServiceResolver handlerResolver) : base(handlerResolver)
         {
         }
-
         public bool ExecuteMultipleHandlers => true;
 
-        public override async Task Handle<TEvent>(TEvent request, CancellationToken cancellationToken, EventHandlerDelegate next)
+        public override async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, MiddlewareDelegate<TResponse> next)
         {
-            var handlers = GetRegisteredHandlers(request);
+            var handlers = GetRegisteredHandlers<TRequest, TResponse>(request);
             if (handlers.Length == 0)
             {
                 throw new Exception("No handler was found for " + request.GetType());
             }
 
             var tasks = handlers
-                .Select(handler => Execute(handler, request, cancellationToken))
+                .Select(handler => Execute<TRequest, TResponse>(handler, request, cancellationToken))
                 .ToArray();
             await Task.WhenAll(tasks);
+
+            return default!;
         }
     }
 }

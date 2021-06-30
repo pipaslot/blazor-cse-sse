@@ -6,28 +6,28 @@ using Core.Mediator.Abstractions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
-namespace App.Server.MediatorPipelines
+namespace App.Server.MediatorMiddlewares
 {
-    public class ValidationPipeline: IRequestPipeline, IEventPipeline
+    public class ValidationMiddleware : IRequestMiddleware, IEventMiddleware
     {
         private readonly ILogger<Program> _logger;
         private readonly IValidatorFactory _validatorFactory;
 
-        public ValidationPipeline(ILogger<Program> logger, IValidatorFactory validatorFactory)
+        public ValidationMiddleware(ILogger<Program> logger, IValidatorFactory validatorFactory)
         {
             _logger = logger;
             _validatorFactory = validatorFactory;
         }
 
-        
-        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next) where TRequest : IRequest<TResponse>
+
+        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, MiddlewareDelegate<TResponse> next) where TRequest : IRequest<TResponse>
         {
             await Validate(request, cancellationToken);
 
             return await next();
         }
 
-        public async Task Handle<TEvent>(TEvent @event, CancellationToken cancellationToken, EventHandlerDelegate next) where TEvent : IEvent
+        public async Task Handle<TEvent>(TEvent @event, CancellationToken cancellationToken, MiddlewareDelegate next) where TEvent : IEvent
         {
             await Validate(@event, cancellationToken);
 
@@ -36,7 +36,7 @@ namespace App.Server.MediatorPipelines
 
         private async Task Validate<TTarget>(TTarget target, CancellationToken cancellationToken)
         {
-            if(target == null)
+            if (target == null)
             {
                 throw new ArgumentNullException(nameof(target));
             }

@@ -1,5 +1,5 @@
 ﻿using Core.Mediator.Abstractions;
-using Core.Mediator.Pipelines;
+using Core.Mediator.Middlewares;
 
 namespace Core.Mediator
 {
@@ -9,40 +9,40 @@ namespace Core.Mediator
         /// Pipeline running all handlers concurrently. Not further pipeline will be executed after this one for specified Action Marker.
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static MediatorConfigurator UseEventOnlyConcurrentMultiHandler<TActionMarker>(this MediatorConfigurator config)
+        public static PipelineConfigurator UseEventOnlyConcurrentMultiHandler<TActionMarker>(this PipelineConfigurator config)
             where TActionMarker : IEvent
         {
-            return config.UseEventOnly<MultiHandlerConcurrentExecutionEventPipeline, TActionMarker>();
+            return config.UseEventOnly<MultiHandlerConcurrentExecutionEventMiddleware, TActionMarker>();
         }
 
         /// <summary>
         /// Pipeline running all handlers concurrently. Not further pipeline will be executed after this one for specified Action Marker.
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static MediatorConfigurator UseRequestOnlyConcurrentMultiHandler<TActionMarker>(this MediatorConfigurator config)
+        public static PipelineConfigurator UseRequestOnlyConcurrentMultiHandler<TActionMarker>(this PipelineConfigurator config)
             where TActionMarker : IRequest
         {
-            return config.UseRequestOnly<MultiHandlerConcurrentExecutionRequestPipeline, TActionMarker>();
+            return config.UseRequestOnly<MultiHandlerConcurrentExecutionRequestMiddleware, TActionMarker>();
         }
 
         /// <summary>
         /// Pipeline running all handlers in sequence one by one. Not further pipeline will be executed after this one for specified Action Marker.
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static MediatorConfigurator UseEventOnlySequenceMultiHandler<TActionMarker>(this MediatorConfigurator config)
+        public static PipelineConfigurator UseEventOnlySequenceMultiHandler<TActionMarker>(this PipelineConfigurator config)
             where TActionMarker : IEvent
         {
-            return config.UseEventOnly<MultiHandlerSequenceExecutionEventPipeline, TActionMarker>();
+            return config.UseEventOnly<MultiHandlerSequenceExecutionEventMiddleware, TActionMarker>();
         }
 
         /// <summary>
         /// Pipeline running all handlers in sequence one by one. Not further pipeline will be executed after this one for specified Action Marker.
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static MediatorConfigurator UseRequestOnlySequenceMultiHandler<TActionMarker>(this MediatorConfigurator config)
+        public static PipelineConfigurator UseRequestOnlySequenceMultiHandler<TActionMarker>(this PipelineConfigurator config)
             where TActionMarker : IRequest
         {
-            return config.UseRequestOnly<MultiHandlerSequenceExecutionRequestPipeline, TActionMarker>();
+            return config.UseRequestOnly<MultiHandlerSequenceExecutionRequestMiddleware, TActionMarker>();
         }
     }
 }

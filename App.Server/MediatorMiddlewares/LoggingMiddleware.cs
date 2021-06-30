@@ -6,19 +6,19 @@ using Core.Mediator.Abstractions;
 using Microsoft.Extensions.Logging;
 using Pipaslot.Logging;
 
-namespace App.Server.MediatorPipelines
+namespace App.Server.MediatorMiddlewares
 {
-    public class LoggingPipeline : IRequestPipeline, IEventPipeline
+    public class LoggingMiddleware : IRequestMiddleware, IEventMiddleware
     {
         private readonly ILogger<Program> _logger;
 
-        public LoggingPipeline(ILogger<Program> logger)
+        public LoggingMiddleware(ILogger<Program> logger)
         {
             _logger = logger;
         }
 
-        
-        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next) where TRequest : IRequest<TResponse>
+
+        public async Task<TResponse> Handle<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, MiddlewareDelegate<TResponse> next) where TRequest : IRequest<TResponse>
         {
             using (_logger.BeginMethod(request, request.GetType().FullName ?? ""))
             {
@@ -27,7 +27,7 @@ namespace App.Server.MediatorPipelines
                 {
                     return await next();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     _logger.LogError(e, "Pipeline exception");
                     throw;
@@ -40,7 +40,7 @@ namespace App.Server.MediatorPipelines
             }
         }
 
-        public async Task Handle<TEvent>(TEvent @event, CancellationToken cancellationToken, EventHandlerDelegate next) where TEvent : IEvent
+        public async Task Handle<TEvent>(TEvent @event, CancellationToken cancellationToken, MiddlewareDelegate next) where TEvent : IEvent
         {
             using (_logger.BeginMethod(@event, @event.GetType().FullName ?? ""))
             {

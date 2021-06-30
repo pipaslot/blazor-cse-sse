@@ -19,7 +19,7 @@ namespace Core.Mediator
             _mediator = mediator;
         }
 
-        public async Task<string> ExecuteQuery(RequestContract request, CancellationToken cancellationToken)
+        public async Task<string> ExecuteQuery(DataContract request, CancellationToken cancellationToken)
         {
             var queryType = Type.GetType(request.ObjectName);
             if (queryType == null)
