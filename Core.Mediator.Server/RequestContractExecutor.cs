@@ -42,12 +42,12 @@ namespace Core.Mediator
         {
             try
             {
-                var response = await _mediator.Fire(message, cancellationToken);
-                return JsonSerializer.Serialize(response);
+                var result = await _mediator.Fire(message, cancellationToken);
+                return SerializeObject(result);
             }
             catch (Exception e)
             {
-                return JsonSerializer.Serialize(new MediatorResponse(e.Message));
+                return SerializeError(e.Message);
             }
         }
 
@@ -74,12 +74,34 @@ namespace Core.Mediator
 
                 var resultProperty = task.GetType().GetProperty("Result");
                 var result = resultProperty?.GetValue(task);
-                return JsonSerializer.Serialize(result);
+                return SerializeObject(result);
             }
             catch (Exception e)
             {
-                return JsonSerializer.Serialize(new MediatorResponse(e.Message));
+                return SerializeError(e.Message);
             }
+        }
+        private string SerializeObject(object? result)
+        {
+            if (result is MediatorResponse mediatorResponse)
+            {
+                return Serialize(mediatorResponse);
+            }
+            return SerializeError($"Unexpected result type from mediator pipeline. Was expected {typeof(MediatorResponse)} but {result.GetType()} was returned instead.");
+        }
+        private string SerializeError(string errorMessage)
+        {
+            return Serialize(new MediatorResponse(errorMessage));
+        }
+        private string Serialize(MediatorResponse response)
+        {
+            var obj = new MediatorResponseSerializable
+            {
+                ErrorMessages = response.ErrorMessages.ToArray(),
+                Results = response.Results.ToArray(),
+                Success = response.Success
+            };
+            return JsonSerializer.Serialize(obj);
         }
     }
 }

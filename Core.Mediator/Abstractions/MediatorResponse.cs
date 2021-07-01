@@ -40,11 +40,9 @@ namespace Core.Mediator.Abstractions
         public bool Success => ErrorMessages.Count == 0;
 
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
-        [JsonIgnore]
         public string ErrorMessage => string.Join(";", ErrorMessages);
         public List<string> ErrorMessages { get; } = new List<string>();
 
-        [JsonIgnore]
         public object? Result => Results.FirstOrDefault();
         public List<object> Results { get; } = new List<object>(1);
     }
