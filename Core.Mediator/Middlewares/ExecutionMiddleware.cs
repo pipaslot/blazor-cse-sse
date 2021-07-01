@@ -7,7 +7,7 @@ using Core.Mediator.Abstractions;
 
 namespace Core.Mediator.Middlewares
 {
-    public abstract class ExecutionMiddleware : IMiddleware, IExecutionMiddleware
+    public abstract class ExecutionMiddleware : IMediatorMiddleware, IExecutionMiddleware
     {
         public abstract bool ExecuteMultipleHandlers { get; }
         protected abstract Task HandleMessage<TMessage>(TMessage message, CancellationToken cancellationToken);

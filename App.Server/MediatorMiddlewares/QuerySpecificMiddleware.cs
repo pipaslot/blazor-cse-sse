@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorMiddlewares
 {
-    public class QuerySpecificMiddleware : IMiddleware
+    public class QuerySpecificMiddleware : IMediatorMiddleware
     {
         private readonly ILogger<Program> _logger;
 

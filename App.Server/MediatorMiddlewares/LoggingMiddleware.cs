@@ -8,7 +8,7 @@ using Pipaslot.Logging;
 
 namespace App.Server.MediatorMiddlewares
 {
-    public class LoggingMiddleware : IMiddleware
+    public class LoggingMiddleware : IMediatorMiddleware
     {
         private readonly ILogger<Program> _logger;
 

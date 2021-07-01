@@ -68,12 +68,12 @@ namespace Core.Mediator
             throw new Exception("Executive pipeline not found");//This should never happen as GetMessagePipelines always returns last pipeline as executive
         }
 
-        public IEnumerable<IMiddleware> GetPipeline(Type requestType)
+        public IEnumerable<IMediatorMiddleware> GetPipeline(Type requestType)
         {
             var pipelines = _serviceProvider.GetServices<PipelineDefinition>()
                 .ToArray()
                 .Where(d => d.MarkerType == null || d.MarkerType.IsAssignableFrom(requestType))
-                .Select(d => (IMiddleware)_serviceProvider.GetRequiredService(d.PipelineType));
+                .Select(d => (IMediatorMiddleware)_serviceProvider.GetRequiredService(d.PipelineType));
 
             foreach (var pipeline in pipelines)
             {

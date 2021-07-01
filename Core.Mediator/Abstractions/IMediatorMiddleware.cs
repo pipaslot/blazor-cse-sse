@@ -7,7 +7,7 @@ namespace Core.Mediator.Abstractions
     /// Surround handler execution
     /// Implementations adds additional behavior and await the next delegate.
     /// </summary>
-    public interface IMiddleware
+    public interface IMediatorMiddleware
     {
         /// <summary>
         /// Pipeline handler. Perform any additional behavior and await the <paramref name="next"/> delegate as necessary

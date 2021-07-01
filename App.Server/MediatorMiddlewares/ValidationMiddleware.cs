@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorMiddlewares
 {
-    public class ValidationMiddleware : IMiddleware
+    public class ValidationMiddleware : IMediatorMiddleware
     {
         private readonly ILogger<Program> _logger;
         private readonly IValidatorFactory _validatorFactory;
@@ -38,6 +38,11 @@ namespace App.Server.MediatorMiddlewares
             }
 
             await next();
+
+            if(action is IBusinessCOmmandFire f)
+            {
+                _mediator.Fire(new BusinesEvent.Comand(f.Id));
+            }
         }
     }
 }

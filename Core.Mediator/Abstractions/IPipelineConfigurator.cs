@@ -32,14 +32,14 @@ namespace Core.Mediator.Abstractions
         /// <summary>
         /// Register middleware in pipeline for all actions
         /// </summary>
-        IPipelineConfigurator Use<TMiddleware>() where TMiddleware : IMiddleware;
+        IPipelineConfigurator Use<TMiddleware>() where TMiddleware : IMediatorMiddleware;
 
         /// <summary>
         /// Register middleware in pipeline for action classes implementing marker type only
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
         IPipelineConfigurator Use<TMiddleware, TActionMarker>()
-            where TMiddleware : IMiddleware
+            where TMiddleware : IMediatorMiddleware
             where TActionMarker : IActionMarker;
     }
 }

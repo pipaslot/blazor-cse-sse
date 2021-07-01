@@ -61,12 +61,12 @@ namespace Core.Mediator
         }
 
         public IPipelineConfigurator Use<TPipeline>()
-            where TPipeline : IMiddleware
+            where TPipeline : IMediatorMiddleware
         {
             return RegisterMidlewares(typeof(TPipeline));
         }
         public IPipelineConfigurator Use<TPipeline, TActionMarker>()
-            where TPipeline : IMiddleware
+            where TPipeline : IMediatorMiddleware
             where TActionMarker : IActionMarker
         {
             return RegisterMidlewares(typeof(TPipeline), typeof(TActionMarker));
