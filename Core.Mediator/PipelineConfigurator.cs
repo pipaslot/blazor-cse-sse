@@ -7,10 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Mediator
 {
-    /// <summary>
-    /// Scans assemblies for Handlers and specify pipelines by their order
-    /// </summary>
-    public class PipelineConfigurator
+    public class PipelineConfigurator : IPipelineConfigurator
     {
         private readonly IServiceCollection _services;
         public List<Assembly> ActionMarkerAssemblies { get; } = new List<Assembly>();
@@ -20,37 +17,23 @@ namespace Core.Mediator
             _services = services;
         }
 
-        /// <summary>
-        /// Will scan for action markers from the assembly of type <typeparamref name="T"/> and register them.
-        /// </summary>
-        /// <typeparam name="T">The type from target asssembly to be scanned</typeparam>
-        public PipelineConfigurator AddMarkersFromAssemblyOf<T>()
+        public IPipelineConfigurator AddMarkersFromAssemblyOf<T>()
         {
             return AddMarkersFromAssemblyOf(typeof(T).Assembly);
         }
 
-        /// <summary>
-        /// Will scan for action markers from the passed assemblies and register them.
-        /// </summary>
-        public PipelineConfigurator AddMarkersFromAssemblyOf(params Assembly[] assemblies)
+        public IPipelineConfigurator AddMarkersFromAssemblyOf(params Assembly[] assemblies)
         {
             ActionMarkerAssemblies.AddRange(assemblies);
             return this;
         }
 
-        /// <summary>
-        /// Will scan for action handlers from the assembly of type <typeparamref name="T"/> and register them.
-        /// </summary>
-        /// <typeparam name="T">The type from target asssembly to be scanned</typeparam>
-        public PipelineConfigurator AddHandlersFromAssemblyOf<T>()
+        public IPipelineConfigurator AddHandlersFromAssemblyOf<T>()
         {
             return AddHandlersFromAssembly(typeof(T).Assembly);
         }
 
-        /// <summary>
-        /// Scan assemblies for action handler types
-        /// </summary>
-        public PipelineConfigurator AddHandlersFromAssembly(params Assembly[] assemblies)
+        public IPipelineConfigurator AddHandlersFromAssembly(params Assembly[] assemblies)
         {
             var handlerTypes = new[]
             {
@@ -76,27 +59,20 @@ namespace Core.Mediator
             }
             return this;
         }
-        /// <summary>
-        /// Register middleware in pipeline for all actions
-        /// </summary>
-        public PipelineConfigurator Use<TPipeline>()
+
+        public IPipelineConfigurator Use<TPipeline>()
             where TPipeline : IMiddleware
         {
             return RegisterMidlewares(typeof(TPipeline));
         }
-
-        /// <summary>
-        /// Register middleware in pipeline for action classes implementing marker type only
-        /// </summary>
-        /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public PipelineConfigurator Use<TPipeline, TActionMarker>()
+        public IPipelineConfigurator Use<TPipeline, TActionMarker>()
             where TPipeline : IMiddleware
             where TActionMarker : IActionMarker
         {
             return RegisterMidlewares(typeof(TPipeline), typeof(TActionMarker));
         }
 
-        private PipelineConfigurator RegisterMidlewares(Type pipeline, Type? markerType = null)
+        private IPipelineConfigurator RegisterMidlewares(Type pipeline, Type? markerType = null)
         {
             _services.AddSingleton(new PipelineDefinition(pipeline, markerType));
             _services.AddScoped(pipeline);

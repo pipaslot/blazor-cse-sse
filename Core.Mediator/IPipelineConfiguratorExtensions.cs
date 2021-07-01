@@ -3,13 +3,13 @@ using Core.Mediator.Middlewares;
 
 namespace Core.Mediator
 {
-    public static class MediatorConfiguratorExtensions
+    public static class IPipelineConfiguratorExtensions
     {
         /// <summary>
         /// Pipeline running all handlers concurrently. Not further pipeline will be executed after this one for specified Action Marker.
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static PipelineConfigurator UseConcurrentMultiHandler<TActionMarker>(this PipelineConfigurator config)
+        public static IPipelineConfigurator UseConcurrentMultiHandler<TActionMarker>(this IPipelineConfigurator config)
             where TActionMarker : IActionMarker
         {
             return config.Use<MultiHandlerConcurrentExecutionMiddleware, TActionMarker>();
@@ -19,7 +19,7 @@ namespace Core.Mediator
         /// Pipeline running all handlers in sequence one by one. Not further pipeline will be executed after this one for specified Action Marker.
         /// </summary>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
-        public static PipelineConfigurator UseSequenceMultiHandler<TActionMarker>(this PipelineConfigurator config)
+        public static IPipelineConfigurator UseSequenceMultiHandler<TActionMarker>(this IPipelineConfigurator config)
             where TActionMarker : IActionMarker
         {
             return config.Use<MultiHandlerSequenceExecutionMiddleware, TActionMarker>();

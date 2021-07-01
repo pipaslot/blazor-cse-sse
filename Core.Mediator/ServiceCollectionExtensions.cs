@@ -10,7 +10,7 @@ namespace Core.Mediator
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static PipelineConfigurator AddMediator(this IServiceCollection services)
+        public static IPipelineConfigurator AddMediator(this IServiceCollection services)
         {
             services.AddTransient<ServiceResolver>();
             services.AddTransient<IMediator, Mediator>();
