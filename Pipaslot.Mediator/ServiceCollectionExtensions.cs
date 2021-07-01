@@ -6,7 +6,8 @@ namespace Pipaslot.Mediator
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Configure handler sources and pipeline for handler processing
+        /// Configures handler sources and pipeline for handler processing.
+        /// Every Request/Message is configured to have exactly one handler by default.
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
