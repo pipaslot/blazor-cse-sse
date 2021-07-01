@@ -38,7 +38,7 @@ namespace App.Client.Services
         protected override async Task OnCultureChanged(string culture)
         {
             var typeName = _classType.AssemblyQualifiedName;
-            var result = await _mediator.Execute(new LanguageResource.Query
+            var result = await _mediator.Send(new LanguageResource.Query
             {
                 Language = culture,
                 TypeName = typeName,

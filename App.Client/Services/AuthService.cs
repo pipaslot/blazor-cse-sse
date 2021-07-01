@@ -53,7 +53,7 @@ namespace App.Client.Services
 
         public async Task SignIn(string username, string password)
         {
-            var response = await _mediator.Execute(new SignIn.Query
+            var response = await _mediator.Send(new SignIn.Query
             {
                 Username = username,
                 Password = password
