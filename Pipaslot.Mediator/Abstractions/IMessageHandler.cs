@@ -9,6 +9,7 @@ namespace Pipaslot.Mediator.Abstractions
     {
         /// <summary>Handles an message</summary>
         /// <param name="message">The message</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         Task Handle(TMessage message, CancellationToken cancellationToken);
     }
 }

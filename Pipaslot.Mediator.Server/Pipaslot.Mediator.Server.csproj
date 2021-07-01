@@ -10,6 +10,7 @@
 		<AssemblyName>Pipaslot.Mediator.Server</AssemblyName>
 		<Authors>Petr Stipek</Authors>
 		<Description>Expose Pipaslot.Mediator as separeted endpoint on HTTP protocol for ASP.NET Core applications</Description>
+		<NoWarn>1591</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

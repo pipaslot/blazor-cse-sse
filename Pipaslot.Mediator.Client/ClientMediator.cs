@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Pipaslot.Mediator.Client
 {
+    /// <summary>
+    /// Request / message dispatcher over HTTP to server endpoint
+    /// </summary>
     public class ClientMediator : IMediator
     {
         private readonly HttpClient _httpClient;

@@ -37,6 +37,7 @@ namespace Pipaslot.Mediator.Abstractions
         /// <summary>
         /// Register middleware in pipeline for action classes implementing marker type only
         /// </summary>
+        /// <typeparam name="TMiddleware">Middleware to apply</typeparam>
         /// <typeparam name="TActionMarker">Action interface</typeparam>
         IPipelineConfigurator Use<TMiddleware, TActionMarker>()
             where TMiddleware : IMediatorMiddleware
