@@ -1,5 +1,8 @@
 ﻿namespace Core.Mediator.Abstractions
 {
+    /// <summary>
+    /// Response contract with all necessary fields sent over network
+    /// </summary>
     public class MediatorResponseSerializable
     {
         public bool Success { get; set; }

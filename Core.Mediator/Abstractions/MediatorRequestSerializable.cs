@@ -1,6 +1,9 @@
 ﻿namespace Core.Mediator.Abstractions
 {
-    public class MediatorRequest
+    /// <summary>
+    /// Request contract with all necessary fields sent over network
+    /// </summary>
+    public class MediatorRequestSerializable
     {
         public const string Endpoint = "/_mediator/request";
         // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
