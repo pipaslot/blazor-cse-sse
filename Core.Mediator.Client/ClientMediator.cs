@@ -28,11 +28,12 @@ namespace Core.Mediator.Client
         public async Task<IMediatorResponse> Fire(IMessage request, CancellationToken cancellationToken = default)
         {
             var contract = CreateContract(request);
+            var requestType = request.GetType();
 
             var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
             try
             {
-                var task = GetRequestTaskFromCacheOrCreateNewRequest<object>(hashCode, contract, cancellationToken);
+                var task = GetRequestTaskFromCacheOrCreateNewRequest<object>(hashCode, contract, requestType, cancellationToken);
                 return await task;
             }
             finally
@@ -47,11 +48,12 @@ namespace Core.Mediator.Client
         public async Task<IMediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
             var contract = CreateContract(request);
+            var requestType = request.GetType();
 
             var hashCode = (contract.Json, contract.ObjectName).GetHashCode();
             try
             {
-                var task = GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(hashCode, contract, cancellationToken);
+                var task = GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(hashCode, contract, requestType, cancellationToken);
                 return await task;
             }
             finally
@@ -63,7 +65,7 @@ namespace Core.Mediator.Client
             }
         }
 
-        private Task<IMediatorResponse<TResponse>> GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(int hashCode, MediatorRequest contract, CancellationToken cancellationToken = default)
+        private Task<IMediatorResponse<TResponse>> GetRequestTaskFromCacheOrCreateNewRequest<TResponse>(int hashCode, MediatorRequest contract, Type requestType, CancellationToken cancellationToken = default)
         {
             lock (_queryTaskCacheLock)
             {
@@ -71,18 +73,17 @@ namespace Core.Mediator.Client
                 {
                     return (Task<IMediatorResponse<TResponse>>)task;
                 }
-                var newTask = SendRequest<TResponse>(contract, cancellationToken);
+                var newTask = SendRequest<TResponse>(contract, requestType, cancellationToken);
                 _queryTaskCache[hashCode] = newTask;
                 return newTask;
             }
         }
 
-        private async Task<IMediatorResponse<TResponse>> SendRequest<TResponse>(MediatorRequest contract, CancellationToken cancellationToken = default)
+        private async Task<IMediatorResponse<TResponse>> SendRequest<TResponse>(MediatorRequest contract, Type requestType, CancellationToken cancellationToken = default)
         {
-            var typeName = typeof(IRequest<TResponse>);
             try
             {
-                var url = MediatorRequest.Endpoint + $"?type={typeName}";
+                var url = MediatorRequest.Endpoint + $"?type={requestType}";
                 var response = await _httpClient.PostAsJsonAsync(url, contract, cancellationToken);
                 response.EnsureSuccessStatusCode();
 
@@ -91,7 +92,7 @@ namespace Core.Mediator.Client
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Mediator request failed for "+ typeName);
+                _logger.LogError(e, "Mediator request failed for "+ requestType);
                 return new MediatorResponse<TResponse>(e.Message);
             }
         }
