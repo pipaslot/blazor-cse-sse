@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator.Abstractions;
+using Pipaslot.Mediator.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace App.Server.MediatorMiddlewares

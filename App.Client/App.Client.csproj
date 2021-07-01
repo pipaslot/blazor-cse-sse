@@ -13,8 +13,8 @@
     <ProjectReference Include="..\App.Shared\App.Shared.csproj" />
     <ProjectReference Include="..\Core.Jwt\Core.Jwt.csproj" />
     <ProjectReference Include="..\Core.Localization\Core.Localization.csproj" />
-    <ProjectReference Include="..\Core.Mediator.Client\Core.Mediator.Client.csproj" />
-    <ProjectReference Include="..\Core.Mediator\Core.Mediator.csproj" />
+    <ProjectReference Include="..\Pipaslot.Mediator.Client\Pipaslot.Mediator.Client.csproj" />
+    <ProjectReference Include="..\Pipaslot.Mediator\Pipaslot.Mediator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

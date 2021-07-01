@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using App.Shared.Queries;
 using Core.Localization;
-using Core.Mediator.Abstractions;
+using Pipaslot.Mediator.Abstractions;
 
 namespace App.Client.Services
 {

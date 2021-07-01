@@ -5,12 +5,12 @@ using App.Client.Resources;
 using Blazored.LocalStorage;
 using Cloudcrate.AspNetCore.Blazor.Browser.Storage;
 using Core.Localization;
-using Core.Mediator.Abstractions;
+using Pipaslot.Mediator.Abstractions;
 using Fluxor;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Core.Mediator.Client;
+using Pipaslot.Mediator.Client;
 using App.Client.Services;
 
 namespace App.Client

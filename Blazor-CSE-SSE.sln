@@ -23,11 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Localization", "Core.L
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{339386CD-80D1-42A3-85E6-FEC719470F12}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Mediator", "Core.Mediator\Core.Mediator.csproj", "{9DAFA062-72A8-4742-8C6D-0898C9AFF3E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipaslot.Mediator", "Pipaslot.Mediator\Pipaslot.Mediator.csproj", "{9DAFA062-72A8-4742-8C6D-0898C9AFF3E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Mediator.Server", "Core.Mediator.Server\Core.Mediator.Server.csproj", "{F4B9290D-AD57-42AB-9946-A0403C38272F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipaslot.Mediator.Server", "Pipaslot.Mediator.Server\Pipaslot.Mediator.Server.csproj", "{F4B9290D-AD57-42AB-9946-A0403C38272F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Mediator.Client", "Core.Mediator.Client\Core.Mediator.Client.csproj", "{1EF1A2CE-F0AA-4720-99A1-FAA9E4FDF390}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipaslot.Mediator.Client", "Pipaslot.Mediator.Client\Pipaslot.Mediator.Client.csproj", "{1EF1A2CE-F0AA-4720-99A1-FAA9E4FDF390}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mediator", "Mediator", "{7B1BC9F7-8475-49C0-9544-EA635B4A7FF6}"
 EndProject

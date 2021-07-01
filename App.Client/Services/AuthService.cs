@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using App.Client.Store;
 using Fluxor;
 using Microsoft.AspNetCore.Components.Authorization;
-using Core.Mediator.Abstractions;
+using Pipaslot.Mediator.Abstractions;
 using App.Shared.Queries;
 
 namespace App.Client.Services

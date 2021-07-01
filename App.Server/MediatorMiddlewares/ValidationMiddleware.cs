@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Mediator.Abstractions;
+using Pipaslot.Mediator.Abstractions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 

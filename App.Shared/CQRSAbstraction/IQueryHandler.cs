@@ -1,4 +1,4 @@
-﻿using Core.Mediator.Abstractions;
+﻿using Pipaslot.Mediator.Abstractions;
 
 namespace App.Shared.CQRSAbstraction
 {    

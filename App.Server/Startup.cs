@@ -7,14 +7,14 @@ using System.Linq;
 using App.Server.QueryHandlers;
 using App.Server.Services;
 using App.Shared.AuthModels;
-using Core.Mediator;
+using Pipaslot.Mediator;
 using App.Shared.Queries;
 using Core.Jwt;
-using Core.Mediator.Abstractions;
+using Pipaslot.Mediator.Abstractions;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Core.Mediator.Server;
+using Pipaslot.Mediator.Server;
 using App.Server.MediatorMiddlewares;
 using App.Shared.CQRSAbstraction;
 
