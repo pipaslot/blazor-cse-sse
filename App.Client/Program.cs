@@ -55,7 +55,7 @@ namespace App.Client
             
             services.AddScoped<AuthService>();
             services.AddScoped<AuthenticationStateProvider, AuthService>(provider => provider.GetRequiredService<AuthService>());
-            services.AddSingleton<IMediator, ClientMediator>();
+            services.AddMediatorClient();
         }
     }
 }
