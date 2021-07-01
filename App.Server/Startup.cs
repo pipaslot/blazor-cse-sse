@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Core.Mediator.Server;
 using App.Server.MediatorMiddlewares;
+using App.Shared.CQRSAbstraction;
 
 namespace App.Server
 {

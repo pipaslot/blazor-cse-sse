@@ -1,7 +1,7 @@
-﻿// ReSharper disable once CheckNamespace
-namespace Core.Mediator.Abstractions
-{
-    
+﻿using Core.Mediator.Abstractions;
+
+namespace App.Shared.CQRSAbstraction
+{    
     /// <summary>Defines a handler for a query</summary>
     /// <typeparam name="TQuery">The type of query being handled</typeparam>
     /// <typeparam name="TResponse">The type of response from the handler</typeparam>

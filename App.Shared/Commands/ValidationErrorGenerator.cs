@@ -1,4 +1,4 @@
-﻿using Core.Mediator.Abstractions;
+﻿using App.Shared.CQRSAbstraction;
 using FluentValidation;
 
 namespace App.Shared.Commands

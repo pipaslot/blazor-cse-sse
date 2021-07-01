@@ -1,6 +1,6 @@
 ﻿using App.Shared.Queries;
 using Core.Jwt;
-using Core.Mediator.Abstractions;
+using App.Shared.CQRSAbstraction;
 using Microsoft.Extensions.Options;
 using System.Threading;
 using System.Threading.Tasks;

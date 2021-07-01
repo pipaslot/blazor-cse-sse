@@ -1,5 +1,6 @@
-﻿// ReSharper disable once CheckNamespace
-namespace Core.Mediator.Abstractions
+﻿using Core.Mediator.Abstractions;
+
+namespace App.Shared.CQRSAbstraction
 {
     /// <summary>
     /// Query action with specific pipeline middlewares and handlers.

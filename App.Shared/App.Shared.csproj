@@ -14,6 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Jwt\Core.Jwt.csproj" />
-    <ProjectReference Include="..\Core.Mediator.CQRSExtensions\Core.Mediator.CQRSExtensions.csproj" />
+    <ProjectReference Include="..\Core.Mediator\Core.Mediator.csproj" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using App.Shared.Commands;
+using App.Shared.CQRSAbstraction;
 using Core.Mediator.Abstractions;
 using Microsoft.Extensions.Logging;
 using Pipaslot.Logging;

@@ -1,4 +1,4 @@
-﻿using Core.Mediator.Abstractions;
+﻿using App.Shared.CQRSAbstraction;
 
 namespace App.Shared.Commands
 {

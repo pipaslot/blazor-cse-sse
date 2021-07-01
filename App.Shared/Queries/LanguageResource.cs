@@ -1,5 +1,4 @@
-﻿using Core.Mediator.Abstractions;
-using System;
+﻿using App.Shared.CQRSAbstraction;
 using System.Collections.Generic;
 
 namespace App.Shared.Queries
