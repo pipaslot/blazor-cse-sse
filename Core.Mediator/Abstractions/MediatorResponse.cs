@@ -16,7 +16,9 @@ namespace Core.Mediator.Abstractions
         {
         }
 
+#pragma warning disable CS8603 // Possible null reference return.
         TResult IMediatorResponse<TResult>.Result => (TResult)Result;
+#pragma warning restore CS8603 // Possible null reference return.
 
         TResult[] IMediatorResponse<TResult>.Results => Results
             .Select(r => (TResult)r)

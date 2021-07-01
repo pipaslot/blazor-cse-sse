@@ -7,7 +7,28 @@ using Pipaslot.Logging;
 
 namespace App.Server.CommandHandlers
 {
-    public class MultiHandlerCommandHandler1 : ICommandHandler<MultiHandler.Command>
+    public class MultiHandlerCommandHandlerAlwaysLast : ICommandHandler<MultiHandler.Command>
+    {
+        private readonly ILogger<MultiHandlerCommandHandlerAlwaysLast> _logger;
+
+        public MultiHandlerCommandHandlerAlwaysLast(ILogger<MultiHandlerCommandHandlerAlwaysLast> logger)
+        {
+            _logger = logger;
+        }
+
+        public int Order => 2;
+
+        public Task Handle(MultiHandler.Command request, CancellationToken cancellationToken)
+        {
+            using (_logger.BeginMethod())
+            {
+                _logger.LogInformation("Handled by handler: Last");
+                return Task.CompletedTask;
+            }
+        }
+    }
+
+    public class MultiHandlerCommandHandler1 : ICommandHandler<MultiHandler.Command>, ISequenceHandler
     {
         private readonly ILogger<MultiHandlerCommandHandler1> _logger;
 
@@ -16,16 +37,19 @@ namespace App.Server.CommandHandlers
             _logger = logger;
         }
 
+        public int Order => 1;
+
         public Task Handle(MultiHandler.Command request, CancellationToken cancellationToken)
         {
             using (_logger.BeginMethod())
             {
-                _logger.LogInformation("Handled by handler 1");
+                _logger.LogInformation("Handled by handler: " + Order);
                 return Task.CompletedTask;
             }
         }
     }
-    public class MultiHandlerCommandHandler2 : ICommandHandler<MultiHandler.Command>
+
+    public class MultiHandlerCommandHandler2 : ICommandHandler<MultiHandler.Command>, ISequenceHandler
     {
         private readonly ILogger<MultiHandlerCommandHandler2> _logger;
 
@@ -34,11 +58,13 @@ namespace App.Server.CommandHandlers
             _logger = logger;
         }
 
+        public int Order => 2;
+
         public Task Handle(MultiHandler.Command request, CancellationToken cancellationToken)
         {
             using (_logger.BeginMethod())
             {
-                _logger.LogInformation("Handled by handler 2");
+                _logger.LogInformation("Handled by handler: " + Order);
                 return Task.CompletedTask;
             }
         }

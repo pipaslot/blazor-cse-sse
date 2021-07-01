@@ -87,7 +87,7 @@ namespace Core.Mediator
             {
                 return Serialize(mediatorResponse);
             }
-            return SerializeError($"Unexpected result type from mediator pipeline. Was expected {typeof(MediatorResponse)} but {result.GetType()} was returned instead.");
+            return SerializeError($"Unexpected result type from mediator pipeline. Was expected {typeof(MediatorResponse)} but {result?.GetType()} was returned instead.");
         }
         private string SerializeError(string errorMessage)
         {

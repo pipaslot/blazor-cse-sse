@@ -38,11 +38,6 @@ namespace App.Server.MediatorMiddlewares
             }
 
             await next();
-
-            if(action is IBusinessCOmmandFire f)
-            {
-                _mediator.Fire(new BusinesEvent.Comand(f.Id));
-            }
         }
     }
 }

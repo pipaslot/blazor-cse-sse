@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Mediator.Abstractions;
@@ -7,6 +8,7 @@ namespace Core.Mediator.Middlewares
 {
     /// <summary>
     /// Pipeline executing multiple handlers implementing TMarker type. Handlers are executed in row, once previous execution finished.
+    /// For order specification see <see cref="ISequenceHandler"/>
     /// </summary>
     public class MultiHandlerSequenceExecutionMiddleware : ExecutionMiddleware
     {
@@ -26,7 +28,8 @@ namespace Core.Mediator.Middlewares
             {
                 throw new Exception("No handler was found for " + message?.GetType());
             }
-            foreach (var handler in handlers)
+            var sortedHandlers = Sort(handlers);
+            foreach (var handler in sortedHandlers)
             {
                 await ExecuteMessage(handler, message, cancellationToken);
             }
@@ -39,10 +42,24 @@ namespace Core.Mediator.Middlewares
             {
                 throw new Exception("No handler was found for " + request?.GetType());
             }
-            foreach (var handler in handlers)
+            var sortedHandlers = Sort(handlers);
+            foreach (var handler in sortedHandlers)
             {
                 await ExecuteRequest(handler, request, response, cancellationToken);
             }
+        }
+
+        private object[] Sort(object[] handlers)
+        {
+            return handlers
+                .Select(h => new
+                {
+                    Handler = h,
+                    Order = (h is ISequenceHandler s) ? s.Order : int.MaxValue
+                })
+                .OrderBy(i=>i.Order)
+                .Select(i=>i.Handler)
+                .ToArray();
         }
     }
 }
