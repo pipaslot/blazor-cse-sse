@@ -24,7 +24,7 @@ namespace Core.Mediator.Client
             _logger = logger;
         }
 
-        public async Task<IMediatorResponse> Fire(IMessage request, CancellationToken cancellationToken = default)
+        public async Task<IMediatorResponse> Send(IMessage request, CancellationToken cancellationToken = default)
         {
             var contract = CreateContract(request);
             var requestType = request.GetType();

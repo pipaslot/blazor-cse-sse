@@ -91,7 +91,7 @@
     private async Task Dispatch(ICommand request)
     {
         ShowSpinner = true;
-        var dispatchResult = await Mediator.Fire(request);
+        var dispatchResult = await Mediator.Send(request);
         DispatchError = dispatchResult.ErrorMessage;
         ShowSpinner = false;
     }
@@ -99,7 +99,7 @@
     private async Task StartInfiniteCommand()
     {
         ShowSpinner = true;
-        var action = Mediator.Fire(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
+        var action = Mediator.Send(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
         await Task.Delay(3000);
         infiniteCommandCancellationTokenSource.Cancel();
         await action;

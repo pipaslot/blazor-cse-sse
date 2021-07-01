@@ -42,7 +42,7 @@ namespace Core.Mediator
         {
             try
             {
-                var result = await _mediator.Fire(message, cancellationToken);
+                var result = await _mediator.Send(message, cancellationToken);
                 return SerializeObject(result);
             }
             catch (Exception e)

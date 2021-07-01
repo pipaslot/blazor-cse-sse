@@ -14,8 +14,8 @@ namespace Core.Mediator.Abstractions
         Task<IMediatorResponse<TResponse>> Execute<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default);
         
         /// <summary>
-        /// Execute action without feedback
+        /// Send message without feedback expectation
         /// </summary>
-        Task<IMediatorResponse> Fire(IMessage message, CancellationToken cancellationToken = default);
+        Task<IMediatorResponse> Send(IMessage message, CancellationToken cancellationToken = default);
     }
 }

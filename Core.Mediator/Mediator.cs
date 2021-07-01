@@ -18,7 +18,7 @@ namespace Core.Mediator
             _handlerResolver = handlerResolver;
         }
 
-        public async Task<IMediatorResponse> Fire(IMessage message, CancellationToken cancellationToken = default)
+        public async Task<IMediatorResponse> Send(IMessage message, CancellationToken cancellationToken = default)
         {
             var pipeline = _handlerResolver.GetPipeline(message.GetType());
             static Task Seed() => Task.CompletedTask;
