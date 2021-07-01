@@ -16,6 +16,7 @@ namespace Core.Mediator
             services.AddTransient<IMediator, Mediator>();
             services.AddTransient<HandlerExistenceChecker>();
             var configurator = new PipelineConfigurator(services);
+            services.AddSingleton(configurator);
 
             return configurator;
         }

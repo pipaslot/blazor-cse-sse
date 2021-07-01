@@ -1,54 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Core.Mediator.Abstractions;
 
 namespace Core.Mediator
 {
     public class HandlerExistenceChecker
     {
-        private readonly List<Assembly> _subjectAssemblies = new List<Assembly>();
         /// <summary>
         /// We need to ignore handlers on less generic type. For example once command is catch, then we do not expect that generic IHandler will process that command as well.
         /// </summary>
         private readonly HashSet<Type> _alreadyVerified = new HashSet<Type>();
         private readonly ServiceResolver _handlerResolver;
+        private readonly PipelineConfigurator _configurator;
 
-        public HandlerExistenceChecker(ServiceResolver handlerResolver)
+        public HandlerExistenceChecker(ServiceResolver handlerResolver, PipelineConfigurator configurator)
         {
             _handlerResolver = handlerResolver;
-        }
-
-        /// <summary>
-        /// Verify that all commands and queries from the same assembly as specified type has registered handler.
-        /// </summary>
-        /// <typeparam name="T">The type in which assembly that should be scanned.</typeparam>
-        public HandlerExistenceChecker ScanFromAssemblyOf<T>()
-        {
-            _subjectAssemblies.Add(typeof(T).Assembly);
-            return this;
-        }
-
-        /// <summary>
-        /// Verify that all commands and queries from the same assembly as specified type has registered handler.
-        /// </summary>
-        public HandlerExistenceChecker ScanFromAssembly(params Assembly[] assemblies)
-        {
-            _subjectAssemblies.AddRange(assemblies);
-            return this;
+            _configurator = configurator;
         }
 
         public void Verify()
         {
-            VerifyMessages();
-            VerifyRequests();
+            var assemblies = _configurator.ActionMarkerAssemblies;
+            if(assemblies.Count == 0)
+            {
+                throw new Exception($"No action marker assembly was registered. Use {nameof(PipelineConfigurator.AddMarkersFromAssemblyOf)} during pipeline setup");
+            }
+            var types = assemblies.SelectMany(s => s.GetTypes());
+            VerifyMessages(types);
+            VerifyRequests(types);
         }
 
-        private void VerifyMessages()
+        private void VerifyMessages(IEnumerable<Type> types)
         {
             var subjectName = typeof(IMessage).Name;
-            var queryTypes = GetMessageSubjects();
+            var queryTypes = GenericHelpers.FilterAssignableToMessage(types);
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
@@ -63,10 +50,10 @@ namespace Core.Mediator
             }
         }
 
-        private void VerifyRequests()
+        private void VerifyRequests(IEnumerable<Type> types)
         {
             var subjectName = typeof(IRequest<>).Name;
-            var queryTypes = GetRequestSubjects();
+            var queryTypes = GenericHelpers.FilterAssignableToRequest(types);
             foreach (var subject in queryTypes)
             {
                 if (_alreadyVerified.Contains(subject))
@@ -90,20 +77,6 @@ namespace Core.Mediator
             {
                 throw new Exception($"Multiple {subjectName} handlers were registered for one {subjectName} type: {subject} with classes {string.Join(" AND ", handlers)}");
             }
-        }
-
-        private Type[] GetMessageSubjects()
-        {
-            var types = _subjectAssemblies
-                .SelectMany(s => s.GetTypes());
-            return GenericHelpers.FilterAssignableToMessage(types);
-        }
-
-        private Type[] GetRequestSubjects()
-        {
-            var types = _subjectAssemblies
-                .SelectMany(s => s.GetTypes());
-            return GenericHelpers.FilterAssignableToRequest(types);
         }
     }
 }

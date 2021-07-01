@@ -57,6 +57,7 @@ namespace App.Server
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMediator()
+                .AddMarkersFromAssemblyOf<Config.Query>()
                 .AddHandlersFromAssemblyOf<ConfigQueryHandler>()
                 .Use<LoggingMiddleware>()
                 .Use<CommandSpecificMiddleware, ICommand>()
@@ -67,7 +68,7 @@ namespace App.Server
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
             services.Scan(scan => scan
-                .FromAssemblyOf<UserCredentials>()
+                .FromAssemblyOf<Config.Query>()
                 .AddClasses(classes => classes.AssignableTo(typeof(IValidator<>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()
@@ -75,15 +76,12 @@ namespace App.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, HandlerExistenceChecker handlerExistenceChecker)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCompression();
 
             if (env.IsDevelopment())
             {
-                handlerExistenceChecker
-                    .ScanFromAssemblyOf<Config.Query>()
-                    .Verify();
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
             }
@@ -100,7 +98,7 @@ namespace App.Server
 
             app.UseBlazorFrameworkFiles();
             app.UseAuthentication();
-            app.UseMediator();
+            app.UseMediator(env.IsDevelopment());
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Core.Mediator.Abstractions;
@@ -12,6 +13,7 @@ namespace Core.Mediator
     public class PipelineConfigurator
     {
         private readonly IServiceCollection _services;
+        public List<Assembly> ActionMarkerAssemblies { get; } = new List<Assembly>();
 
         public PipelineConfigurator(IServiceCollection services)
         {
@@ -19,16 +21,34 @@ namespace Core.Mediator
         }
 
         /// <summary>
-        /// Will scan for types from the assembly of type <typeparamref name="T"/>.
+        /// Will scan for action markers from the assembly of type <typeparamref name="T"/> and register them.
         /// </summary>
-        /// <typeparam name="T">The type in which assembly that should be scanned.</typeparam>
+        /// <typeparam name="T">The type from target asssembly to be scanned</typeparam>
+        public PipelineConfigurator AddMarkersFromAssemblyOf<T>()
+        {
+            return AddMarkersFromAssemblyOf(typeof(T).Assembly);
+        }
+
+        /// <summary>
+        /// Will scan for action markers from the passed assemblies and register them.
+        /// </summary>
+        public PipelineConfigurator AddMarkersFromAssemblyOf(params Assembly[] assemblies)
+        {
+            ActionMarkerAssemblies.AddRange(assemblies);
+            return this;
+        }
+
+        /// <summary>
+        /// Will scan for action handlers from the assembly of type <typeparamref name="T"/> and register them.
+        /// </summary>
+        /// <typeparam name="T">The type from target asssembly to be scanned</typeparam>
         public PipelineConfigurator AddHandlersFromAssemblyOf<T>()
         {
             return AddHandlersFromAssembly(typeof(T).Assembly);
         }
 
         /// <summary>
-        /// Scan assemblies for handler types
+        /// Scan assemblies for action handler types
         /// </summary>
         public PipelineConfigurator AddHandlersFromAssembly(params Assembly[] assemblies)
         {
