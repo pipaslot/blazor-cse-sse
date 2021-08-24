@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using App.Shared.App;
 using Core.Localization;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 
 namespace App.Client.Services
 {
@@ -38,7 +38,7 @@ namespace App.Client.Services
         protected override async Task OnCultureChanged(string culture)
         {
             var typeName = _classType.AssemblyQualifiedName;
-            var result = await _mediator.Send(new LanguageResourceRequest.Query
+            var result = await _mediator.Execute(new LanguageResourceRequest.Query
             {
                 Language = culture,
                 TypeName = typeName,

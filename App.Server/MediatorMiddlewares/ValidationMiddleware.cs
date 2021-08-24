@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Pipaslot.Mediator.Abstractions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using Pipaslot.Mediator.Middlewares;
 
 namespace App.Server.MediatorMiddlewares
 {
@@ -19,7 +19,7 @@ namespace App.Server.MediatorMiddlewares
             _validatorFactory = validatorFactory;
         }
 
-        public async Task Invoke<TAction>(TAction action, MediatorResponse response, MiddlewareDelegate next, CancellationToken cancellationToken)
+        public async Task Invoke<TAction>(TAction action, MediatorContext context, MiddlewareDelegate next, CancellationToken cancellationToken)
         {
             if (action == null)
             {
@@ -37,7 +37,7 @@ namespace App.Server.MediatorMiddlewares
                 }
             }
 
-            await next();
+            await next(context);
         }
     }
 }

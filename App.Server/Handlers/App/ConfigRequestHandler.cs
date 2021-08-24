@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 using Microsoft.Extensions.Options;
 using App.Shared.App;
 

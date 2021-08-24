@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 using FluentValidation;
 
 namespace App.Shared.Contact

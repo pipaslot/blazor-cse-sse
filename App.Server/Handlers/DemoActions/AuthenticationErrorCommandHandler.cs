@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using App.Shared.DemoActions;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 
 namespace App.Server.Handlers.DemoActions
 {

@@ -1,5 +1,5 @@
 ﻿using Core.Jwt;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 
 namespace App.Shared.Auth
 {

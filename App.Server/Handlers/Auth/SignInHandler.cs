@@ -1,5 +1,5 @@
 ﻿using Core.Jwt;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 using Microsoft.Extensions.Options;
 using System.Threading;
 using System.Threading.Tasks;

@@ -40,7 +40,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var config = await Mediator.Send(new ConfigRequest.Query());
+        var config = await Mediator.Execute(new ConfigRequest.Query());
 
         if (config.Success)
         {

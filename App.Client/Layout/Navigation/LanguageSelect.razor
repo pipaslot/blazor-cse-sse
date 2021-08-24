@@ -22,7 +22,7 @@
     string[] _languages = { };
     protected override async Task OnInitializedAsync()
     {
-        var config = await Mediator.Send(new ConfigRequest.Query());
+        var config = await Mediator.Execute(new ConfigRequest.Query());
         if (config.Success)
         {
             _languages = config.Result.Languages;

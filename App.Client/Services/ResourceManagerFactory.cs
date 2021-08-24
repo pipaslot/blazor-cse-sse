@@ -1,6 +1,6 @@
 ﻿using System;
 using Core.Localization;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 
 namespace App.Client.Services
 {

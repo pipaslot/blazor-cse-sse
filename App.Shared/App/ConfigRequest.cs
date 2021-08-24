@@ -1,4 +1,4 @@
-﻿using Pipaslot.Mediator.Abstractions;
+﻿using Pipaslot.Mediator;
 
 namespace App.Shared.App
 {

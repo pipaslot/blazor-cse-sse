@@ -7,7 +7,7 @@ using System.Linq;
 using App.Server.Services;
 using Pipaslot.Mediator;
 using Core.Jwt;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -56,13 +56,17 @@ namespace App.Server
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMediator()
-                .AddMarkersFromAssemblyOf<ConfigRequest.Query>()
+                .AddActionsFromAssemblyOf<ConfigRequest.Query>()
                 .AddHandlersFromAssemblyOf<ConfigRequestHandler>()
-                .Use<LoggingMiddleware>()
-                .Use<CommandSpecificMiddleware, IMessage>()
-                .Use<QuerySpecificMiddleware, IRequest>()
-                .Use<ValidationMiddleware>()
-                .UseSequenceMultiHandler<IMessage>();
+                .AddPipeline<IMessage>()
+                    .UseExceptionLogging()
+                    .Use<CommandSpecificMiddleware>()
+                    .Use<ValidationMiddleware>()
+                    .UseSequenceMultiHandler()
+                .AddDefaultPipeline()
+                    .Use<CustomLoggingMiddleware>()
+                    .Use<QuerySpecificMiddleware>()
+                    .Use<ValidationMiddleware>();
 
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();

@@ -7,7 +7,7 @@ using App.Client.Store;
 using App.Shared.Auth;
 using Fluxor;
 using Microsoft.AspNetCore.Components.Authorization;
-using Pipaslot.Mediator.Abstractions;
+using Pipaslot.Mediator;
 
 namespace App.Client.Services
 {
@@ -53,7 +53,7 @@ namespace App.Client.Services
 
         public async Task SignIn(string username, string password)
         {
-            var response = await _mediator.Send(new SignInRequest.Query
+            var response = await _mediator.Execute(new SignInRequest.Query
             {
                 Username = username,
                 Password = password
