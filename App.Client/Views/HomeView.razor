@@ -1,5 +1,5 @@
 ﻿@page "/"
-@using App.Shared.Commands
+@using App.Shared.DemoActions
 @using System.Threading
 @inject IMediator Mediator
 
@@ -14,59 +14,7 @@
     <button @onclick="MultiHandlerCommand">Fire multiple command handlers together for one command</button> 
     <button @onclick="StartInfiniteCommand">Fire infinite command canceled on UI after 3 seconds</button> 
     <div>@DispatchError</div>
-    @*<BRow>
-            <BCol Size="sm-4">4</BCol>
-            <BCol Size="sm-4">4</BCol>
-            <BCol Size="sm-2">4</BCol>
-        </BRow>
-        <BRow>
-            <BCol Size="sm-2">2</BCol>
-            <BCol Size="sm-4">4</BCol>
-            <BCol Size="sm-6">6</BCol>
-        </BRow>
-
-        <BContainer>
-            <BRow>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-            </BRow>
-            <BRow>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-            </BRow>
-        </BContainer>
-        <BContainer>
-            <BRow>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-            </BRow>
-            <BRow>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-            </BRow>
-        </BContainer>
-        <h4>Align</h4>
-        <BContainer>
-            <BRow Align="start" style="height:50px">
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-            </BRow>
-            <BRow Align="center" style="height:50px">
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-            </BRow>
-            <BRow Align="@BRowAlign.End" style="height:50px">
-                <BCol Size="@BColSize.SM_4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-                <BCol Size="sm-4">4</BCol>
-            </BRow>
-        </BContainer>*@
+   
 </BContainer>
 @code{
     string DispatchError = "";
@@ -75,20 +23,20 @@
 
     async Task DispatchErrorCommand()
     {
-        await Dispatch(new ValidationErrorGenerator.Command());
+        await Dispatch(new ValidationErrorGeneratorMessage.Command());
     }
 
     async Task CallForbiddenOperation()
     {
-        await Dispatch(new AuthenticationError.Command());
+        await Dispatch(new AuthenticationErrorMessage.Command());
     }
 
     async Task MultiHandlerCommand()
     {
-        await Dispatch(new MultiHandler.Command());
+        await Dispatch(new MultiHandlerMessage.Command());
     }
 
-    private async Task Dispatch(ICommand request)
+    private async Task Dispatch(IMessage request)
     {
         ShowSpinner = true;
         var dispatchResult = await Mediator.Dispatch(request);
@@ -99,7 +47,7 @@
     private async Task StartInfiniteCommand()
     {
         ShowSpinner = true;
-        var action = Mediator.Dispatch(new Infinite.Command(), infiniteCommandCancellationTokenSource.Token);
+        var action = Mediator.Dispatch(new InfiniteMessage.Command(), infiniteCommandCancellationTokenSource.Token);
         await Task.Delay(3000);
         infiniteCommandCancellationTokenSource.Cancel();
         await action;

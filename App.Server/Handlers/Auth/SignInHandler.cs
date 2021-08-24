@@ -1,13 +1,13 @@
-﻿using App.Shared.Queries;
-using Core.Jwt;
-using App.Shared.CQRSAbstraction;
+﻿using Core.Jwt;
+using Pipaslot.Mediator.Abstractions;
 using Microsoft.Extensions.Options;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Shared.Auth;
 
-namespace App.Server.QueryHandlers
+namespace App.Server.Handlers.Auth
 {
-    public class SignInHandler : IQueryHandler<SignIn.Query, SignIn.Result>
+    public class SignInHandler : IRequestHandler<SignInRequest.Query, SignInRequest.Result>
     {
         private readonly IOptions<AuthOptions> _authOptions;
 
@@ -16,7 +16,7 @@ namespace App.Server.QueryHandlers
             _authOptions = authOptions;
         }
 
-        public Task<SignIn.Result> Handle(SignIn.Query request, CancellationToken cancellationToken)
+        public Task<SignInRequest.Result> Handle(SignInRequest.Query request, CancellationToken cancellationToken)
         {
             var options = _authOptions.Value;
             var id = 5;
@@ -29,7 +29,7 @@ namespace App.Server.QueryHandlers
                 //.AddClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", role.ToString())
                 .AddExpiry(options.TokenExpirationInMinutes)
                 .Build();
-            return Task.FromResult(new SignIn.Result
+            return Task.FromResult(new SignInRequest.Result
             {
                 Success = true,
                 AccessToken = token,

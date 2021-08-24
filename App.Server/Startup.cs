@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using App.Server.QueryHandlers;
 using App.Server.Services;
-using App.Shared.AuthModels;
 using Pipaslot.Mediator;
-using App.Shared.Queries;
 using Core.Jwt;
 using Pipaslot.Mediator.Abstractions;
 using FluentValidation;
@@ -16,7 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Pipaslot.Mediator.Server;
 using App.Server.MediatorMiddlewares;
-using App.Shared.CQRSAbstraction;
+using App.Server.Handlers.App;
+using App.Shared.App;
 
 namespace App.Server
 {
@@ -49,7 +47,7 @@ namespace App.Server
 
             Client.Program.ConfigureServerAndClientSharedServices<ResourceManagerServerFactory>(services);
 
-            services.Configure<Config.Result>(_configuration.GetSection("App"));
+            services.Configure<ConfigRequest.Result>(_configuration.GetSection("App"));
 
             services.AddAuthorization();
             services.AddCoreAuthForClient(_configuration.GetSection("Auth"));
@@ -58,18 +56,18 @@ namespace App.Server
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMediator()
-                .AddMarkersFromAssemblyOf<Config.Query>()
-                .AddHandlersFromAssemblyOf<ConfigQueryHandler>()
+                .AddMarkersFromAssemblyOf<ConfigRequest.Query>()
+                .AddHandlersFromAssemblyOf<ConfigRequestHandler>()
                 .Use<LoggingMiddleware>()
-                .Use<CommandSpecificMiddleware, ICommand>()
-                .Use<QuerySpecificMiddleware, IQuery>()
+                .Use<CommandSpecificMiddleware, IMessage>()
+                .Use<QuerySpecificMiddleware, IRequest>()
                 .Use<ValidationMiddleware>()
-                .UseSequenceMultiHandler<ICommand>();
+                .UseSequenceMultiHandler<IMessage>();
 
             // Register all validators from project App.Shared
             services.AddTransient<IValidatorFactory, ValidatorFactory>();
             services.Scan(scan => scan
-                .FromAssemblyOf<Config.Query>()
+                .FromAssemblyOf<ConfigRequest.Query>()
                 .AddClasses(classes => classes.AssignableTo(typeof(IValidator<>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime()

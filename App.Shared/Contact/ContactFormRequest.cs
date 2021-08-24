@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.CQRSAbstraction;
+using Pipaslot.Mediator.Abstractions;
 using FluentValidation;
 
-namespace App.Shared.Queries
+namespace App.Shared.Contact
 {
-    public static class ContactForm
+    public static class ContactFormRequest
     {
-        public class Query : IQuery<Result>
+        public class Query : IRequest<Result>
         {
             public string Firstname { get; set; } = "";
             public string Lastname { get; set; } = "";

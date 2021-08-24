@@ -1,25 +1,24 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Commands;
-using App.Shared.CQRSAbstraction;
 using Pipaslot.Mediator.Abstractions;
 using Microsoft.Extensions.Logging;
 using Pipaslot.Logging;
+using App.Shared.DemoActions;
 
-namespace App.Server.CommandHandlers
+namespace App.Server.Handlers.DemoActions
 {
-    public class MultiHandlerCommandHandlerAlwaysLast : ICommandHandler<MultiHandler.Command>
+    public class MultiHandlerMessageHandlerAlwaysLast : IMessageHandler<MultiHandlerMessage.Command>
     {
-        private readonly ILogger<MultiHandlerCommandHandlerAlwaysLast> _logger;
+        private readonly ILogger<MultiHandlerMessageHandlerAlwaysLast> _logger;
 
-        public MultiHandlerCommandHandlerAlwaysLast(ILogger<MultiHandlerCommandHandlerAlwaysLast> logger)
+        public MultiHandlerMessageHandlerAlwaysLast(ILogger<MultiHandlerMessageHandlerAlwaysLast> logger)
         {
             _logger = logger;
         }
 
         public int Order => 2;
 
-        public Task Handle(MultiHandler.Command request, CancellationToken cancellationToken)
+        public Task Handle(MultiHandlerMessage.Command request, CancellationToken cancellationToken)
         {
             using (_logger.BeginMethod())
             {
@@ -29,7 +28,7 @@ namespace App.Server.CommandHandlers
         }
     }
 
-    public class MultiHandlerCommandHandler1 : ICommandHandler<MultiHandler.Command>, ISequenceHandler
+    public class MultiHandlerCommandHandler1 : IMessageHandler<MultiHandlerMessage.Command>, ISequenceHandler
     {
         private readonly ILogger<MultiHandlerCommandHandler1> _logger;
 
@@ -40,7 +39,7 @@ namespace App.Server.CommandHandlers
 
         public int Order => 1;
 
-        public Task Handle(MultiHandler.Command request, CancellationToken cancellationToken)
+        public Task Handle(MultiHandlerMessage.Command request, CancellationToken cancellationToken)
         {
             using (_logger.BeginMethod())
             {
@@ -50,7 +49,7 @@ namespace App.Server.CommandHandlers
         }
     }
 
-    public class MultiHandlerCommandHandler2 : ICommandHandler<MultiHandler.Command>, ISequenceHandler
+    public class MultiHandlerCommandHandler2 : IMessageHandler<MultiHandlerMessage.Command>, ISequenceHandler
     {
         private readonly ILogger<MultiHandlerCommandHandler2> _logger;
 
@@ -61,7 +60,7 @@ namespace App.Server.CommandHandlers
 
         public int Order => 2;
 
-        public Task Handle(MultiHandler.Command request, CancellationToken cancellationToken)
+        public Task Handle(MultiHandlerMessage.Command request, CancellationToken cancellationToken)
         {
             using (_logger.BeginMethod())
             {

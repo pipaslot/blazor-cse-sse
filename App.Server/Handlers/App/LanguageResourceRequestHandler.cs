@@ -1,25 +1,25 @@
-﻿using App.Shared.Queries;
-using App.Shared.CQRSAbstraction;
+﻿using Pipaslot.Mediator.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Resources;
+using App.Shared.App;
 
-namespace App.Server.QueryHandlers
+namespace App.Server.Handlers.App
 {
-    public class LanguageResourceHandler : IQueryHandler<LanguageResource.Query, LanguageResource.Result>
+    public class LanguageResourceRequestHandler : IRequestHandler<LanguageResourceRequest.Query, LanguageResourceRequest.Result>
     {
-        public Task<LanguageResource.Result> Handle(LanguageResource.Query request, CancellationToken cancellationToken)
+        public Task<LanguageResourceRequest.Result> Handle(LanguageResourceRequest.Query request, CancellationToken cancellationToken)
         {
             var resource = GetResource(request);
-            return Task.FromResult(new LanguageResource.Result
+            return Task.FromResult(new LanguageResourceRequest.Result
             {
                 Resource = resource
             });
         }
 
-        private Dictionary<string, string> GetResource(LanguageResource.Query request)
+        private Dictionary<string, string> GetResource(LanguageResourceRequest.Query request)
         {
             var type = Type.GetType(request.TypeName);
             if (type == null)

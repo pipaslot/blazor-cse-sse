@@ -1,11 +1,11 @@
-﻿using App.Shared.CQRSAbstraction;
+﻿using Pipaslot.Mediator.Abstractions;
 
-namespace App.Shared.Queries
+namespace App.Shared.App
 {
     
-    public static class Config
+    public static class ConfigRequest
     {
-        public class Query : IQuery<Result>
+        public class Query : IRequest<Result>
         {
         
         }

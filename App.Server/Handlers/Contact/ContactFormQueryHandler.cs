@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using App.Shared.Queries;
-using App.Shared.CQRSAbstraction;
+using Pipaslot.Mediator.Abstractions;
 using Microsoft.Extensions.Logging;
+using App.Shared.Contact;
 
-namespace App.Server.QueryHandlers
+namespace App.Server.Handlers.Contact
 {
     // ReSharper disable once UnusedType.Global
-    public class ContactFormQueryHandler : IQueryHandler<ContactForm.Query, ContactForm.Result>
+    public class ContactFormQueryHandler : IRequestHandler<ContactFormRequest.Query, ContactFormRequest.Result>
     {
         private readonly ILogger<ContactFormQueryHandler> _logger;
 
@@ -16,10 +16,10 @@ namespace App.Server.QueryHandlers
             _logger = logger;
         }
 
-        public Task<ContactForm.Result> Handle(ContactForm.Query query, CancellationToken cancellationToken)
+        public Task<ContactFormRequest.Result> Handle(ContactFormRequest.Query query, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Contact form was processed");
-            return Task.FromResult(new ContactForm.Result
+            return Task.FromResult(new ContactFormRequest.Result
             {
                 Success = true
             });

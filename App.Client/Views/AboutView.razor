@@ -1,6 +1,7 @@
 ﻿@page "/about"
 @inject IMediator Mediator
 @inject ILogger<AboutView> Logger
+@using App.Shared.Contact
 
 <BContainer>
     <Spinner Show="_loading" />
@@ -69,7 +70,7 @@
 
     bool _loading;
     SendingStatus _wasSent = SendingStatus.NotSent;
-    ContactForm.Query _model = new ContactForm.Query();
+    ContactFormRequest.Query _model = new ContactFormRequest.Query();
 
     async Task SubmitValidForm()
     {
@@ -78,17 +79,17 @@
 
     async Task HackFrontendValidation()
     {
-        await SendData(new ContactForm.Query());
+        await SendData(new ContactFormRequest.Query());
     }
 
-    private async Task SendData(ContactForm.Query data)
+    private async Task SendData(ContactFormRequest.Query data)
     {
         _loading = true;
         var result = await Mediator.Send(data);
         if (result.Success)
         {
             _wasSent = result.Result.Success ? SendingStatus.Sent : SendingStatus.NotAccepted;
-            _model = new ContactForm.Query();
+            _model = new ContactFormRequest.Query();
         }
         else
         {

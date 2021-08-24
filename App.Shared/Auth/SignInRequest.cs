@@ -1,11 +1,11 @@
 ﻿using Core.Jwt;
-using App.Shared.CQRSAbstraction;
+using Pipaslot.Mediator.Abstractions;
 
-namespace App.Shared.Queries
+namespace App.Shared.Auth
 {
-    public static class SignIn
+    public static class SignInRequest
     {
-        public class Query : IQuery<Result>
+        public class Query : IRequest<Result>
         {
             public string Username { get; set; }
             public string Password { get; set; }

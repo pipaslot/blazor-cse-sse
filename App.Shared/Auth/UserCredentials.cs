@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace App.Shared.AuthModels
+namespace App.Shared.Auth
 {
     public class UserCredentials
     {

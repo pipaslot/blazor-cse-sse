@@ -1,11 +1,11 @@
-﻿using App.Shared.CQRSAbstraction;
+﻿using Pipaslot.Mediator.Abstractions;
 using FluentValidation;
 
-namespace App.Shared.Commands
+namespace App.Shared.DemoActions
 {
-    public static class ValidationErrorGenerator
+    public static class ValidationErrorGeneratorMessage
     {
-        public class Command : ICommand
+        public class Command : IMessage
         {
             public string MandatoryParameter { get; set; }
         }
